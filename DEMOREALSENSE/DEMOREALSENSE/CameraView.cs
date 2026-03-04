@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,6 +28,12 @@ namespace DEMOREALSENSE
         // Dernière image (pour mapping click -> pixel)
         private Bitmap? _lastBitmapShown;
 
+        // ====== PHOTO / SNAPSHOT ======
+        private readonly string _snapDir =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RealSense_Captures");
+
+        private readonly object _snapshotLock = new();
+
         public CameraView()
         {
             InitializeComponent();
@@ -36,6 +44,13 @@ namespace DEMOREALSENSE
             distanceLabel.BringToFront();
 
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;
+
+            // Dossier photo
+            Directory.CreateDirectory(_snapDir);
+
+            // Bouton photo (tu l'as déjà posé dans le designer)
+            button1.Text = "Prendre photo";
+            button1.Click += button1_Click;
 
             distanceLabel.Text = "Caméra prête. Clique sur un objet pour le suivre.";
             Log("UI Ready");
@@ -94,8 +109,11 @@ namespace DEMOREALSENSE
                     cameraPictureBox.Image = null;
                     old?.Dispose();
 
-                    _lastBitmapShown?.Dispose();
-                    _lastBitmapShown = null;
+                    lock (_snapshotLock)
+                    {
+                        _lastBitmapShown?.Dispose();
+                        _lastBitmapShown = null;
+                    }
 
                     distanceLabel.Text = "Arrêté.";
                 });
@@ -122,7 +140,10 @@ namespace DEMOREALSENSE
 
                         if (ok)
                         {
-                            ushort raw = DistanceCalculator.MedianDepthRaw(depthU16, _camera.DepthW, _camera.DepthH, _tracker.X, _tracker.Y, DIST_RADIUS);
+                            ushort raw = DistanceCalculator.MedianDepthRaw(
+                                depthU16, _camera.DepthW, _camera.DepthH,
+                                _tracker.X, _tracker.Y, DIST_RADIUS);
+
                             UpdateDistanceLabel(raw);
                         }
                         else
@@ -146,8 +167,12 @@ namespace DEMOREALSENSE
                         cameraPictureBox.Image = toShow;
                         old?.Dispose();
 
-                        _lastBitmapShown?.Dispose();
-                        _lastBitmapShown = (Bitmap)toShow.Clone(); // pour mapping clic fiable
+                        // stocker une copie pour le clic + snapshot
+                        lock (_snapshotLock)
+                        {
+                            _lastBitmapShown?.Dispose();
+                            _lastBitmapShown = (Bitmap)toShow.Clone();
+                        }
                     });
                 }
                 catch (Exception ex)
@@ -161,14 +186,21 @@ namespace DEMOREALSENSE
 
         private void CameraPictureBox_MouseClick(object? sender, MouseEventArgs e)
         {
-            // On mappe le clic vers pixel image
-            if (_lastBitmapShown == null)
+            Bitmap? img;
+            lock (_snapshotLock)
+            {
+                img = _lastBitmapShown == null ? null : (Bitmap)_lastBitmapShown.Clone();
+            }
+
+            if (img == null)
             {
                 distanceLabel.Text = "Image pas prête (attends 1-2 secondes).";
                 return;
             }
 
-            var (x, y) = TranslateZoomMousePositionToImagePixel(cameraPictureBox, _lastBitmapShown, e.Location);
+            var (x, y) = TranslateZoomMousePositionToImagePixel(cameraPictureBox, img, e.Location);
+            img.Dispose();
+
             if (x < 0 || y < 0)
             {
                 distanceLabel.Text = "Clique dans l'image (pas dans les bandes).";
@@ -176,7 +208,6 @@ namespace DEMOREALSENSE
             }
 
             // On a besoin d'une frame récente pour initialiser tracker :
-            // => on relit une frame rapide (timeout court)
             if (!_camera.TryGetAlignedFrames(500, out var rgb, out var depthU16))
             {
                 distanceLabel.Text = "Frame non dispo (reclique).";
@@ -191,7 +222,10 @@ namespace DEMOREALSENSE
             }
 
             // Distance immédiate
-            ushort raw = DistanceCalculator.MedianDepthRaw(depthU16, _camera.DepthW, _camera.DepthH, _tracker.X, _tracker.Y, DIST_RADIUS);
+            ushort raw = DistanceCalculator.MedianDepthRaw(
+                depthU16, _camera.DepthW, _camera.DepthH,
+                _tracker.X, _tracker.Y, DIST_RADIUS);
+
             UpdateDistanceLabel(raw);
 
             Log($"Tracking ON at ({_tracker.X},{_tracker.Y}), tpl={_tracker.TemplateSize} search={_tracker.SearchRadius}");
@@ -277,6 +311,42 @@ namespace DEMOREALSENSE
         private void Log(string s)
         {
             Debug.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {s}");
+        }
+
+        // ====== BOUTON PHOTO ======
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Bitmap? snap = null;
+
+                // On prend la DERNIERE image affichée (avec overlay)
+                lock (_snapshotLock)
+                {
+                    if (_lastBitmapShown != null)
+                        snap = (Bitmap)_lastBitmapShown.Clone();
+                }
+
+                if (snap == null)
+                {
+                    distanceLabel.Text = "Pas d'image à enregistrer (attends la caméra).";
+                    return;
+                }
+
+                string fileName = $"rs_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
+                string fullPath = Path.Combine(_snapDir, fileName);
+
+                snap.Save(fullPath, ImageFormat.Png);
+                snap.Dispose();
+
+                distanceLabel.Text = $"Photo enregistrée: {fileName}";
+                Debug.WriteLine("Saved snapshot: " + fullPath);
+            }
+            catch (Exception ex)
+            {
+                distanceLabel.Text = "Erreur photo: " + ex.Message;
+                Debug.WriteLine("Snapshot error: " + ex);
+            }
         }
     }
 }
