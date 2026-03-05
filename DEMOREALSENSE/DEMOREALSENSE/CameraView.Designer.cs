@@ -45,6 +45,7 @@
             cameraPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             cameraPictureBox.TabIndex = 0;
             cameraPictureBox.TabStop = false;
+
             // 
             // distanceLabel
             // 

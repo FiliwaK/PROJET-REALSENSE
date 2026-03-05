@@ -34,6 +34,19 @@ namespace DEMOREALSENSE
 
         private readonly object _snapshotLock = new();
 
+        // ============================================================
+        // ✅ AJOUT: Détection de ligne par clics (Ctrl + Click)
+        // ============================================================
+        private readonly ClickLineDetector _lineDetector = new ClickLineDetector
+        {
+            MinPointsToFit = 6,
+            RansacIterations = 250,
+            InlierThresholdPx = 6f,
+            MinInliers = 6
+        };
+
+        private readonly object _lineLock = new(); // thread-safe
+
         public CameraView()
         {
             InitializeComponent();
@@ -43,6 +56,7 @@ namespace DEMOREALSENSE
             cameraPictureBox.BringToFront();
             distanceLabel.BringToFront();
 
+            // ✅ On garde ton MouseClick (tracking) -> inchangé
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;
 
             // Dossier photo
@@ -52,7 +66,11 @@ namespace DEMOREALSENSE
             button1.Text = "Prendre photo";
             button1.Click += button1_Click;
 
-            distanceLabel.Text = "Caméra prête. Clique sur un objet pour le suivre.";
+            // ✅ (Optionnel) Reset de la ligne avec R, sans casser
+            KeyPreview = true;
+            KeyDown += CameraView_KeyDown;
+
+            distanceLabel.Text = "Caméra prête. Clique sur un objet pour le suivre. (Ctrl+Click = mode ligne)";
             Log("UI Ready");
         }
 
@@ -80,7 +98,7 @@ namespace DEMOREALSENSE
                 _cts = new CancellationTokenSource();
                 _task = Task.Run(() => Loop(_cts.Token), _cts.Token);
 
-                SetStatus("OK. Clique sur un objet pour le suivre.");
+                SetStatus("OK. Clique sur un objet pour le suivre. (Ctrl+Click = ligne)");
             }
             catch (Exception ex)
             {
@@ -155,8 +173,12 @@ namespace DEMOREALSENSE
                     // bitmap + overlay
                     using var bmp = FrameBitmapConverter.RgbToBitmap24bpp(rgb, w, h);
 
+                    // ✅ overlay tracking (comme avant)
                     if (_tracker.IsTracking && _tracker.X >= 0 && _tracker.Y >= 0)
                         FrameBitmapConverter.DrawGreenBox(bmp, _tracker.X, _tracker.Y, BOX_HALF);
+
+                    // ✅ AJOUT overlay ligne (dans le bitmap, pas dans Paint)
+                    DrawLineOverlayOnBitmap(bmp);
 
                     // clone safe pour UI
                     var toShow = (Bitmap)bmp.Clone();
@@ -184,8 +206,23 @@ namespace DEMOREALSENSE
             }
         }
 
+        // ============================================================
+        // ✅ MouseClick: 2 modes sans casser le tracking
+        // - Click normal => tracking (ton code inchangé)
+        // - Ctrl + Click => ajout point de ligne
+        // ============================================================
         private void CameraPictureBox_MouseClick(object? sender, MouseEventArgs e)
         {
+            // ✅ MODE LIGNE : Ctrl + Click
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                AddLinePointFromClick(e.Location);
+                return;
+            }
+
+            // ==========================
+            // TRACKING (INCHANGÉ)
+            // ==========================
             Bitmap? img;
             lock (_snapshotLock)
             {
@@ -229,6 +266,83 @@ namespace DEMOREALSENSE
             UpdateDistanceLabel(raw);
 
             Log($"Tracking ON at ({_tracker.X},{_tracker.Y}), tpl={_tracker.TemplateSize} search={_tracker.SearchRadius}");
+        }
+
+        // ============================================================
+        // ✅ AJOUT: ajoute un point de ligne depuis un clic (Zoom OK)
+        // ============================================================
+        private void AddLinePointFromClick(Point clickLocation)
+        {
+            Bitmap? img;
+            lock (_snapshotLock)
+            {
+                img = _lastBitmapShown == null ? null : (Bitmap)_lastBitmapShown.Clone();
+            }
+
+            if (img == null)
+            {
+                distanceLabel.Text = "Image pas prête (attends 1-2 secondes).";
+                return;
+            }
+
+            var (x, y) = TranslateZoomMousePositionToImagePixel(cameraPictureBox, img, clickLocation);
+            img.Dispose();
+
+            if (x < 0 || y < 0)
+            {
+                distanceLabel.Text = "Ctrl+Clique dans l'image (pas dans les bandes).";
+                return;
+            }
+
+            lock (_lineLock)
+            {
+                _lineDetector.AddClick(new PointF(x, y));
+            }
+
+            // feedback
+            ThrottledLabel(_lineDetector.HasLine
+                ? "✅ Ligne détectée (Ctrl+Click pour ajouter / R pour reset)"
+                : $"Mode ligne: {_lineDetector.Samples.Count}/{_lineDetector.MinPointsToFit} points");
+        }
+
+        // ============================================================
+        // ✅ AJOUT: dessine la ligne + points dans le bitmap (safe)
+        // ============================================================
+        private void DrawLineOverlayOnBitmap(Bitmap bmp)
+        {
+            ClickLineDetector.LineModel line;
+            bool hasLine;
+            PointF[] pts;
+
+            lock (_lineLock)
+            {
+                hasLine = _lineDetector.HasLine;
+                line = _lineDetector.Line;
+                pts = _lineDetector.Samples.Count == 0 ? Array.Empty<PointF>() : new System.Collections.Generic.List<PointF>(_lineDetector.Samples).ToArray();
+            }
+
+            if (!hasLine && pts.Length == 0) return;
+
+            using var g = Graphics.FromImage(bmp);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            // points
+            for (int i = 0; i < pts.Length; i++)
+            {
+                var p = pts[i];
+                g.FillEllipse(Brushes.Lime, p.X - 3, p.Y - 3, 6, 6);
+            }
+
+            if (!hasLine) return;
+
+            var bounds = new RectangleF(0, 0, bmp.Width - 1, bmp.Height - 1);
+
+            // Segment image
+            if (_lineDetector.TryGetSegmentWithin(bounds, out var a, out var b))
+            {
+                using var pen = new Pen(Color.Red, 3f);
+                g.DrawLine(pen, a, b);
+            }
         }
 
         private void UpdateDistanceLabel(ushort raw)
@@ -289,6 +403,15 @@ namespace DEMOREALSENSE
             int imgX = (int)(x * (img.Width / (float)drawWidth));
             int imgY = (int)(y * (img.Height / (float)drawHeight));
             return (imgX, imgY);
+        }
+
+        private void CameraView_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.R)
+            {
+                lock (_lineLock) _lineDetector.Clear();
+                ThrottledLabel("Ligne reset ✅ (Ctrl+Click pour redéfinir)");
+            }
         }
 
         private void SafeUI(Action a)
