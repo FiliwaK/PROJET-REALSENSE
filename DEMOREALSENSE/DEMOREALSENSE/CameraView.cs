@@ -35,7 +35,7 @@ namespace DEMOREALSENSE
         private readonly object _snapshotLock = new();
 
         // ============================================================
-        // ✅ AJOUT: Détection de ligne par clics (Ctrl + Click)
+        // ✅ AJOUT: Ligne (Ctrl+Click) + IN/OUT
         // ============================================================
         private readonly ClickLineDetector _lineDetector = new ClickLineDetector
         {
@@ -44,8 +44,7 @@ namespace DEMOREALSENSE
             InlierThresholdPx = 6f,
             MinInliers = 6
         };
-
-        private readonly object _lineLock = new(); // thread-safe
+        private readonly object _lineLock = new();
 
         public CameraView()
         {
@@ -56,21 +55,23 @@ namespace DEMOREALSENSE
             cameraPictureBox.BringToFront();
             distanceLabel.BringToFront();
 
-            // ✅ On garde ton MouseClick (tracking) -> inchangé
+            // ✅ garde le tracking sur MouseClick
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;
 
             // Dossier photo
             Directory.CreateDirectory(_snapDir);
 
-            // Bouton photo (tu l'as déjà posé dans le designer)
+            // Bouton photo (inchangé)
             button1.Text = "Prendre photo";
             button1.Click += button1_Click;
 
-            // ✅ (Optionnel) Reset de la ligne avec R, sans casser
+            // reset ligne optionnel
             KeyPreview = true;
             KeyDown += CameraView_KeyDown;
 
-            distanceLabel.Text = "Caméra prête. Clique sur un objet pour le suivre. (Ctrl+Click = mode ligne)";
+            // ✅ texte par défaut en NOIR (comme demandé)
+            distanceLabel.ForeColor = Color.Black;
+            distanceLabel.Text = "Caméra prête. Clique sur un objet pour le suivre. (Ctrl+Click = ligne)";
             Log("UI Ready");
         }
 
@@ -133,6 +134,7 @@ namespace DEMOREALSENSE
                         _lastBitmapShown = null;
                     }
 
+                    distanceLabel.ForeColor = Color.Black;
                     distanceLabel.Text = "Arrêté.";
                 });
             }
@@ -162,22 +164,22 @@ namespace DEMOREALSENSE
                                 depthU16, _camera.DepthW, _camera.DepthH,
                                 _tracker.X, _tracker.Y, DIST_RADIUS);
 
-                            UpdateDistanceLabel(raw);
+                            UpdateDistanceAndInOut(raw);
                         }
                         else
                         {
-                            ThrottledLabel("Objet perdu (reclique).");
+                            ThrottledLabel("Objet perdu (reclique).", Color.OrangeRed);
                         }
                     }
 
                     // bitmap + overlay
                     using var bmp = FrameBitmapConverter.RgbToBitmap24bpp(rgb, w, h);
 
-                    // ✅ overlay tracking (comme avant)
+                    // overlay tracking (comme avant)
                     if (_tracker.IsTracking && _tracker.X >= 0 && _tracker.Y >= 0)
                         FrameBitmapConverter.DrawGreenBox(bmp, _tracker.X, _tracker.Y, BOX_HALF);
 
-                    // ✅ AJOUT overlay ligne (dans le bitmap, pas dans Paint)
+                    // overlay ligne ultra léger
                     DrawLineOverlayOnBitmap(bmp);
 
                     // clone safe pour UI
@@ -206,23 +208,17 @@ namespace DEMOREALSENSE
             }
         }
 
-        // ============================================================
-        // ✅ MouseClick: 2 modes sans casser le tracking
-        // - Click normal => tracking (ton code inchangé)
-        // - Ctrl + Click => ajout point de ligne
-        // ============================================================
+        // MouseClick: 2 modes sans casser le tracking
         private void CameraPictureBox_MouseClick(object? sender, MouseEventArgs e)
         {
-            // ✅ MODE LIGNE : Ctrl + Click
+            // MODE LIGNE : Ctrl + Click
             if ((ModifierKeys & Keys.Control) == Keys.Control)
             {
                 AddLinePointFromClick(e.Location);
                 return;
             }
 
-            // ==========================
-            // TRACKING (INCHANGÉ)
-            // ==========================
+            // TRACKING (ton code inchangé)
             Bitmap? img;
             lock (_snapshotLock)
             {
@@ -231,7 +227,7 @@ namespace DEMOREALSENSE
 
             if (img == null)
             {
-                distanceLabel.Text = "Image pas prête (attends 1-2 secondes).";
+                ThrottledLabel("Image pas prête (attends 1-2 secondes).", Color.Black);
                 return;
             }
 
@@ -240,37 +236,33 @@ namespace DEMOREALSENSE
 
             if (x < 0 || y < 0)
             {
-                distanceLabel.Text = "Clique dans l'image (pas dans les bandes).";
+                ThrottledLabel("Clique dans l'image (pas dans les bandes).", Color.Black);
                 return;
             }
 
-            // On a besoin d'une frame récente pour initialiser tracker :
             if (!_camera.TryGetAlignedFrames(500, out var rgb, out var depthU16))
             {
-                distanceLabel.Text = "Frame non dispo (reclique).";
+                ThrottledLabel("Frame non dispo (reclique).", Color.Black);
                 return;
             }
 
             bool started = _tracker.TryStart(rgb, _camera.ColorW, _camera.ColorH, x, y);
             if (!started)
             {
-                distanceLabel.Text = "Impossible de créer template (bord image).";
+                ThrottledLabel("Impossible de créer template (bord image).", Color.Black);
                 return;
             }
 
-            // Distance immédiate
             ushort raw = DistanceCalculator.MedianDepthRaw(
                 depthU16, _camera.DepthW, _camera.DepthH,
                 _tracker.X, _tracker.Y, DIST_RADIUS);
 
-            UpdateDistanceLabel(raw);
+            UpdateDistanceAndInOut(raw);
 
             Log($"Tracking ON at ({_tracker.X},{_tracker.Y}), tpl={_tracker.TemplateSize} search={_tracker.SearchRadius}");
         }
 
-        // ============================================================
-        // ✅ AJOUT: ajoute un point de ligne depuis un clic (Zoom OK)
-        // ============================================================
+        // Ajout point ligne depuis clic (Zoom OK)
         private void AddLinePointFromClick(Point clickLocation)
         {
             Bitmap? img;
@@ -281,7 +273,7 @@ namespace DEMOREALSENSE
 
             if (img == null)
             {
-                distanceLabel.Text = "Image pas prête (attends 1-2 secondes).";
+                ThrottledLabel("Image pas prête (attends 1-2 secondes).", Color.Black);
                 return;
             }
 
@@ -290,90 +282,144 @@ namespace DEMOREALSENSE
 
             if (x < 0 || y < 0)
             {
-                distanceLabel.Text = "Ctrl+Clique dans l'image (pas dans les bandes).";
+                ThrottledLabel("Ctrl+Clique dans l'image (pas dans les bandes).", Color.Black);
                 return;
             }
 
+            bool hasLineNow;
+            int count;
             lock (_lineLock)
             {
                 _lineDetector.AddClick(new PointF(x, y));
+                hasLineNow = _lineDetector.HasLine;
+                count = _lineDetector.Samples.Count;
             }
 
-            // feedback
-            ThrottledLabel(_lineDetector.HasLine
-                ? "✅ Ligne détectée (Ctrl+Click pour ajouter / R pour reset)"
-                : $"Mode ligne: {_lineDetector.Samples.Count}/{_lineDetector.MinPointsToFit} points");
+            if (hasLineNow)
+                ThrottledLabel("✅ Ligne détectée (Ctrl+Click pour ajouter / R reset)", Color.Black);
+            else
+                ThrottledLabel($"Mode ligne: {count}/{_lineDetector.MinPointsToFit} points", Color.Black);
         }
 
-        // ============================================================
-        // ✅ AJOUT: dessine la ligne + points dans le bitmap (safe)
-        // ============================================================
+        // Overlay ligne + points (optimisé)
         private void DrawLineOverlayOnBitmap(Bitmap bmp)
         {
-            ClickLineDetector.LineModel line;
             bool hasLine;
-            PointF[] pts;
 
             lock (_lineLock)
             {
                 hasLine = _lineDetector.HasLine;
-                line = _lineDetector.Line;
-                pts = _lineDetector.Samples.Count == 0 ? Array.Empty<PointF>() : new System.Collections.Generic.List<PointF>(_lineDetector.Samples).ToArray();
+                if (!hasLine && _lineDetector.Samples.Count == 0)
+                    return;
             }
 
-            if (!hasLine && pts.Length == 0) return;
-
             using var g = Graphics.FromImage(bmp);
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-            // points
-            for (int i = 0; i < pts.Length; i++)
+            // Points
+            lock (_lineLock)
             {
-                var p = pts[i];
-                g.FillEllipse(Brushes.Lime, p.X - 3, p.Y - 3, 6, 6);
+                for (int i = 0; i < _lineDetector.Samples.Count; i++)
+                {
+                    var p = _lineDetector.Samples[i];
+                    g.FillEllipse(Brushes.Lime, p.X - 2, p.Y - 2, 4, 4);
+                }
             }
 
             if (!hasLine) return;
 
             var bounds = new RectangleF(0, 0, bmp.Width - 1, bmp.Height - 1);
-
-            // Segment image
             if (_lineDetector.TryGetSegmentWithin(bounds, out var a, out var b))
             {
-                using var pen = new Pen(Color.Red, 3f);
+                using var pen = new Pen(Color.Red, 2f);
                 g.DrawLine(pen, a, b);
             }
         }
 
-        private void UpdateDistanceLabel(ushort raw)
+        // Distance + IN/OUT (seule partie en couleur)
+        private void UpdateDistanceAndInOut(ushort raw)
         {
             if (raw == 0)
             {
-                ThrottledLabel("Objet suivi, mais profondeur invalide.");
+                ThrottledLabel("Objet suivi, mais profondeur invalide.", Color.OrangeRed);
                 return;
             }
 
             var (m, cm) = DistanceCalculator.RawToMetersCm(raw, _camera.DepthUnits);
 
+            // throttle UI
             long now = DateTime.UtcNow.Ticks;
-            if (now - _lastUiTicks >= UiMinTicks)
+            if (now - _lastUiTicks < UiMinTicks) return;
+            _lastUiTicks = now;
+
+            bool hasInOut = TryComputeInOut_LeftIsIn(_tracker.X, _tracker.Y, out bool isIn);
+
+            SafeUI(() =>
             {
-                _lastUiTicks = now;
-                SafeUI(() => distanceLabel.Text = $"{m:0.000} m  ({cm:0.0} cm)");
-            }
+                if (!hasInOut)
+                {
+                    distanceLabel.ForeColor = Color.Black;
+                    distanceLabel.Text = $"{m:0.000} m  ({cm:0.0} cm)  |  Ligne: non définie (Ctrl+Click)";
+                    return;
+                }
+
+                // ✅ seulement IN/OUT en couleur
+                distanceLabel.ForeColor = isIn ? Color.LimeGreen : Color.Red;
+                distanceLabel.Text = $"{m:0.000} m  ({cm:0.0} cm)  |  " + (isIn ? "IN ✅" : "OUT ❌");
+            });
         }
 
-        private void ThrottledLabel(string text)
+        // Test gauche/droite stable : direction forcée vers le haut + cross
+        private bool TryComputeInOut_LeftIsIn(int ballX, int ballY, out bool isIn)
+        {
+            isIn = false;
+
+            ClickLineDetector.LineModel line;
+            lock (_lineLock)
+            {
+                if (!_lineDetector.HasLine) return false;
+                line = _lineDetector.Line;
+            }
+
+            float x0 = line.Point.X;
+            float y0 = line.Point.Y;
+            float dx = line.Direction.X;
+            float dy = line.Direction.Y;
+
+            // Force direction "vers le haut" (dy < 0)
+            if (dy > 0f)
+            {
+                dx = -dx;
+                dy = -dy;
+            }
+
+            float vx = ballX - x0;
+            float vy = ballY - y0;
+
+            // cross = v x dir = vx*dy - vy*dx
+            float cross = vx * dy - vy * dx;
+
+            // gauche => cross > 0
+            isIn = cross > 0f;
+            return true;
+        }
+
+        // Throttled label qui garde la couleur demandée (par défaut noir)
+        private void ThrottledLabel(string text, Color color)
         {
             long now = DateTime.UtcNow.Ticks;
             if (now - _lastUiTicks >= UiMinTicks)
             {
                 _lastUiTicks = now;
-                SafeUI(() => distanceLabel.Text = text);
+                SafeUI(() =>
+                {
+                    distanceLabel.ForeColor = color;
+                    distanceLabel.Text = text;
+                });
             }
         }
 
-        // Mapping clic Zoom -> pixel image (utilise la vraie taille bitmap)
+        // Mapping clic Zoom -> pixel image
         private static (int x, int y) TranslateZoomMousePositionToImagePixel(PictureBox pb, Image img, Point mouse)
         {
             float imageAspect = (float)img.Width / img.Height;
@@ -410,7 +456,11 @@ namespace DEMOREALSENSE
             if (e.KeyCode == Keys.R)
             {
                 lock (_lineLock) _lineDetector.Clear();
-                ThrottledLabel("Ligne reset ✅ (Ctrl+Click pour redéfinir)");
+                SafeUI(() =>
+                {
+                    distanceLabel.ForeColor = Color.Black;
+                    distanceLabel.Text = "Ligne reset ✅ (Ctrl+Click pour redéfinir)";
+                });
             }
         }
 
@@ -427,7 +477,11 @@ namespace DEMOREALSENSE
 
         private void SetStatus(string s)
         {
-            SafeUI(() => distanceLabel.Text = s);
+            SafeUI(() =>
+            {
+                distanceLabel.ForeColor = Color.Black;
+                distanceLabel.Text = s;
+            });
             Log(s);
         }
 
@@ -443,7 +497,6 @@ namespace DEMOREALSENSE
             {
                 Bitmap? snap = null;
 
-                // On prend la DERNIERE image affichée (avec overlay)
                 lock (_snapshotLock)
                 {
                     if (_lastBitmapShown != null)
@@ -452,7 +505,11 @@ namespace DEMOREALSENSE
 
                 if (snap == null)
                 {
-                    distanceLabel.Text = "Pas d'image à enregistrer (attends la caméra).";
+                    SafeUI(() =>
+                    {
+                        distanceLabel.ForeColor = Color.Black;
+                        distanceLabel.Text = "Pas d'image à enregistrer (attends la caméra).";
+                    });
                     return;
                 }
 
@@ -462,12 +519,20 @@ namespace DEMOREALSENSE
                 snap.Save(fullPath, ImageFormat.Png);
                 snap.Dispose();
 
-                distanceLabel.Text = $"Photo enregistrée: {fileName}";
+                SafeUI(() =>
+                {
+                    distanceLabel.ForeColor = Color.Black;
+                    distanceLabel.Text = $"Photo enregistrée: {fileName}";
+                });
                 Debug.WriteLine("Saved snapshot: " + fullPath);
             }
             catch (Exception ex)
             {
-                distanceLabel.Text = "Erreur photo: " + ex.Message;
+                SafeUI(() =>
+                {
+                    distanceLabel.ForeColor = Color.OrangeRed;
+                    distanceLabel.Text = "Erreur photo: " + ex.Message;
+                });
                 Debug.WriteLine("Snapshot error: " + ex);
             }
         }

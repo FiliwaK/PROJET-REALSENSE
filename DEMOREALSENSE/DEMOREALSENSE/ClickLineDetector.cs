@@ -127,7 +127,6 @@ namespace DEMOREALSENSE
         {
             bestModel = default;
             bestInliers = new List<PointF>();
-
             if (points.Count < 2) return false;
 
             var rnd = new Random(12345);
