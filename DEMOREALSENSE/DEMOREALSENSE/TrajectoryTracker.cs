@@ -13,7 +13,6 @@ namespace DEMOREALSENSE
         }
 
         private readonly Queue<Sample> _samples = new Queue<Sample>();
-
         public int MaxSamples { get; set; } = 30;
 
         public void Reset() => _samples.Clear();

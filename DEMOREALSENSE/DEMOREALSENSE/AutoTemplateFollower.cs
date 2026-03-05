@@ -5,7 +5,7 @@ namespace DEMOREALSENSE
 {
     /// <summary>
     /// Détecte automatiquement la balle (BallDetector) puis
-    /// démarre le TemplateTracker pour un suivi stable.
+    /// démarre TemplateTracker pour un suivi stable.
     /// En cas de perte, ré-acquiert automatiquement.
     /// </summary>
     public sealed class AutoTemplateFollower
@@ -19,59 +19,49 @@ namespace DEMOREALSENSE
             _template = templateTracker ?? throw new ArgumentNullException(nameof(templateTracker));
         }
 
-        public bool IsActive { get; private set; } = true;
-
-        // Quand on perd, combien de frames on tente de ré-acquérir
         public int ReacquireEveryNFrames { get; set; } = 2;
-
-        // ROI autour de la dernière position (plus stable)
-        public int RoiHalfSize { get; set; } = 160;
-
-        // Pour éviter les faux lock: il faut X frames confirmées
+        public int RoiHalfSize { get; set; } = 220;
         public int MinConfirmFrames { get; set; } = 2;
 
         private int _frameCount = 0;
         private int _confirm = 0;
-
         private Point _last = new Point(-1, -1);
 
         public void Reset()
         {
             _confirm = 0;
             _last = new Point(-1, -1);
-            // On ne stop pas le template tracker ici pour ne pas casser tracking click,
-            // c'est CameraView qui gère quel mode utiliser.
         }
 
         /// <summary>
-        /// Essaie d'assurer un suivi (auto).
-        /// Retourne true si position suivie dispo.
+        /// Retourne true si on a une position utilisable (détectée ou trackée).
+        /// bx/by = position estimée.
         /// </summary>
-        public bool TryUpdate(byte[] rgb, int w, int h, Bitmap bmp24, out int x, out int y)
+        public bool TryUpdate(byte[] rgb, int w, int h, Bitmap bmp24, out int bx, out int by)
         {
-            x = y = -1;
-            if (!IsActive) return false;
+            bx = by = -1;
+            if (rgb == null || bmp24 == null) return false;
 
             _frameCount++;
 
-            // 1) Si template tracker suit déjà => meilleur signal
+            // 1) Si TemplateTracker actif, c'est le signal le plus stable
             if (_template.IsTracking)
             {
                 if (_template.TryUpdate(rgb, w, h))
                 {
                     _last = new Point(_template.X, _template.Y);
-                    x = _template.X;
-                    y = _template.Y;
+                    bx = _template.X;
+                    by = _template.Y;
                     _confirm = MinConfirmFrames;
                     return true;
                 }
 
-                // perdu => on laisse tomber le template
+                // perdu -> stop + tentative reacquire
                 _template.Stop();
                 _confirm = 0;
             }
 
-            // 2) Ré-acquisition via BallDetector (pas à chaque frame pour perf)
+            // 2) Réacquisition via BallDetector (pas forcément chaque frame)
             if ((_frameCount % ReacquireEveryNFrames) != 0)
                 return false;
 
@@ -81,21 +71,20 @@ namespace DEMOREALSENSE
             _confirm++;
             _last = new Point(cx, cy);
 
-            // Quand confirmé assez de frames => start template tracking
+            // Après X confirmations => start TemplateTracker auto
             if (_confirm >= MinConfirmFrames)
             {
-                // démarre template tracker sur image RGB (pas bitmap)
                 bool started = _template.TryStart(rgb, w, h, cx, cy);
                 if (started)
                 {
-                    x = cx; y = cy;
+                    bx = cx; by = cy;
                     return true;
                 }
                 _confirm = 0;
             }
 
-            // On a détecté, mais pas encore confirmé
-            x = cx; y = cy;
+            // Détecté mais pas encore lock template
+            bx = cx; by = cy;
             return true;
         }
 
@@ -103,7 +92,7 @@ namespace DEMOREALSENSE
         {
             cx = cy = -1;
 
-            // Pas de dernière position => détect global
+            // si pas de position => global
             if (last.X < 0 || last.Y < 0)
             {
                 if (_detector.TryDetect(bmp24, out int x, out int y, out _))
