@@ -5,35 +5,24 @@ namespace DEMOREALSENSE
     public sealed class FrameResult
     {
         public bool HasFrame { get; set; }
+
+        // Image déjà prête pour UI (ownership: UI doit Dispose l’ancienne)
         public Bitmap? BitmapToShow { get; set; }
 
-        public long NowTicks { get; set; }
-        public double FrameMs { get; set; }
+        // Manual tracker (si actif)
+        public bool ManualTrackingOk { get; set; } = true;
 
-        // qui est suivi ?
-        public bool HasBall { get; set; }
-        public int BallX { get; set; }
-        public int BallY { get; set; }
-
-        // profondeur de la balle (raw) + units (m)
+        // Infos distance
         public ushort RawDepth { get; set; }
         public float DepthUnits { get; set; }
 
-        // tracking manuel
-        public bool ManualTrackingOk { get; set; }
+        // temps frame (ms)
+        public double FrameMs { get; set; }
 
-        // état IN/OUT (latch)
+        // horloge
+        public long NowTicks { get; set; }
+
+        // latch IN/OUT
         public InOutLatch Latch { get; set; } = new InOutLatch();
-
-        // impact (croix)
-        public bool HasImpact { get; set; }
-        public PointF ImpactPoint { get; set; }
-
-        // debug sol
-        public bool HasGround { get; set; }
-        public float GroundY { get; set; }
-
-        // source affichage HUD
-        public string Source { get; set; } = "AUTO"; // "AUTO" / "MANUAL" / "NONE"
     }
 }

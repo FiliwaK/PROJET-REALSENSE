@@ -50,7 +50,7 @@
             // distanceLabel
             // 
             distanceLabel.AutoSize = true;
-            distanceLabel.Location = new Point(597, 12);
+            distanceLabel.Location = new Point(393, 12);
             distanceLabel.Name = "distanceLabel";
             distanceLabel.Size = new Size(120, 20);
             distanceLabel.TabIndex = 1;
@@ -58,7 +58,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(442, 8);
+            button1.Location = new Point(276, 8);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 2;
@@ -82,9 +82,9 @@
             traitementFrameLabel.AutoSize = true;
             traitementFrameLabel.Location = new Point(30, 12);
             traitementFrameLabel.Name = "traitementFrameLabel";
-            traitementFrameLabel.Size = new Size(106, 20);
+            traitementFrameLabel.Size = new Size(213, 20);
             traitementFrameLabel.TabIndex = 3;
-            traitementFrameLabel.Text = "point d'impact";
+            traitementFrameLabel.Text = "temps de traitement par frame";
             // 
             // CameraView
             // 

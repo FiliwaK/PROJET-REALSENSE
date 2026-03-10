@@ -1,52 +1,38 @@
-﻿using System.Drawing;
+﻿using System;
 
 namespace DEMOREALSENSE
 {
     public sealed class ImpactDetector
     {
-        // Vy flip (descend -> remonte) : en image, Y vers le bas
-        public float MinVyDown { get; set; } = 120f;
-        public float MinVyUp { get; set; } = 120f;
+        // anti doublons
+        public int CooldownMs { get; set; } = 500;
 
-        // changement d'angle (optionnel) : cos(angle) petit => gros virage
-        public float MaxCosAngle { get; set; } = 0.25f; // ~75° ou plus (assez violent)
-
-        // anti-rebond multiple
-        public int CooldownMs { get; set; } = 600;
-
+        private bool _wasInContact = false;
         private long _lastImpactTicks = 0;
 
-        public void Reset() => _lastImpactTicks = 0;
-
-        public bool TryDetectImpact(long nowTicks, PointF vPrev, PointF vNow)
+        public void Reset()
         {
-            long cd = System.TimeSpan.FromMilliseconds(CooldownMs).Ticks;
-            if (_lastImpactTicks != 0 && nowTicks - _lastImpactTicks < cd)
-                return false;
-
-            // 1) Rebond vertical : descend (vy +) puis remonte (vy -)
-            bool vyFlip = (vPrev.Y > +MinVyDown && vNow.Y < -MinVyUp);
-
-            // 2) Gros virage : angle entre vPrev et vNow
-            bool angleBreak = false;
-            float a = Len(vPrev);
-            float b = Len(vNow);
-            if (a > 1e-3f && b > 1e-3f)
-            {
-                float cos = (vPrev.X * vNow.X + vPrev.Y * vNow.Y) / (a * b);
-                // cos proche de 1 = même direction, cos proche de -1 = opposé
-                angleBreak = cos < MaxCosAngle;
-            }
-
-            if (vyFlip || angleBreak)
-            {
-                _lastImpactTicks = nowTicks;
-                return true;
-            }
-
-            return false;
+            _wasInContact = false;
+            _lastImpactTicks = 0;
         }
 
-        private static float Len(PointF v) => (float)System.Math.Sqrt(v.X * v.X + v.Y * v.Y);
+        /// <summary>
+        /// Update avec un bool "contactSol".
+        /// Retourne true UNIQUEMENT au moment où on passe de "pas contact" -> "contact".
+        /// </summary>
+        public bool Update(bool contactSol, long nowTicks)
+        {
+            bool risingEdge = (!_wasInContact && contactSol);
+            _wasInContact = contactSol;
+
+            if (!risingEdge) return false;
+
+            long cd = TimeSpan.FromMilliseconds(CooldownMs).Ticks;
+            if (_lastImpactTicks != 0 && (nowTicks - _lastImpactTicks) < cd)
+                return false;
+
+            _lastImpactTicks = nowTicks;
+            return true;
+        }
     }
 }

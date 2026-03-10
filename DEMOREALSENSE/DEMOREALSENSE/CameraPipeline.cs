@@ -9,7 +9,6 @@ namespace DEMOREALSENSE
         private readonly RealSenseCameraService _camera;
 
         private readonly TemplateTracker _manualTracker;
-
         private readonly ClickLineDetector _lineDetector;
         private readonly object _lineLock;
 
@@ -22,15 +21,19 @@ namespace DEMOREALSENSE
         private readonly GroundEstimator _ground;
         private readonly InOutLatch _latch;
 
-        // état interne air/sol
-        private bool _wasClearlyInAir = false;
+        // --- options ---
+        public bool AutoEnabled { get; set; } = true;
 
-        // affichage croix (persist)
+        // Cross display
         private PointF? _impactMark = null;
         private long _impactMarkTicks = 0;
         private const int ImpactMarkMs = 2500;
 
-        public bool AutoEnabled { get; set; } = true;
+        // Air memory
+        private bool _wasClearlyInAir = false;
+
+        // Perf
+        private readonly Stopwatch _sw = new Stopwatch();
 
         public CameraPipeline(
             RealSenseCameraService camera,
@@ -38,12 +41,14 @@ namespace DEMOREALSENSE
             ClickLineDetector lineDetector, object lineLock,
             BallDetector ballDetector,
             TemplateTracker autoTracker, AutoTemplateFollower autoFollower,
-            TrajectoryTracker traj, ImpactDetector impact,
-            GroundEstimator ground, InOutLatch latch)
+            TrajectoryTracker traj,
+            ImpactDetector impact,
+            GroundEstimator ground,
+            InOutLatch latch)
         {
             _camera = camera;
-            _manualTracker = manualTracker;
 
+            _manualTracker = manualTracker;
             _lineDetector = lineDetector;
             _lineLock = lineLock;
 
@@ -61,27 +66,29 @@ namespace DEMOREALSENSE
         {
             _autoTracker.Stop();
             _autoFollower.Reset();
+
             _traj.Reset();
             _impact.Reset();
-            _latch.Reset();
 
-            _wasClearlyInAir = false;
             _impactMark = null;
             _impactMarkTicks = 0;
+
+            _wasClearlyInAir = false;
+            _latch.Reset();
         }
 
         public FrameResult ProcessOneFrame(OverlayRenderer overlays)
         {
-            var sw = Stopwatch.StartNew();
             var res = new FrameResult();
+            _sw.Restart();
 
-            long nowTicks = DateTime.UtcNow.Ticks;
-            res.NowTicks = nowTicks;
+            res.NowTicks = DateTime.UtcNow.Ticks;
 
-            // 1) frames
+            // 1) Frames
             if (!_camera.TryGetAlignedFrames(2000, out var rgb, out var depthU16))
             {
                 res.HasFrame = false;
+                res.FrameMs = _sw.Elapsed.TotalMilliseconds;
                 return res;
             }
 
@@ -91,8 +98,7 @@ namespace DEMOREALSENSE
             int w = _camera.ColorW;
             int h = _camera.ColorH;
 
-            // 2) manuel update (sans casser)
-            res.ManualTrackingOk = true;
+            // 2) Manual tracker update (ne casse pas)
             if (_manualTracker.IsTracking)
             {
                 bool ok = _manualTracker.TryUpdate(rgb, w, h);
@@ -100,123 +106,142 @@ namespace DEMOREALSENSE
                 if (!ok) _manualTracker.Stop();
             }
 
-            // 3) bitmap
+            // 3) Bitmap
             using var bmp = FrameBitmapConverter.RgbToBitmap24bpp(rgb, w, h);
 
-            // 4) overlay manuel
+            // overlays manual
             if (_manualTracker.IsTracking && _manualTracker.X >= 0 && _manualTracker.Y >= 0)
-                overlays.DrawManualTracker(bmp, _manualTracker.X, _manualTracker.Y);
+                overlays.DrawManualBox(bmp, _manualTracker.X, _manualTracker.Y);
 
-            // 5) AUTO ball
+            // 4) Auto ball
+            bool haveAuto = false;
             int bx = -1, by = -1;
-            bool hasAutoBall = false;
 
             if (AutoEnabled)
             {
-                hasAutoBall = _autoFollower.TryUpdate(rgb, w, h, bmp, out bx, out by);
-                if (hasAutoBall && bx >= 0 && by >= 0)
-                    overlays.DrawAutoBall(bmp, bx, by, 12);
+                haveAuto = _autoFollower.TryUpdate(rgb, w, h, bmp, out bx, out by);
+                if (haveAuto && bx >= 0 && by >= 0)
+                    overlays.DrawAutoCircle(bmp, bx, by);
             }
 
-            // 6) quelle balle on juge ? (manuel prioritaire)
-            bool useManual = _manualTracker.IsTracking && _manualTracker.X >= 0 && _manualTracker.Y >= 0;
-            if (useManual)
+            // 5) Choisir la meilleure source de position de balle (AUTO sinon MANUEL)
+            bool haveBall = false;
+            int ballX = -1, ballY = -1;
+
+            if (haveAuto && bx >= 0 && by >= 0)
             {
-                res.Source = "MANUAL";
-                res.HasBall = true;
-                res.BallX = _manualTracker.X;
-                res.BallY = _manualTracker.Y;
+                haveBall = true;
+                ballX = bx; ballY = by;
             }
-            else if (hasAutoBall && bx >= 0 && by >= 0)
+            else if (_manualTracker.IsTracking && _manualTracker.X >= 0 && _manualTracker.Y >= 0)
             {
-                res.Source = "AUTO";
-                res.HasBall = true;
-                res.BallX = bx;
-                res.BallY = by;
-            }
-            else
-            {
-                res.Source = "NONE";
-                res.HasBall = false;
+                haveBall = true;
+                ballX = _manualTracker.X; ballY = _manualTracker.Y;
             }
 
-            // 7) ligne overlay
-            overlays.DrawLine(bmp, _lineDetector, _lineLock);
-
-            // 8) logique (distance, latch, impact)
-            if (res.HasBall)
+            // 6) Calcul distance balle (si dispo)
+            ushort ballRaw = 0;
+            if (haveBall)
             {
-                // distance
-                res.RawDepth = DistanceCalculator.MedianDepthRaw(
+                ballRaw = DistanceCalculator.MedianDepthRaw(
                     depthU16, _camera.DepthW, _camera.DepthH,
-                    res.BallX, res.BallY, radius: 2);
+                    ballX, ballY, radius: 2);
+            }
+            res.RawDepth = ballRaw;
 
-                // IN/OUT (continue) sur la position courante (manuel OU auto)
-                if (InOutJudge.TryIsIn(_lineDetector, _lineLock, new PointF(res.BallX, res.BallY), out bool isInNow))
-                    _latch.Update(isInNow, nowTicks);
-
-                // sol depuis la ligne
-                if (_ground.TryGetGroundY(_lineDetector, _lineLock, res.BallX, out float yGround))
+            // 7) IN/OUT latch (AUTO + MANUEL)
+            if (haveBall)
+            {
+                if (InOutJudge.TryIsIn(_lineDetector, _lineLock, new PointF(ballX, ballY), out bool isInNow))
                 {
-                    res.HasGround = true;
-                    res.GroundY = yGround;
+                    _latch.Update(isInNow, res.NowTicks);
+                }
+            }
+            res.Latch = _latch;
 
-                    // debug sol (petit point)
-                    overlays.DrawGroundDebug(bmp, res.BallX, yGround);
+            // 8) Impact sol (croix) — UNIQUEMENT contact sol
+            if (haveBall)
+            {
+                if (_ground.TryGetGroundY(_lineDetector, _lineLock, ballX, out float yGround))
+                {
+                    // profondeur du "sol" au même x (autour de yGround)
+                    int gy = Clamp((int)Math.Round(yGround), 0, _camera.DepthH - 1);
 
-                    // trajectoire seulement si on a une balle
-                    _traj.Add(new PointF(res.BallX, res.BallY), nowTicks);
+                    ushort groundRaw = DistanceCalculator.MedianDepthRaw(
+                        depthU16, _camera.DepthW, _camera.DepthH,
+                        ballX, gy, radius: 2);
 
-                    // air/sol
-                    bool clearlyInAir = _ground.IsClearlyInAir(_lineDetector, _lineLock, new PointF(res.BallX, res.BallY), out _);
-                    bool nearGround = Math.Abs(res.BallY - yGround) <= _ground.NearGroundPx;
+                    // bool air / contact
+                    bool clearlyInAir = _ground.IsClearlyInAir(ballY, yGround);
 
-                    // impact = uniquement si proche sol ET gros changement trajectoire
-                    if (_traj.TryGetPreviousVelocity(out var vPrev) && _traj.TryGetVelocity(out var vNow))
+                    bool contact = _ground.IsContactWithGround(
+                        ballX, ballY,
+                        yGround,
+                        ballRaw, groundRaw,
+                        _camera.DepthUnits);
+
+                    // On veut surtout : AIR -> CONTACT
+                    bool airToContact = (_wasClearlyInAir && contact);
+
+                    // update impact detector (front montant de contact)
+                    bool impactNow = false;
+                    if (airToContact)
+                        impactNow = _impact.Update(contactSol: true, nowTicks: res.NowTicks);
+                    else
+                        impactNow = _impact.Update(contactSol: contact, nowTicks: res.NowTicks);
+
+                    if (impactNow)
                     {
-                        // condition forte : air -> proche sol (super fiable)
-                        bool airToGround = _wasClearlyInAir && nearGround;
-
-                        // condition cinématique : changement sec (vyFlip/angleBreak)
-                        bool sharp = _impact.TryDetectImpact(nowTicks, vPrev, vNow);
-
-                        bool impactSol = nearGround && (airToGround || sharp);
-
-                        if (impactSol)
-                        {
-                            // croix EXACTEMENT sur le sol
-                            _impactMark = new PointF(res.BallX, yGround);
-                            _impactMarkTicks = nowTicks;
-                        }
+                        // ✅ Croix au sol (pas à la position de la balle)
+                        _impactMark = new PointF(ballX, yGround);
+                        _impactMarkTicks = res.NowTicks;
                     }
 
                     _wasClearlyInAir = clearlyInAir;
+
+                    // debug sol (petit point discret)
+                    overlays.DrawGroundDebug(bmp, ballX, yGround);
                 }
             }
 
-            // 9) dessiner croix (si encore visible)
-            if (_impactMark.HasValue)
-            {
-                long dt = nowTicks - _impactMarkTicks;
-                if (dt <= TimeSpan.FromMilliseconds(ImpactMarkMs).Ticks)
-                {
-                    overlays.DrawImpactCross(bmp, _impactMark.Value.X, _impactMark.Value.Y);
-                    res.HasImpact = true;
-                    res.ImpactPoint = _impactMark.Value;
-                }
-                else
-                {
-                    _impactMark = null;
-                }
-            }
+            // 9) Ligne overlay
+            overlays.DrawLineOverlay(bmp, _lineDetector, _lineLock);
 
-            // 10) output bitmap UI
+            // 10) Croix impact (si active)
+            DrawImpactIfAlive(bmp, res.NowTicks);
+
+            // 11) clone pour UI
             res.BitmapToShow = (Bitmap)bmp.Clone();
-            res.Latch = _latch;
 
-            sw.Stop();
-            res.FrameMs = sw.Elapsed.TotalMilliseconds;
+            _sw.Stop();
+            res.FrameMs = _sw.Elapsed.TotalMilliseconds;
             return res;
+        }
+
+        private void DrawImpactIfAlive(Bitmap bmp, long nowTicks)
+        {
+            if (!_impactMark.HasValue) return;
+
+            long dt = nowTicks - _impactMarkTicks;
+            if (dt > TimeSpan.FromMilliseconds(ImpactMarkMs).Ticks)
+            {
+                _impactMark = null;
+                return;
+            }
+
+            using var g = Graphics.FromImage(bmp);
+            using var pen = new Pen(Color.Yellow, 3f);
+
+            var p = _impactMark.Value;
+            g.DrawLine(pen, p.X - 10, p.Y - 10, p.X + 10, p.Y + 10);
+            g.DrawLine(pen, p.X - 10, p.Y + 10, p.X + 10, p.Y - 10);
+        }
+
+        private static int Clamp(int v, int lo, int hi)
+        {
+            if (v < lo) return lo;
+            if (v > hi) return hi;
+            return v;
         }
     }
 }

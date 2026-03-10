@@ -11,6 +11,7 @@ namespace DEMOREALSENSE
 {
     public partial class CameraView : Form
     {
+
         private readonly RealSenseCameraService _camera = new RealSenseCameraService();
 
         private readonly TemplateTracker _tracker = new TemplateTracker();
@@ -44,6 +45,9 @@ namespace DEMOREALSENSE
 
         private readonly string _snapDir =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RealSense_Captures");
+        
+        private const string HelpText =
+        "Touches: Click=Tracker manuel | Ctrl+Click=Tracer ligne | Shift+Click=Calibrer balle | A=Auto ON/OFF | R=Reset ligne";
 
         public CameraView()
         {
@@ -82,6 +86,7 @@ namespace DEMOREALSENSE
             KeyDown += CameraView_KeyDown;
 
             _hud.SetStatus("Click=tracker | Ctrl+Click=ligne | Shift+Click=calibrer balle | A=Auto ON/OFF | R=reset ligne");
+            _hud.SetStatus(HelpText);
         }
 
         protected override void OnShown(EventArgs e)
@@ -107,7 +112,8 @@ namespace DEMOREALSENSE
                 _cts = new CancellationTokenSource();
                 _task = Task.Run(() => Loop(_cts.Token), _cts.Token);
 
-                _hud?.SetStatus("OK. AutoBall ON. Shift+Click calibrer balle. Ctrl+Click tracer ligne.");
+                //_hud?.SetStatus("OK. AutoBall ON. Shift+Click calibrer balle. Ctrl+Click tracer ligne.");
+                _hud?.SetStatus(HelpText);
             }
             catch (Exception ex)
             {
