@@ -1,84 +1,52 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace DEMOREALSENSE
 {
     public sealed class ImpactDetector
     {
-        // --- Réglages (safe par défaut) ---
-        public float MinPrevSpeed = 140f;        // vitesse avant impact
-        public float MinSpeedDropRatio = 0.45f;  // speedNow < speedPrev * ratio
-        public float MinVyFlip = 60f;            // vy change signe (rebond) avec amplitude
+        // Vy flip (descend -> remonte) : en image, Y vers le bas
+        public float MinVyDown { get; set; } = 120f;
+        public float MinVyUp { get; set; } = 120f;
 
-        public float MaxMoveAfterPx = 5f;        // déplacement faible => contact sol / roulage
-        public int ConfirmFrames = 2;            // frames consécutives stables pour confirmer
-        public int CandidateWindowFrames = 4;    // fenêtre max après candidat
+        // changement d'angle (optionnel) : cos(angle) petit => gros virage
+        public float MaxCosAngle { get; set; } = 0.25f; // ~75° ou plus (assez violent)
 
-        // --- Etat interne ---
-        private bool _hasCandidate = false;
-        private int _candidateAge = 0;
-        private int _stableCount = 0;
+        // anti-rebond multiple
+        public int CooldownMs { get; set; } = 600;
 
-        public void Reset()
+        private long _lastImpactTicks = 0;
+
+        public void Reset() => _lastImpactTicks = 0;
+
+        public bool TryDetectImpact(long nowTicks, PointF vPrev, PointF vNow)
         {
-            _hasCandidate = false;
-            _candidateAge = 0;
-            _stableCount = 0;
-        }
-
-        /// <summary>
-        /// Nouvelle API (VAR) : retourne true uniquement quand impact sol est confirmé.
-        /// </summary>
-        public bool Update(PointF vPrev, PointF vNow, float movePx)
-        {
-            float spPrev = Len(vPrev);
-            float spNow = Len(vNow);
-
-            if (_hasCandidate)
-            {
-                _candidateAge++;
-
-                if (movePx <= MaxMoveAfterPx) _stableCount++;
-                else _stableCount = 0;
-
-                if (_stableCount >= ConfirmFrames)
-                {
-                    Reset();
-                    return true; // IMPACT CONFIRME
-                }
-
-                if (_candidateAge > CandidateWindowFrames)
-                    Reset();
-
+            long cd = System.TimeSpan.FromMilliseconds(CooldownMs).Ticks;
+            if (_lastImpactTicks != 0 && nowTicks - _lastImpactTicks < cd)
                 return false;
+
+            // 1) Rebond vertical : descend (vy +) puis remonte (vy -)
+            bool vyFlip = (vPrev.Y > +MinVyDown && vNow.Y < -MinVyUp);
+
+            // 2) Gros virage : angle entre vPrev et vNow
+            bool angleBreak = false;
+            float a = Len(vPrev);
+            float b = Len(vNow);
+            if (a > 1e-3f && b > 1e-3f)
+            {
+                float cos = (vPrev.X * vNow.X + vPrev.Y * vNow.Y) / (a * b);
+                // cos proche de 1 = même direction, cos proche de -1 = opposé
+                angleBreak = cos < MaxCosAngle;
             }
 
-            if (spPrev < MinPrevSpeed)
-                return false;
-
-            bool bigSpeedDrop = (spNow < spPrev * MinSpeedDropRatio);
-
-            // Rebond vertical (descend puis remonte)
-            // Note: Y image vers le bas => "descend" = vPrev.Y positif
-            bool vyFlip = (vPrev.Y > +MinVyFlip && vNow.Y < -MinVyFlip);
-
-            if (bigSpeedDrop || vyFlip)
+            if (vyFlip || angleBreak)
             {
-                _hasCandidate = true;
-                _candidateAge = 0;
-                _stableCount = (movePx <= MaxMoveAfterPx) ? 1 : 0;
+                _lastImpactTicks = nowTicks;
+                return true;
             }
 
             return false;
         }
 
-        /// <summary>
-        /// COMPAT : ton CameraView appelle encore TryDetectFirstImpact(...)
-        /// Donc on garde ce nom comme wrapper, sans casser ton code.
-        /// </summary>
-        public bool TryDetectFirstImpact(PointF vPrev, PointF vNow, float movePx)
-            => Update(vPrev, vNow, movePx);
-
-        private static float Len(PointF v) => (float)Math.Sqrt(v.X * v.X + v.Y * v.Y);
+        private static float Len(PointF v) => (float)System.Math.Sqrt(v.X * v.X + v.Y * v.Y);
     }
 }

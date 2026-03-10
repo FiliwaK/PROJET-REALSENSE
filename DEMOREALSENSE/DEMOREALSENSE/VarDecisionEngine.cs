@@ -3,194 +3,145 @@ using System.Drawing;
 
 namespace DEMOREALSENSE
 {
-    public enum VarEventType
+    public enum VarDecisionType
     {
         None,
-        GroundContact,
-        AirCrossLine,
-        ExitFov
+        In,
+        Out
     }
 
+    public enum VarDecisionReason
+    {
+        None,
+        CrossLine,
+        FirstImpact,
+        Stopped
+    }
+
+    /// <summary>
+    /// Décision style VAR :
+    /// - OUT immédiat si la balle passe côté OUT (dépasse la ligne).
+    /// - Sinon : décision au premier impact au sol (position de la croix).
+    /// - Sinon : décision si la balle s'arrête.
+    /// Pas de IN/OUT en continu.
+    /// </summary>
     public sealed class VarDecisionEngine
     {
-        public int StableFrames = 3;
-        public float MinAirSpeed = 120f;
-        public float MaxGroundVy = 35f;
-        public float MaxGroundMovePx = 6f;
-        public float CrossEpsilonPx = 6f;
+        // --- Réglages ---
+        public int StopConfirmFrames { get; set; } = 6;   // ~6 frames stables
+        public float StopMovePx { get; set; } = 2.2f;     // déplacement très faible => arrêt
 
-        public bool EnableExitFovDecision = true;
-        public int ExitFovFrames = 6;
-
-        private bool _hasLast = false;
-        private PointF _lastPos;
-        private long _lastTicks;
-
-        private bool? _lastSide = null;
-        private int _sideStableCount = 0;
-
-        private int _groundStable = 0;
-        private int _exitFovCount = 0;
-
+        // --- Etat ---
         public bool HasDecision { get; private set; }
-        public bool DecisionIsIn { get; private set; }
-        public PointF DecisionPoint { get; private set; }
-        public VarEventType DecisionEvent { get; private set; } = VarEventType.None;
+        public VarDecisionType Decision { get; private set; } = VarDecisionType.None;
+        public VarDecisionReason Reason { get; private set; } = VarDecisionReason.None;
+
+        public PointF? DecisionPoint { get; private set; } = null; // point de sortie/impact/arrêt
+        public bool HasLine { get; private set; } = false;
+
+        // pour détecter "passage" vers OUT
+        private bool _prevSideKnown = false;
+        private bool _prevIsIn = true;
+
+        // arrêt
+        private int _stopCount = 0;
 
         public void Reset()
         {
-            _hasLast = false;
-            _lastSide = null;
-            _sideStableCount = 0;
-            _groundStable = 0;
-            _exitFovCount = 0;
-
             HasDecision = false;
-            DecisionEvent = VarEventType.None;
-            DecisionPoint = default;
+            Decision = VarDecisionType.None;
+            Reason = VarDecisionReason.None;
+            DecisionPoint = null;
+            HasLine = false;
+
+            _prevSideKnown = false;
+            _prevIsIn = true;
+
+            _stopCount = 0;
         }
 
-        public bool Update(
-            ClickLineDetector detector, object lineLock,
-            PointF pos, long ticks,
-            bool inFrame,
-            out VarEventType ev)
+        /// <summary>
+        /// Appel frame par frame avec la position balle + infos impact/mouvement.
+        /// - movePx : déplacement entre les 2 derniers points (pixels)
+        /// - impactConfirmed : true si ImpactDetector confirme premier impact sol
+        /// </summary>
+        public void Update(
+            ClickLineDetector lineDetector,
+            object lineLock,
+            PointF ballPos,
+            float movePx,
+            bool impactConfirmed)
         {
-            ev = VarEventType.None;
-            if (HasDecision) return false;
+            if (HasDecision) return;
 
-            if (!TryGetSide(detector, lineLock, pos, out bool side, out float signedDist))
+            // 1) Sans ligne => impossible de dire IN/OUT
+            bool hasLine = InOutJudge.TryIsIn(lineDetector, lineLock, ballPos, out bool isInNow);
+            HasLine = hasLine;
+
+            // 2) OUT immédiat si dépasse la ligne (dès qu'on est côté OUT)
+            if (hasLine)
             {
-                _hasLast = true;
-                _lastPos = pos;
-                _lastTicks = ticks;
-                return false;
-            }
-
-            bool? stableSide = null;
-
-            if (Math.Abs(signedDist) >= CrossEpsilonPx)
-            {
-                if (_lastSide.HasValue && _lastSide.Value == side) _sideStableCount++;
-                else { _lastSide = side; _sideStableCount = 1; }
-
-                if (_sideStableCount >= StableFrames) stableSide = _lastSide.Value;
-            }
-
-            PointF v = default;
-            float speed = 0f;
-            float move = 0f;
-
-            if (_hasLast)
-            {
-                double dt = (ticks - _lastTicks) / (double)TimeSpan.TicksPerSecond;
-                if (dt > 1e-6)
+                // si on est OUT maintenant => décision immédiate OUT
+                if (!isInNow)
                 {
-                    float dx = pos.X - _lastPos.X;
-                    float dy = pos.Y - _lastPos.Y;
-                    v = new PointF((float)(dx / dt), (float)(dy / dt));
-                    speed = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y);
-                    move = (float)Math.Sqrt(dx * dx + dy * dy);
+                    Commit(VarDecisionType.Out, VarDecisionReason.CrossLine, ballPos);
+                    return;
                 }
-            }
 
-            // 1) Contact sol / roulement
-            bool looksGroundNow = (Math.Abs(v.Y) <= MaxGroundVy && move <= MaxGroundMovePx);
-
-            if (looksGroundNow) _groundStable++;
-            else _groundStable = 0;
-
-            if (_groundStable >= StableFrames)
-            {
-                HasDecision = true;
-                DecisionIsIn = side;
-                DecisionPoint = pos;
-                DecisionEvent = VarEventType.GroundContact;
-                ev = DecisionEvent;
-                SaveLast(pos, ticks);
-                return true;
-            }
-
-            // 2) Crossing en l'air
-            if (stableSide.HasValue && _hasLast && speed >= MinAirSpeed)
-            {
-                if (TryGetSide(detector, lineLock, _lastPos, out bool prevSide, out float prevSigned) &&
-                    Math.Abs(prevSigned) >= CrossEpsilonPx &&
-                    prevSide != stableSide.Value)
+                // optionnel : si tu veux détecter "passage" (IN->OUT), on a déjà OUT immédiat
+                if (!_prevSideKnown)
                 {
-                    HasDecision = true;
-                    DecisionIsIn = stableSide.Value;
-                    DecisionPoint = pos;
-                    DecisionEvent = VarEventType.AirCrossLine;
-                    ev = DecisionEvent;
-                    SaveLast(pos, ticks);
-                    return true;
-                }
-            }
-
-            // 3) Perte FOV (option)
-            if (EnableExitFovDecision)
-            {
-                if (!inFrame)
-                {
-                    if (stableSide.HasValue && stableSide.Value == false) _exitFovCount++;
-                    else _exitFovCount = 0;
-
-                    if (_exitFovCount >= ExitFovFrames)
-                    {
-                        HasDecision = true;
-                        DecisionIsIn = false;
-                        DecisionPoint = pos;
-                        DecisionEvent = VarEventType.ExitFov;
-                        ev = DecisionEvent;
-                        SaveLast(pos, ticks);
-                        return true;
-                    }
+                    _prevSideKnown = true;
+                    _prevIsIn = isInNow;
                 }
                 else
                 {
-                    _exitFovCount = 0;
+                    _prevIsIn = isInNow;
                 }
             }
 
-            SaveLast(pos, ticks);
-            return false;
-        }
-
-        private void SaveLast(PointF pos, long ticks)
-        {
-            _hasLast = true;
-            _lastPos = pos;
-            _lastTicks = ticks;
-        }
-
-        private static bool TryGetSide(ClickLineDetector detector, object lineLock, PointF p, out bool isIn, out float signedDist)
-        {
-            isIn = false;
-            signedDist = 0f;
-
-            ClickLineDetector.LineModel line;
-            lock (lineLock)
+            // 3) Premier impact sol => décision basée sur position impact (croix)
+            if (impactConfirmed)
             {
-                if (!detector.HasLine) return false;
-                line = detector.Line;
+                // on commit IN/OUT d'après la position actuelle (point d'impact)
+                if (!hasLine)
+                {
+                    // On marque le point mais pas de décision sans ligne
+                    DecisionPoint = ballPos;
+                    Reason = VarDecisionReason.FirstImpact;
+                    return;
+                }
+
+                Commit(isInNow ? VarDecisionType.In : VarDecisionType.Out, VarDecisionReason.FirstImpact, ballPos);
+                return;
             }
 
-            float x0 = line.Point.X;
-            float y0 = line.Point.Y;
-            float dx = line.Direction.X;
-            float dy = line.Direction.Y;
+            // 4) Arrêt balle => décision IN/OUT selon position à l'arrêt
+            if (movePx <= StopMovePx)
+                _stopCount++;
+            else
+                _stopCount = 0;
 
-            if (dy > 0f) { dx = -dx; dy = -dy; }
+            if (_stopCount >= StopConfirmFrames)
+            {
+                if (!hasLine)
+                {
+                    DecisionPoint = ballPos;
+                    Reason = VarDecisionReason.Stopped;
+                    return;
+                }
 
-            float vx = p.X - x0;
-            float vy = p.Y - y0;
+                Commit(isInNow ? VarDecisionType.In : VarDecisionType.Out, VarDecisionReason.Stopped, ballPos);
+                return;
+            }
+        }
 
-            float cross = vx * dy - vy * dx;
-
-            signedDist = cross;
-            isIn = cross > 0f;
-            return true;
+        private void Commit(VarDecisionType decision, VarDecisionReason reason, PointF p)
+        {
+            HasDecision = true;
+            Decision = decision;
+            Reason = reason;
+            DecisionPoint = p;
         }
     }
 }

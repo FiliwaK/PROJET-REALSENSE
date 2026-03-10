@@ -32,6 +32,7 @@
             distanceLabel = new Label();
             button1 = new Button();
             panel1 = new Panel();
+            traitementFrameLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)cameraPictureBox).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -45,7 +46,6 @@
             cameraPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             cameraPictureBox.TabIndex = 0;
             cameraPictureBox.TabStop = false;
-
             // 
             // distanceLabel
             // 
@@ -58,7 +58,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(480, 3);
+            button1.Location = new Point(442, 8);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 2;
@@ -68,6 +68,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(traitementFrameLabel);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(distanceLabel);
             panel1.Dock = DockStyle.Bottom;
@@ -75,6 +76,15 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1042, 60);
             panel1.TabIndex = 3;
+            // 
+            // traitementFrameLabel
+            // 
+            traitementFrameLabel.AutoSize = true;
+            traitementFrameLabel.Location = new Point(30, 12);
+            traitementFrameLabel.Name = "traitementFrameLabel";
+            traitementFrameLabel.Size = new Size(106, 20);
+            traitementFrameLabel.TabIndex = 3;
+            traitementFrameLabel.Text = "point d'impact";
             // 
             // CameraView
             // 
@@ -97,5 +107,6 @@
         private Label distanceLabel;
         private Button button1;
         private Panel panel1;
+        private Label traitementFrameLabel;
     }
 }
