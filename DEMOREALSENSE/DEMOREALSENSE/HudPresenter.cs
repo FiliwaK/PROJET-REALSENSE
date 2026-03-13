@@ -4,15 +4,24 @@ using System.Windows.Forms;
 
 namespace DEMOREALSENSE
 {
+    /// <summary>
+    /// Présentation HUD — version améliorée.
+    ///
+    /// AMÉLIORATIONS :
+    ///   - Affiche le verdict VarInOutEngine (IN/OUT/Tracking/PendingImpact) quand disponible.
+    ///   - Verdict Final affiché en grand avec couleur claire.
+    ///   - Conserve l'ancienne API RenderHelpOrDistance pour compat.
+    /// </summary>
     public sealed class HudPresenter
     {
         private readonly Label _distanceLabel;
         private readonly Label _frameLabel;
 
         private long _lastUiTicks = 0;
-        private long _uiMinTicks = TimeSpan.TicksPerSecond / 10;
+        private long _uiMinTicks = TimeSpan.TicksPerSecond / 10;  // 10hz général
+        private long _lastVerdictTicks = 0;
+        private long _verdictMinTicks = TimeSpan.TicksPerSecond / 20; // 20hz pour IN/OUT
 
-        // message temporaire
         private long _msgUntilTicks = 0;
         private string? _msgText = null;
         private Color _msgColor = Color.Black;
@@ -36,20 +45,27 @@ namespace DEMOREALSENSE
             _msgUntilTicks = nowTicks + TimeSpan.FromMilliseconds(holdMs).Ticks;
         }
 
+        /// <summary>
+        /// Rendu principal — affiche distance + verdict IN/OUT live.
+        /// </summary>
         public void RenderHelpOrDistance(
             long nowTicks,
             string helpText,
             bool showDistance,
             ushort rawDepth,
             float depthUnits,
-            InOutLatch latch)
+            InOutLatch latch,
+            VarInOutEngine? varEngine = null,
+            InOutSide liveSide = InOutSide.Unknown,
+            bool verdictHeld = false,
+            long heldTicks = 0,
+            int outHoldMs = 5000)
         {
-            if (nowTicks - _lastUiTicks < _uiMinTicks) return;
-            _lastUiTicks = nowTicks;
-
-            // priorité: message temporaire
+            // Messages temporaires : throttle normal
             if (_msgText != null && nowTicks <= _msgUntilTicks)
             {
+                if (nowTicks - _lastUiTicks < _uiMinTicks) return;
+                _lastUiTicks = nowTicks;
                 _distanceLabel.ForeColor = _msgColor;
                 _distanceLabel.Text = _msgText;
                 return;
@@ -58,12 +74,18 @@ namespace DEMOREALSENSE
 
             if (!showDistance)
             {
+                if (nowTicks - _lastUiTicks < _uiMinTicks) return;
+                _lastUiTicks = nowTicks;
                 _distanceLabel.ForeColor = Color.Black;
                 _distanceLabel.Text = helpText;
                 return;
             }
 
-            // show distance + in/out
+            // ✅ Verdict IN/OUT : throttle 20hz (réactif)
+            if (nowTicks - _lastVerdictTicks < _verdictMinTicks) return;
+            _lastVerdictTicks = nowTicks;
+            _lastUiTicks = nowTicks;
+
             string distText = "--";
             if (rawDepth != 0)
             {
@@ -71,7 +93,53 @@ namespace DEMOREALSENSE
                 distText = $"{m:0.000} m ({cm:0.0} cm)";
             }
 
-            // IN/OUT
+            if (liveSide != InOutSide.Unknown)
+            {
+                RenderLiveVerdict(distText, liveSide, verdictHeld, heldTicks, nowTicks, outHoldMs);
+                return;
+            }
+
+            RenderWithLatch(distText, latch, nowTicks);
+        }
+
+        // ── Rendu live IN/OUT ────────────────────────────────────────────
+
+        private void RenderLiveVerdict(
+            string distText, InOutSide side,
+            bool verdictHeld, long heldTicks, long nowTicks, int outHoldMs)
+        {
+            string verdict;
+            Color col;
+
+            if (side == InOutSide.Out)
+            {
+                if (verdictHeld)
+                {
+                    // Compte à rebours du hold
+                    long remTicks = heldTicks + outHoldMs * TimeSpan.TicksPerMillisecond - nowTicks;
+                    int remSec = Math.Max(0, (int)(remTicks / TimeSpan.TicksPerMillisecond / 1000));
+                    verdict = remSec > 0 ? $"❌  OUT  ({remSec}s)" : "❌  OUT";
+                }
+                else
+                {
+                    verdict = "❌  OUT";
+                }
+                col = Color.Red;
+            }
+            else
+            {
+                verdict = "✅  IN";
+                col = Color.LimeGreen;
+            }
+
+            _distanceLabel.ForeColor = col;
+            _distanceLabel.Text = $"{distText} | {verdict}";
+        }
+
+        // ── Fallback latch ───────────────────────────────────────────────
+
+        private void RenderWithLatch(string distText, InOutLatch latch, long nowTicks)
+        {
             string inout = "IN/OUT: ?";
             Color col = Color.Black;
 
@@ -94,7 +162,7 @@ namespace DEMOREALSENSE
         public void UpdateFrameTime(double frameMs)
         {
             _frameLabel.ForeColor = Color.Black;
-            _frameLabel.Text = $"Traitement moyen: {frameMs:0.0} ms/frame";
+            _frameLabel.Text = $"Traitement: {frameMs:0.0} ms/frame";
         }
     }
 }

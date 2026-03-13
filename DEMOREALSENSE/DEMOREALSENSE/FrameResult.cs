@@ -6,23 +6,25 @@ namespace DEMOREALSENSE
     {
         public bool HasFrame { get; set; }
 
-        // Image déjà prête pour UI (ownership: UI doit Dispose l’ancienne)
         public Bitmap? BitmapToShow { get; set; }
 
-        // Manual tracker (si actif)
         public bool ManualTrackingOk { get; set; } = true;
 
-        // Infos distance
         public ushort RawDepth { get; set; }
         public float DepthUnits { get; set; }
 
-        // temps frame (ms)
         public double FrameMs { get; set; }
-
-        // horloge
         public long NowTicks { get; set; }
 
-        // latch IN/OUT
+        // Latch legacy
         public InOutLatch Latch { get; set; } = new InOutLatch();
+
+        // VarEngine conservé pour compat
+        public VarInOutEngine? VarEngine { get; set; }
+
+        // ✅ Verdict live direct (mis à jour chaque frame)
+        public InOutSide LiveSide { get; set; } = InOutSide.Unknown;
+        public bool VerdictHeld { get; set; } = false;   // true = OUT figé 5s
+        public long VerdictHeldTicks { get; set; } = 0;
     }
 }

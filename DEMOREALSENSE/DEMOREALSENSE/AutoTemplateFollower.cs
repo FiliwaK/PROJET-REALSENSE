@@ -20,6 +20,9 @@ namespace DEMOREALSENSE
 
         public int RoiHalfSize { get; set; } = 240;
 
+        /// <summary>Dernier rayon estimé de la balle (px). 0 si inconnu.</summary>
+        public int LastRadius { get; private set; } = 0;
+
         /// <summary>Quand on a une dernière position, reacquire par ROI toutes N frames.</summary>
         public int ReacquireEveryNFrames { get; set; } = 2;
 
@@ -43,6 +46,7 @@ namespace DEMOREALSENSE
         {
             _confirm = 0;
             _last = new Point(-1, -1);
+            LastRadius = 0;
         }
 
         public bool TryUpdate(byte[] rgb, int w, int h, Bitmap bmp24, out int bx, out int by)
@@ -124,9 +128,10 @@ namespace DEMOREALSENSE
             // Pas de last => full frame
             if (last.X < 0 || last.Y < 0)
             {
-                if (_detector.TryDetect(bmp24, out int x, out int y, out _))
+                if (_detector.TryDetect(bmp24, out int x, out int y, out int r0))
                 {
                     cx = x; cy = y;
+                    LastRadius = Math.Max(4, r0);
                     return true;
                 }
                 return false;
@@ -135,10 +140,11 @@ namespace DEMOREALSENSE
             Rectangle roi = BuildRoi(bmp24.Width, bmp24.Height, last, RoiHalfSize);
             using var crop = bmp24.Clone(roi, bmp24.PixelFormat);
 
-            if (_detector.TryDetect(crop, out int rx, out int ry, out _))
+            if (_detector.TryDetect(crop, out int rx, out int ry, out int rr))
             {
                 cx = roi.X + rx;
                 cy = roi.Y + ry;
+                LastRadius = Math.Max(4, rr);
                 return true;
             }
 
