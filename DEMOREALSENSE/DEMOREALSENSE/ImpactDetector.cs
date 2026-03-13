@@ -3,117 +3,96 @@
 namespace DEMOREALSENSE
 {
     /// <summary>
-    /// Détecteur de rebond — machine d'état simple basée sur la vitesse verticale.
+    /// Détecteur de rebond par INVERSION DE VITESSE VERTICALE.
     ///
     /// PRINCIPE :
-    ///   Phase 1 — FALLING  : la balle descend (dy > seuil) pendant MinFallFrames frames
-    ///   Phase 2 — BOUNCED  : immédiatement après, la balle remonte (dy < -seuil) → REBOND ÉMIS
-    ///
-    ///   On ne cherche PAS à détecter le contact avec le sol.
-    ///   On détecte l'inversion de vitesse, qui est le signal le plus fiable et le plus rapide.
+    ///   Un rebond = la balle descend (dy > 0 en image) PUIS remonte (dy < 0).
+    ///   Détection par comparaison de la vitesse moyenne sur deux demi-fenêtres.
     ///
     /// DEUX MODES :
-    ///   Normal — tracker manuel, positions brutes
-    ///   Smooth — tracker auto (positions lissées par template matching)
-    ///            → seuils réduits car le lissage atténue les vitesses
+    ///   Mode normal  — pour tracker manuel ou positions brutes (seuils standard)
+    ///   Mode smooth  — pour tracker auto qui lisse les positions (seuils réduits)
+    ///   → AppellerSetSmoothMode(true) quand le tracker auto est actif.
     ///
-    /// PARAMÈTRES ajustables :
-    ///   MinFallFrames   — nb frames consécutives de descente avant d'accepter un rebond
-    ///   FallSpeedPx     — vitesse min de descente (px/frame)
-    ///   RiseSpeedPx     — vitesse min de remontée (px/frame) pour confirmer le rebond
-    ///   CooldownMs      — délai minimum entre deux rebonds (évite doubles détections)
+    /// PARAMÈTRES :
+    ///   MinFallSpeedPx / MinRiseSpeedPx — seuils de vitesse (px/frame)
+    ///   CooldownMs     — délai min entre deux rebonds
+    ///   HistoryFrames  — fenêtre glissante (frames mémorisées)
     /// </summary>
     public sealed class ImpactDetector
     {
-        // ── Mode normal (tracker manuel) ─────────────────────────────────
-        public float FallSpeedPx { get; set; } = 1.8f;
-        public float RiseSpeedPx { get; set; } = 1.2f;
-        public int MinFallFrames { get; set; } = 3;
+        // ── Paramètres mode normal ───────────────────────────────────────
+        public float MinFallSpeedPx { get; set; } = 1.5f;
+        public float MinRiseSpeedPx { get; set; } = 1.0f;
 
-        // ── Mode smooth (tracker auto — positions lissées) ────────────────
-        public float FallSpeedPxSmooth { get; set; } = 0.6f;
-        public float RiseSpeedPxSmooth { get; set; } = 0.5f;
-        public int MinFallFramesSmooth { get; set; } = 4;
+        // ── Paramètres mode smooth (tracker auto) ────────────────────────
+        public float MinFallSpeedPxSmooth { get; set; } = 0.5f;  // lissé → seuil très bas
+        public float MinRiseSpeedPxSmooth { get; set; } = 0.4f;
 
-        public int CooldownMs { get; set; } = 400;
+        public int CooldownMs { get; set; } = 350;
+        public int HistoryFrames { get; set; } = 6;  // fenêtre plus large = plus robuste
 
-        // ── État ─────────────────────────────────────────────────────────
-        private enum Phase { Idle, Falling }
-        private Phase _phase = Phase.Idle;
-        private int _fallCount = 0;
-        private float _prevY = float.NaN;
-        private long _lastFireTicks = 0;
+        // ── Etat ─────────────────────────────────────────────────────────
+        private readonly float[] _yHistory = new float[32];
+        private int _head = 0;
+        private int _count = 0;
+        private bool _wasFalling = false;
+        private long _lastImpactTicks = 0;
         private bool _smoothMode = false;
 
         /// <summary>
         /// Appeler avec true quand le tracker auto est actif (positions lissées).
-        /// Le changement de mode remet l'état à zéro.
+        /// Appeler avec false pour le tracker manuel.
         /// </summary>
         public void SetSmoothMode(bool smooth)
         {
-            if (_smoothMode == smooth) return;
-            _smoothMode = smooth;
-            Reset();
+            if (_smoothMode != smooth)
+            {
+                _smoothMode = smooth;
+                // Reset l'historique car les échelles de mouvement changent
+                Reset();
+            }
         }
 
         public void Reset()
         {
-            _phase = Phase.Idle;
-            _fallCount = 0;
-            _prevY = float.NaN;
-            _lastFireTicks = 0;
+            _head = 0;
+            _count = 0;
+            _wasFalling = false;
+            _lastImpactTicks = 0;
+            Array.Clear(_yHistory, 0, _yHistory.Length);
         }
 
         /// <summary>
-        /// Appeler chaque frame avec la position Y courante de la balle (bas de la balle = contactY).
-        /// Retourne true exactement une fois par rebond détecté.
+        /// Appeler chaque frame avec la position Y de la balle (pixels).
+        /// Retourne true au moment exact du rebond (inversion descente→montée).
         /// </summary>
         public bool Update(float ballY, long nowTicks)
         {
-            if (float.IsNaN(_prevY)) { _prevY = ballY; return false; }
+            _yHistory[_head % _yHistory.Length] = ballY;
+            _head++;
+            if (_count < _yHistory.Length) _count++;
 
-            float dy = ballY - _prevY;   // positif = descend (Y augmente vers le bas)
-            _prevY = ballY;
+            if (_count < HistoryFrames) return false;
 
-            float fallThresh = _smoothMode ? FallSpeedPxSmooth : FallSpeedPx;
-            float riseThresh = _smoothMode ? RiseSpeedPxSmooth : RiseSpeedPx;
-            int minFall = _smoothMode ? MinFallFramesSmooth : MinFallFrames;
+            int half = HistoryFrames / 2;
+            float dyRecent = AverageDy(0, half);            // frames récentes
+            float dyOlder = AverageDy(half, HistoryFrames);   // frames précédentes
 
-            switch (_phase)
+            float fallThresh = _smoothMode ? MinFallSpeedPxSmooth : MinFallSpeedPx;
+            float riseThresh = _smoothMode ? MinRiseSpeedPxSmooth : MinRiseSpeedPx;
+
+            bool fallingNow = dyOlder > fallThresh;
+            bool risingNow = dyRecent < -riseThresh;
+
+            if (_wasFalling && risingNow)
             {
-                case Phase.Idle:
-                    if (dy > fallThresh)
-                    {
-                        _fallCount++;
-                        if (_fallCount >= minFall)
-                            _phase = Phase.Falling;
-                    }
-                    else
-                    {
-                        _fallCount = 0;
-                    }
-                    break;
-
-                case Phase.Falling:
-                    if (dy < -riseThresh)
-                    {
-                        // Inversion confirmée → REBOND
-                        _phase = Phase.Idle;
-                        _fallCount = 0;
-                        return TryFire(nowTicks);
-                    }
-                    else if (dy > fallThresh)
-                    {
-                        // Continue de descendre
-                        _fallCount++;
-                    }
-                    else
-                    {
-                        // Vitesse nulle / incertaine — on reste Falling mais on reset le compteur
-                        _fallCount = 0;
-                    }
-                    break;
+                _wasFalling = false;
+                return TryFireImpact(nowTicks);
             }
+
+            if (fallingNow && !risingNow) _wasFalling = true;
+            if (risingNow) _wasFalling = false;
 
             return false;
         }
@@ -122,14 +101,30 @@ namespace DEMOREALSENSE
         public bool Update(bool clearlyInAir, bool contactGround, long nowTicks) => false;
         public bool UpdateAirToGround(bool airToContact, long nowTicks) => false;
 
-        // ── Helper ───────────────────────────────────────────────────────
+        // ── Helpers ──────────────────────────────────────────────────────
 
-        private bool TryFire(long nowTicks)
+        private float AverageDy(int fromRecent, int toRecent)
+        {
+            int n = toRecent - fromRecent;
+            if (n <= 0 || _count < toRecent + 1) return 0f;
+            float sum = 0f;
+            for (int i = fromRecent; i < toRecent; i++)
+                sum += GetHistory(i) - GetHistory(i + 1); // dy positif = descend
+            return sum / n;
+        }
+
+        private float GetHistory(int backIndex)
+        {
+            int idx = (_head - 1 - backIndex + _yHistory.Length * 2) % _yHistory.Length;
+            return _yHistory[idx];
+        }
+
+        private bool TryFireImpact(long nowTicks)
         {
             long cd = CooldownMs * TimeSpan.TicksPerMillisecond;
-            if (_lastFireTicks != 0 && (nowTicks - _lastFireTicks) < cd)
+            if (_lastImpactTicks != 0 && (nowTicks - _lastImpactTicks) < cd)
                 return false;
-            _lastFireTicks = nowTicks;
+            _lastImpactTicks = nowTicks;
             return true;
         }
     }
