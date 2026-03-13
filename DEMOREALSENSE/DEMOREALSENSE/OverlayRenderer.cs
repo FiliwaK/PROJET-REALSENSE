@@ -6,12 +6,6 @@ namespace DEMOREALSENSE
     {
         public int ManualBoxHalf { get; set; } = 12;
 
-        // === compat noms ===
-        public void DrawManualTracker(Bitmap bmp, int x, int y) => DrawManualBox(bmp, x, y);
-        public void DrawAutoBall(Bitmap bmp, int x, int y, int radiusPx = 12) => DrawAutoCircle(bmp, x, y, radiusPx);
-        public void DrawLine(Bitmap bmp, ClickLineDetector lineDetector, object lineLock) => DrawLineOverlay(bmp, lineDetector, lineLock);
-
-        // === rendu ===
         public void DrawManualBox(Bitmap bmp, int x, int y)
         {
             FrameBitmapConverter.DrawGreenBox(bmp, x, y, ManualBoxHalf);
@@ -22,15 +16,6 @@ namespace DEMOREALSENSE
             using var g = Graphics.FromImage(bmp);
             using var pen = new Pen(Color.DeepSkyBlue, 2f);
             g.DrawEllipse(pen, x - radiusPx, y - radiusPx, radiusPx * 2, radiusPx * 2);
-        }
-
-        public void DrawImpactCross(Bitmap bmp, float x, float y)
-        {
-            using var g = Graphics.FromImage(bmp);
-            using var pen = new Pen(Color.Yellow, 3f);
-
-            g.DrawLine(pen, x - 10, y - 10, x + 10, y + 10);
-            g.DrawLine(pen, x - 10, y + 10, x + 10, y - 10);
         }
 
         public void DrawGroundDebug(Bitmap bmp, float x, float yGround)
@@ -51,7 +36,7 @@ namespace DEMOREALSENSE
             using var g = Graphics.FromImage(bmp);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-            // points cliqués
+            // Points cliqués
             lock (lineLock)
             {
                 for (int i = 0; i < lineDetector.Samples.Count; i++)
@@ -68,6 +53,39 @@ namespace DEMOREALSENSE
             {
                 using var pen = new Pen(Color.Red, 2f);
                 g.DrawLine(pen, a, b);
+            }
+        }
+
+        /// <summary>
+        /// ✅ Affiche le terrain défini par 4 points (Alt+Click x4).
+        /// - Points: petits ronds cyan
+        /// - Lignes: polygone cyan
+        /// </summary>
+        public void DrawCourtOverlay(Bitmap bmp, CourtArea court)
+        {
+            if (court == null) return;
+            var pts = court.Points;
+            if (pts.Count == 0) return;
+
+            using var g = Graphics.FromImage(bmp);
+            using var pen = new Pen(Color.Cyan, 2f);
+
+            // points
+            for (int i = 0; i < pts.Count; i++)
+            {
+                var p = pts[i];
+                g.FillEllipse(Brushes.Cyan, p.X - 4, p.Y - 4, 8, 8);
+            }
+
+            // lignes si 2+ points
+            if (pts.Count >= 2)
+            {
+                for (int i = 0; i < pts.Count - 1; i++)
+                    g.DrawLine(pen, pts[i], pts[i + 1]);
+
+                // si terrain complet: fermer le polygone
+                if (court.HasCourt)
+                    g.DrawLine(pen, pts[pts.Count - 1], pts[0]);
             }
         }
     }

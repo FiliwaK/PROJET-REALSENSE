@@ -27,14 +27,15 @@ namespace DEMOREALSENSE
 
         private readonly BallDetector _ballDetector = new BallDetector();
         private readonly AutoTemplateFollower _autoFollower;
-
         private readonly TrajectoryTracker _traj = new TrajectoryTracker();
         private readonly ImpactDetector _impact = new ImpactDetector();
-
         private readonly GroundEstimator _ground = new GroundEstimator { NearGroundPx = 35f, AboveGroundPx = 80f };
 
-        // ✅ OUT = 5 secondes
+        // OUT = 5s (si tu utilises InOutLatch comme tu l'as collé)
         private readonly InOutLatch _inOutLatch = new InOutLatch { OutHoldMs = 5000 };
+
+        // ✅ zone terrain (4 points)
+        private readonly CourtArea _court = new CourtArea();
 
         private readonly OverlayRenderer _overlays = new OverlayRenderer { ManualBoxHalf = 12 };
         private readonly SnapshotBuffer _snapshots = new SnapshotBuffer();
@@ -50,9 +51,8 @@ namespace DEMOREALSENSE
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RealSense_Captures");
 
         private const string HelpText =
-            "Touches: Click=Tracker manuel | Ctrl+Click=Tracer ligne | Shift+Click=Calibrer balle | A=Auto ON/OFF | R=Reset ligne | Photo=Prendre";
+            "Touches: Click=Tracker manuel | Ctrl+Click=Ligne | Shift+Click=Calibrer balle | Alt+Click=Terrain(4) | C=Reset terrain | A=Auto ON/OFF | R=Reset ligne ";
 
-        // ✅ Help jusqu'à ce que tu cliques manuellement une balle
         private bool _ballSelected = false;
 
         public CameraView()
@@ -79,7 +79,7 @@ namespace DEMOREALSENSE
             _hud = new HudPresenter(distanceLabel, traitementFrameLabel);
             _hud.SetUiHz(10);
 
-            // ✅ ATTENTION: ctor CameraPipeline = (camera, manualTracker, lineDetector, lineLock, autoTracker, autoFollower, traj, impact, ground, latch)
+            // ✅ ctor pipeline avec _court
             _pipeline = new CameraPipeline(
                 _camera,
                 _tracker,
@@ -88,7 +88,8 @@ namespace DEMOREALSENSE
                 _traj,
                 _impact,
                 _ground,
-                _inOutLatch);
+                _inOutLatch,
+                _court);
 
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;
 
@@ -98,7 +99,6 @@ namespace DEMOREALSENSE
             KeyPreview = true;
             KeyDown += CameraView_KeyDown;
 
-            // ✅ Help direct
             distanceLabel.ForeColor = Color.Black;
             distanceLabel.Text = HelpText;
         }
@@ -132,7 +132,6 @@ namespace DEMOREALSENSE
             }
             catch (Exception ex)
             {
-                // pas de SetStatus dans HudPresenter maintenant
                 SafeUI(() =>
                 {
                     distanceLabel.ForeColor = Color.OrangeRed;
@@ -206,11 +205,9 @@ namespace DEMOREALSENSE
                         _snapshots.Update(r.BitmapToShow);
                     }
 
-                    // tracking perdu (manuel)
                     if (!r.ManualTrackingOk)
                         _hud?.ShowTempMessage(r.NowTicks, "Objet perdu (reclique).", Color.OrangeRed);
 
-                    // ✅ distanceLabel: help tant que pas sélection balle
                     _hud?.RenderHelpOrDistance(
                         r.NowTicks,
                         HelpText,
@@ -228,6 +225,9 @@ namespace DEMOREALSENSE
         private void CameraPictureBox_MouseClick(object? sender, MouseEventArgs e)
         {
             if (_input == null) return;
+
+            // ✅ Alt+Click => terrain
+            if ((ModifierKeys & Keys.Alt) == Keys.Alt) { AddCourtPointFromClick(e.Location); return; }
 
             if ((ModifierKeys & Keys.Shift) == Keys.Shift) { CalibrateBallColorFromClick(e.Location); return; }
             if ((ModifierKeys & Keys.Control) == Keys.Control) { AddLinePointFromClick(e.Location); return; }
@@ -257,7 +257,6 @@ namespace DEMOREALSENSE
                 return;
             }
 
-            // ✅ maintenant on autorise l’affichage distance+IN/OUT
             _ballSelected = true;
             _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Balle sélectionnée ✅", Color.Black, 900);
         }
@@ -290,9 +289,7 @@ namespace DEMOREALSENSE
             _ballDetector.TolB = 100;
             _ballDetector.MinBlobPixels = 60;
 
-            // ✅ calibration => reset complet (auto + line-related)
             _pipeline?.ResetAllStates();
-
             _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, $"Calibration balle: R{c.R} G{c.G} B{c.B}", Color.Black);
         }
 
@@ -319,8 +316,25 @@ namespace DEMOREALSENSE
                 hasLineNow ? "✅ Ligne détectée (Ctrl+Click ajouter / R reset)" : $"Mode ligne: {count}/{_lineDetector.MinPointsToFit} points",
                 Color.Black);
 
-            // ✅ reset seulement line-related (ne tue pas l'auto)
             _pipeline?.ResetLineRelatedStates();
+        }
+
+        private void AddCourtPointFromClick(Point clickLocation)
+        {
+            if (_input == null) return;
+
+            if (!_input.TryGetClickPixel(clickLocation, out int x, out int y))
+            {
+                _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Image pas prête / Alt+clique dans l'image.", Color.Black);
+                return;
+            }
+
+            _court.AddPoint(new PointF(x, y));
+
+            if (_court.HasCourt)
+                _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "✅ Terrain défini (4 points).", Color.Black);
+            else
+                _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, $"Terrain: {_court.Points.Count}/4 (Alt+Click)", Color.Black);
         }
 
         private void CameraView_KeyDown(object? sender, KeyEventArgs e)
@@ -328,7 +342,6 @@ namespace DEMOREALSENSE
             if (e.KeyCode == Keys.R)
             {
                 lock (_lineLock) _lineDetector.Clear();
-
                 _pipeline?.ResetLineRelatedStates();
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Ligne reset ✅ (Ctrl+Click)", Color.Black);
             }
@@ -337,12 +350,14 @@ namespace DEMOREALSENSE
                 if (_pipeline != null)
                 {
                     _pipeline.AutoEnabled = !_pipeline.AutoEnabled;
-
-                    // toggle auto => reset complet (états propres)
                     _pipeline.ResetAllStates();
-
                     _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "AUTO BALL: " + (_pipeline.AutoEnabled ? "ON" : "OFF"), Color.Black);
                 }
+            }
+            else if (e.KeyCode == Keys.C)
+            {
+                _court.Clear();
+                _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Terrain reset ✅ (Alt+Click x4)", Color.Black);
             }
         }
 

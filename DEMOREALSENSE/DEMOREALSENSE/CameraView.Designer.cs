@@ -50,7 +50,7 @@
             // distanceLabel
             // 
             distanceLabel.AutoSize = true;
-            distanceLabel.Location = new Point(393, 12);
+            distanceLabel.Location = new Point(30, 40);
             distanceLabel.Name = "distanceLabel";
             distanceLabel.Size = new Size(120, 20);
             distanceLabel.TabIndex = 1;
@@ -58,7 +58,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(276, 8);
+            button1.Location = new Point(487, 3);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 2;
