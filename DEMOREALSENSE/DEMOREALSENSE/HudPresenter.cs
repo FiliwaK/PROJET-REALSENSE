@@ -4,10 +4,6 @@ using System.Windows.Forms;
 
 namespace DEMOREALSENSE
 {
-    /// <summary>
-    /// Gère l'affichage des labels (distance + IN/OUT latch + perf ms/frame),
-    /// avec throttle et EMA.
-    /// </summary>
     public sealed class HudPresenter
     {
         private readonly Label _distanceLabel;
@@ -16,13 +12,15 @@ namespace DEMOREALSENSE
         private long _lastUiTicks = 0;
         private long _uiMinTicks = TimeSpan.TicksPerSecond / 10;
 
-        private double _emaMs = 0.0;
-        private const double EmaAlpha = 0.08;
+        // message temporaire
+        private long _msgUntilTicks = 0;
+        private string? _msgText = null;
+        private Color _msgColor = Color.Black;
 
-        public HudPresenter(Label distanceLabel, Label traitementFrameLabel)
+        public HudPresenter(Label distanceLabel, Label frameLabel)
         {
             _distanceLabel = distanceLabel;
-            _frameLabel = traitementFrameLabel;
+            _frameLabel = frameLabel;
         }
 
         public void SetUiHz(int hz)
@@ -31,72 +29,72 @@ namespace DEMOREALSENSE
             _uiMinTicks = TimeSpan.TicksPerSecond / hz;
         }
 
-        public void UpdateFrameTime(double ms)
+        public void ShowTempMessage(long nowTicks, string text, Color color, int holdMs = 1400)
         {
-            if (_emaMs <= 0.0001) _emaMs = ms;
-            else _emaMs = _emaMs + EmaAlpha * (ms - _emaMs);
-
-            _frameLabel.ForeColor = Color.Black;
-            _frameLabel.Text = $"Traitement moyen: {_emaMs:0.0} ms/frame";
+            _msgText = text;
+            _msgColor = color;
+            _msgUntilTicks = nowTicks + TimeSpan.FromMilliseconds(holdMs).Ticks;
         }
 
-        public void UpdateDistanceAndInOut(
+        public void RenderHelpOrDistance(
             long nowTicks,
+            string helpText,
+            bool showDistance,
             ushort rawDepth,
             float depthUnits,
-            string prefix,
             InOutLatch latch)
         {
             if (nowTicks - _lastUiTicks < _uiMinTicks) return;
             _lastUiTicks = nowTicks;
 
-            string distText = $"{prefix}: --";
+            // priorité: message temporaire
+            if (_msgText != null && nowTicks <= _msgUntilTicks)
+            {
+                _distanceLabel.ForeColor = _msgColor;
+                _distanceLabel.Text = _msgText;
+                return;
+            }
+            _msgText = null;
+
+            if (!showDistance)
+            {
+                _distanceLabel.ForeColor = Color.Black;
+                _distanceLabel.Text = helpText;
+                return;
+            }
+
+            // show distance + in/out
+            string distText = "--";
             if (rawDepth != 0)
             {
                 var (m, cm) = DistanceCalculator.RawToMetersCm(rawDepth, depthUnits);
-                distText = $"{prefix}: {m:0.000} m ({cm:0.0} cm)";
+                distText = $"{m:0.000} m ({cm:0.0} cm)";
             }
 
-            string inout = " | IN/OUT: ? (trace ligne)";
+            // IN/OUT
+            string inout = "IN/OUT: ?";
             Color col = Color.Black;
 
             if (latch.IsLatchedOut)
             {
                 int rem = latch.LatchedRemainingMs(nowTicks);
-                inout = $" | OUT ❌ (hold {rem / 1000.0:0.0}s)";
+                inout = $"OUT ❌ ({rem / 1000.0:0.0}s)";
                 col = Color.Red;
             }
             else if (latch.HasState)
             {
-                if (latch.CurrentIsIn)
-                {
-                    inout = " | IN ✅";
-                    col = Color.LimeGreen;
-                }
-                else
-                {
-                    inout = " | OUT ❌";
-                    col = Color.Red;
-                }
+                if (latch.CurrentIsIn) { inout = "IN ✅"; col = Color.LimeGreen; }
+                else { inout = "OUT ❌"; col = Color.Red; }
             }
 
             _distanceLabel.ForeColor = col;
-            _distanceLabel.Text = distText + inout;
+            _distanceLabel.Text = $"{distText} | {inout}";
         }
 
-        public void ShowMessage(long nowTicks, string text, Color color)
+        public void UpdateFrameTime(double frameMs)
         {
-            if (nowTicks - _lastUiTicks < _uiMinTicks) return;
-            _lastUiTicks = nowTicks;
-
-            _distanceLabel.ForeColor = color;
-            _distanceLabel.Text = text;
-        }
-
-        public void SetStatus(string text)
-        {
-            _distanceLabel.ForeColor = Color.Black;
-            _distanceLabel.Text = text;
+            _frameLabel.ForeColor = Color.Black;
+            _frameLabel.Text = $"Traitement moyen: {frameMs:0.0} ms/frame";
         }
     }
 }

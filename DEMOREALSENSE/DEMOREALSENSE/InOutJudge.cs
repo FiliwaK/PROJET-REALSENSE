@@ -5,10 +5,10 @@ namespace DEMOREALSENSE
     public static class InOutJudge
     {
         /// <summary>
-        /// Retourne true si la ligne existe, et donne isIn selon le côté.
-        /// Convention actuelle : "LeftIsIn" (côté gauche de la direction de la ligne = IN).
+        /// Sur la ligne => IN (epsilonPx).
+        /// Convention: côté gauche de la direction = IN.
         /// </summary>
-        public static bool TryIsIn(ClickLineDetector lineDet, object lineLock, PointF p, out bool isIn)
+        public static bool TryIsIn(ClickLineDetector lineDet, object lineLock, PointF p, out bool isIn, float epsilonPx = 3f)
         {
             isIn = false;
 
@@ -24,18 +24,23 @@ namespace DEMOREALSENSE
             float dx = line.Direction.X;
             float dy = line.Direction.Y;
 
-            // Normalisation de direction pour garder une convention stable
-            // (sinon "IN" peut s'inverser selon l'ordre de click)
+            // stabilise la convention
             if (dy > 0f) { dx = -dx; dy = -dy; }
 
             float vx = p.X - x0;
             float vy = p.Y - y0;
 
-            // Produit vectoriel 2D
             float cross = vx * dy - vy * dx;
 
-            isIn = cross > 0f;
+            // ✅ sur la ligne => IN
+            if (cross >= -epsilonPx) isIn = true;
+            else isIn = false;
+
             return true;
         }
+
+        // compat si ton code appelle l’ancienne signature
+        public static bool TryIsIn(ClickLineDetector lineDet, object lineLock, PointF p, out bool isIn)
+            => TryIsIn(lineDet, lineLock, p, out isIn, 3f);
     }
 }
