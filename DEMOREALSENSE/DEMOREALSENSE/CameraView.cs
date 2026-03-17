@@ -90,8 +90,8 @@ namespace DEMOREALSENSE
                 _ground,
                 _inOutLatch)
             {
-                LineWidthPx = 10f,   // zone "sur la ligne" = ±10px → pas de croix ambiguë
-                OutHoldMs = 5000   // verdict OUT affiché 5s puis reset automatique
+                LineWidthPx = 10f,
+                OutHoldMs = 5000
             };
 
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;

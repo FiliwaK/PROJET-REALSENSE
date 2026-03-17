@@ -225,27 +225,36 @@ namespace DEMOREALSENSE
             }
             res.Latch = _latch;
 
-            // ── Détection rebond par inversion vitesse verticale ──────────
+            // ── Détection rebond ──────────────────────────────────────────
             bool impactFired = false;
 
             if (haveBall)
             {
-                // ImpactDetector sur contactY (bas de la balle) — signal d'inversion plus net
-                impactFired = _impact.Update((float)contactY, nowTicks);
+                impactFired = _impact.UpdateBounce((float)ballX, (float)contactY, nowTicks);
 
-                if (impactFired && hasLine && zoneNow != InOutJudge.Zone.OnLine)
+                if (impactFired)
                 {
-                    // Croix à la position réelle de la balle au moment du rebond
-                    _impactMark = new PointF(ballX, contactY);
+                    // ✅ Position croix : sur la ligne (yGround) si disponible
+                    // car c'est là où la balle a réellement touché le sol
+                    // Sinon LastBounceY = Y le plus bas enregistré pendant la descente
+                    float crossY = (float)contactY;
+                    if (hasLine && _ground.TryGetGroundY(_lineDetector, _lineLock, ballX, out float yg))
+                        crossY = yg;
+                    else if (_impact.LastBounceY > 0)
+                        crossY = _impact.LastBounceY;
+
+                    _impactMark = new PointF(ballX, crossY);
                     _impactMarkTicks = nowTicks;
-                    _impactSide = (zoneNow == InOutJudge.Zone.Out) ? InOutSide.Out : InOutSide.In;
+                    _impactSide = hasLine
+                        ? ((zoneNow == InOutJudge.Zone.Out) ? InOutSide.Out : InOutSide.In)
+                        : InOutSide.Unknown;
                 }
             }
 
             // ── Verdict IN/OUT : live + hold 5s sur rebond OUT ────────────
             if (haveBall && hasLine)
             {
-                // ✅ Expiration du hold basée sur le temps uniquement (pas sur la zone)
+                // Expiration du hold par timer uniquement
                 if (_verdictHeld)
                 {
                     long elapsed2 = nowTicks - _verdictHeldTicks;
@@ -253,7 +262,7 @@ namespace DEMOREALSENSE
                         _verdictHeld = false;
                 }
 
-                // Rebond OUT détecté → fige le verdict 5s
+                // ✅ Hold déclenché dès qu'un rebond est détecté (indépendant de _impactMark)
                 if (impactFired && zoneNow == InOutJudge.Zone.Out)
                 {
                     _verdictHeld = true;
@@ -262,11 +271,9 @@ namespace DEMOREALSENSE
                 }
                 else if (impactFired && zoneNow == InOutJudge.Zone.In)
                 {
-                    // Rebond clairement IN → annule le hold
                     _verdictHeld = false;
                 }
 
-                // ✅ Pendant le hold OUT → on affiche OUT peu importe la position live
                 if (_verdictHeld)
                     res.LiveSide = InOutSide.Out;
                 else
@@ -305,42 +312,17 @@ namespace DEMOREALSENSE
 
             var p = _impactMark.Value;
             float progress = 1f - (float)(elapsed / (double)(ImpactMarkMs * TimeSpan.TicksPerMillisecond));
-
-            // Couleur et label selon verdict
-            Color crossColor;
-            string label;
-
-            switch (_impactSide)
-            {
-                case InOutSide.Out:
-                    crossColor = Color.Red;
-                    label = "OUT";
-                    break;
-                case InOutSide.In:
-                default:
-                    crossColor = Color.LimeGreen;
-                    label = "IN";
-                    break;
-            }
-
             float crossSize = 10f + progress * 6f;
 
             using var g = Graphics.FromImage(bmp);
-            using var pen = new Pen(crossColor, 3f);
+            using var pen = new Pen(Color.White, 3f);
 
-            // Croix diagonale
             g.DrawLine(pen, p.X - crossSize, p.Y - crossSize, p.X + crossSize, p.Y + crossSize);
             g.DrawLine(pen, p.X - crossSize, p.Y + crossSize, p.X + crossSize, p.Y - crossSize);
 
-            // Cercle autour
             float r = crossSize * 0.8f;
-            using var penCircle = new Pen(crossColor, 1.5f);
+            using var penCircle = new Pen(Color.White, 1.5f);
             g.DrawEllipse(penCircle, p.X - r, p.Y - r, r * 2, r * 2);
-
-            // Label
-            using var font = new System.Drawing.Font("Arial", 10f, System.Drawing.FontStyle.Bold);
-            using var brush = new SolidBrush(crossColor);
-            g.DrawString(label, font, brush, p.X + crossSize + 3, p.Y - 8);
         }
     }
 }
