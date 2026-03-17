@@ -33,6 +33,7 @@
             button1 = new Button();
             panel1 = new Panel();
             traitementFrameLabel = new Label();
+            button2 = new Button();
             ((System.ComponentModel.ISupportInitialize)cameraPictureBox).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -68,6 +69,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(button2);
             panel1.Controls.Add(traitementFrameLabel);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(distanceLabel);
@@ -85,6 +87,16 @@
             traitementFrameLabel.Size = new Size(213, 20);
             traitementFrameLabel.TabIndex = 3;
             traitementFrameLabel.Text = "temps de traitement par frame";
+            // 
+            // button2
+            // 
+            button2.Location = new Point(945, 0);
+            button2.Name = "button2";
+            button2.Size = new Size(94, 29);
+            button2.TabIndex = 4;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // CameraView
             // 
@@ -108,5 +120,6 @@
         private Button button1;
         private Panel panel1;
         private Label traitementFrameLabel;
+        private Button button2;
     }
 }

@@ -39,6 +39,26 @@ namespace DEMOREALSENSE
             ImpactCooldownMs = 300
         };
 
+        private IDetectionStrategy? _strategy;
+
+        /// <summary>Change la stratégie de détection à chaud (touche M / bouton).</summary>
+        public void SetDetectionStrategy(IDetectionStrategy? strategy)
+        {
+            _strategy?.Reset(); // reset l'ancienne
+            _strategy = strategy;
+            _strategy?.Reset(); // reset la nouvelle aussi
+
+            // Si on revient en mode algo (strategy=null ou AlgoDetectionStrategy),
+            // effacer la ligne IA injectée dans le lineDetector
+            if (strategy == null || strategy is AlgoDetectionStrategy)
+            {
+                lock (_lineLock)
+                    _lineDetector.Clear();
+            }
+
+            ResetLineRelatedStates();
+        }
+
         public bool AutoEnabled { get; set; } = true;
         public bool FlipInOutSide { get; set; } = false;
 
@@ -107,6 +127,7 @@ namespace DEMOREALSENSE
         {
             _autoTracker.Stop();
             _autoFollower.Reset();
+            _strategy?.Reset();
             ResetLineRelatedStates();
         }
 
@@ -147,16 +168,37 @@ namespace DEMOREALSENSE
             if (_manualTracker.IsTracking && _manualTracker.X >= 0 && _manualTracker.Y >= 0)
                 overlays.DrawManualBox(bmp, _manualTracker.X, _manualTracker.Y);
 
-            // ── Tracker auto ──────────────────────────────────────────────
+            // ── Tracker auto (algo) ou stratégie IA ──────────────────────
             bool autoOk = false;
             int ax = -1, ay = -1;
 
-            if (AutoEnabled)
+            if (_strategy != null)
+            {
+                var det = _strategy.Detect(rgb, bmp, w, h);
+                if (det.BallCenter.HasValue)
+                {
+                    autoOk = true;
+                    ax = (int)det.BallCenter.Value.X;
+                    ay = (int)det.BallCenter.Value.Y;
+                    // Visuel IA : carré magenta au lieu du cercle bleu
+                    overlays.DrawIaCircle(bmp, ax, ay,
+                        Math.Max(12, (int)(_autoFollower.LastRadius * 1.2f)));
+
+                    if (det.HasIaLine)
+                    {
+                        lock (_lineLock)
+                            _lineDetector.SetLineModel(det.IaLineModel!.Value);
+                    }
+                }
+            }
+            else if (AutoEnabled)
             {
                 autoOk = _autoFollower.TryUpdate(rgb, w, h, bmp, out ax, out ay);
-                if (autoOk && ax >= 0 && ay >= 0)
-                    overlays.DrawAutoCircle(bmp, ax, ay);
             }
+
+            // Cercle algo seulement en mode algo
+            if (autoOk && ax >= 0 && ay >= 0 && _strategy == null)
+                overlays.DrawAutoCircle(bmp, ax, ay);
 
             // ── Choix position balle (auto prioritaire) ───────────────────
             bool haveBall = false;

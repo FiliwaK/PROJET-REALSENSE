@@ -18,6 +18,27 @@ namespace DEMOREALSENSE
             g.DrawEllipse(pen, x - radiusPx, y - radiusPx, radiusPx * 2, radiusPx * 2);
         }
 
+        /// <summary>
+        /// Cercle IA — carré à coins arrondis magenta, plus grand, avec croix centrale.
+        /// Visuellement distinct du cercle algo bleu.
+        /// </summary>
+        public void DrawIaCircle(Bitmap bmp, int x, int y, int radiusPx = 16)
+        {
+            using var g = Graphics.FromImage(bmp);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            // Carré arrondi magenta
+            using var pen = new Pen(Color.Magenta, 2.5f);
+            int s = radiusPx;
+            g.DrawRectangle(pen, x - s, y - s, s * 2, s * 2);
+
+            // Croix centrale petite
+            using var penCross = new Pen(Color.Magenta, 1.5f);
+            int c = 4;
+            g.DrawLine(penCross, x - c, y, x + c, y);
+            g.DrawLine(penCross, x, y - c, x, y + c);
+        }
+
         public void DrawGroundDebug(Bitmap bmp, float x, float yGround)
         {
             using var g = Graphics.FromImage(bmp);

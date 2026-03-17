@@ -46,6 +46,28 @@ namespace DEMOREALSENSE
         private HudPresenter? _hud;
         private CameraPipeline? _pipeline;
 
+        // ── Stratégies de détection ───────────────────────────────────────
+        private IDetectionStrategy? _currentStrategy;
+        private AlgoDetectionStrategy? _algoStrategy;
+        private YoloDetectionStrategy? _yoloStrategy;
+        private DetectionMode _detectionMode = DetectionMode.Algo;
+
+        // Cherche les modèles ONNX : d'abord à la racine du exe, ensuite dans Models/
+        private static string FindOnnx(string fileName)
+        {
+            string[] candidates = {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models", fileName),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models", Path.GetFileName(fileName)),
+            };
+            foreach (var p in candidates)
+                if (File.Exists(p)) return p;
+            return candidates[0]; // retourne le premier même si absent (pour le message d'erreur)
+        }
+
+        private static readonly string BallOnnx = FindOnnx("ball_detect.onnx");
+        private static readonly string LineOnnx = FindOnnx("line_seg.onnx");
+
         private CancellationTokenSource? _cts;
         private Task? _task;
 
@@ -78,7 +100,11 @@ namespace DEMOREALSENSE
 
             _input = new InputController(cameraPictureBox, _snapshots);
             _hud = new HudPresenter(distanceLabel, traitementFrameLabel);
-            _hud.SetUiHz(20); // 20hz : label IN/OUT réactif (~50ms)
+            _hud.SetUiHz(20);
+
+            // ── Stratégies de détection ───────────────────────────────────
+            _algoStrategy = new AlgoDetectionStrategy(_ballDetector, _autoFollower);
+            _currentStrategy = _algoStrategy; // algo par défaut
 
             _pipeline = new CameraPipeline(
                 _camera,
@@ -96,7 +122,7 @@ namespace DEMOREALSENSE
 
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;
 
-            button1.Text = "Prendre photo";
+            button1.Text = "📷 Photo";
             button1.Click += button1_Click;
 
             KeyPreview = true;
@@ -123,6 +149,7 @@ namespace DEMOREALSENSE
 
                 distanceLabel.ForeColor = Color.Black;
                 distanceLabel.Text = HelpText;
+                button2.Text = "⚙️ Algo";
 
                 _camera.Start(640, 480, 30);
 
@@ -201,8 +228,8 @@ namespace DEMOREALSENSE
                     if (!r.ManualTrackingOk)
                         _hud?.ShowTempMessage(r.NowTicks, "Objet perdu (reclique).", Color.OrangeRed);
 
-                    // ✅ HUD avec verdict live direct
-                    // showDistance=true dès qu'on a un LiveSide (balle auto ou manuelle + ligne)
+                    // Label mode en cours
+                    string modeLabel = _detectionMode == DetectionMode.Yolo ? " 🤖" : "";
                     bool showInfo = _ballSelected || r.LiveSide != InOutSide.Unknown;
                     _hud?.RenderHelpOrDistance(
                         r.NowTicks,
@@ -332,7 +359,6 @@ namespace DEMOREALSENSE
                     }
                     break;
 
-                // ✅ Touche F : flip côté IN/OUT (si convention inversée)
                 case Keys.F:
                     if (_pipeline != null)
                     {
@@ -341,6 +367,11 @@ namespace DEMOREALSENSE
                         _hud?.ShowTempMessage(DateTime.UtcNow.Ticks,
                             "Flip IN/OUT: " + (_pipeline.FlipInOutSide ? "ON" : "OFF"), Color.Black);
                     }
+                    break;
+
+                // ✅ Touche M : switch Algo ↔ IA
+                case Keys.M:
+                    SwitchDetectionMode();
                     break;
             }
         }
@@ -366,6 +397,60 @@ namespace DEMOREALSENSE
             {
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Erreur photo: " + ex.Message, Color.OrangeRed);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SwitchDetectionMode();
+        }
+
+        private void SwitchDetectionMode()
+        {
+            if (_detectionMode == DetectionMode.Algo)
+            {
+                if (_yoloStrategy == null)
+                {
+                    if (!File.Exists(BallOnnx) || !File.Exists(LineOnnx))
+                    {
+                        _hud?.ShowTempMessage(DateTime.UtcNow.Ticks,
+                            "Modèles ONNX introuvables dans Models/", Color.OrangeRed, 3000);
+                        return;
+                    }
+                    try
+                    {
+                        _yoloStrategy = new YoloDetectionStrategy(BallOnnx, LineOnnx);
+                    }
+                    catch (Exception ex)
+                    {
+                        _hud?.ShowTempMessage(DateTime.UtcNow.Ticks,
+                            "Erreur chargement YOLO: " + ex.Message, Color.OrangeRed, 3000);
+                        return;
+                    }
+                }
+
+                _detectionMode = DetectionMode.Yolo;
+                _currentStrategy = _yoloStrategy;
+            }
+            else
+            {
+                _detectionMode = DetectionMode.Algo;
+                _currentStrategy = null; // null = pipeline utilise AutoTemplateFollower natif
+            }
+
+            // ✅ Reset complet : pipeline, trackers, ligne, marqueurs
+            _tracker.Stop();           // tracker manuel
+            _autoTracker.Stop();       // tracker auto
+            _pipeline?.SetDetectionStrategy(_currentStrategy);
+            _pipeline?.ResetAllStates();
+            lock (_lineLock) _lineDetector.Clear();
+            _ballSelected = false;
+
+            // Met à jour le bouton et le HUD
+            bool isYolo = _detectionMode == DetectionMode.Yolo;
+            button2.Text = isYolo ? "🤖 IA" : "⚙️ Algo";
+            string msg = isYolo ? "Mode IA YOLO — ligne auto" : "Mode Algo — Ctrl+Click pour ligne";
+            _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, msg,
+                isYolo ? Color.Magenta : Color.LimeGreen, 2500);
         }
 
         private void SafeUI(Action a)

@@ -57,6 +57,16 @@ namespace DEMOREALSENSE
             return true;
         }
 
+        /// <summary>
+        /// Injecte directement un LineModel depuis la stratégie IA YOLO.
+        /// Bypass le RANSAC — la ligne vient du modèle de segmentation.
+        /// </summary>
+        public void SetLineModel(LineModel model)
+        {
+            Line = model;
+            HasLine = true;
+        }
+
         public bool TryGetSegmentWithin(RectangleF bounds, out PointF a, out PointF b)
         {
             a = default; b = default;
