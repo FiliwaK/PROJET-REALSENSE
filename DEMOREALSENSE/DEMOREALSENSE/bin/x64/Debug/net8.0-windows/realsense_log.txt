@@ -1,0 +1,3389 @@
+11:10:24.308 [UI] OnShown() -> StartCamera()
+11:10:24.456 [START] StartCamera() called
+11:10:24.480 [STOP] StopCamera() called
+11:10:24.495 [STOP] Align disposed
+11:10:24.508 [STOP] Pipeline stopped
+11:10:24.530 [STOP] Pipeline disposed
+11:10:24.554 [STOP] CTS disposed
+11:10:24.565 [OK] StopCamera finished
+11:10:24.945 [START] USE_DEPTH=false, Color only
+11:10:24.948 [START] Calling _pipe.Start(cfg) ...
+11:10:25.758 [OK] Pipeline started
+11:10:25.793 [STATUS] Caméra démarrée (Color only). Attente des frames...
+11:10:25.800 [START] Launching capture thread...
+11:10:25.815 [OK] Capture thread launched
+11:10:25.824 [THREAD] CaptureLoop started
+11:10:25.839 [STATUS] [WAIT] WaitForFrames() ...
+11:10:25.861 [WAIT] WaitForFrames()
+11:10:26.561 [OK] Frames received
+11:10:26.578 [STATUS] [OK] Frames reçues
+11:10:26.665 [STATUS] [WAIT] WaitForFrames() ...
+11:10:26.728 [WAIT] WaitForFrames()
+11:10:26.791 [OK] Frames received
+11:10:26.824 [STATUS] [OK] Frames reçues
+11:10:26.851 [STATUS] [WAIT] WaitForFrames() ...
+11:10:26.869 [WAIT] WaitForFrames()
+11:10:26.881 [OK] Frames received
+11:10:26.907 [STATUS] [OK] Frames reçues
+11:10:26.932 [STATUS] [WAIT] WaitForFrames() ...
+11:10:26.962 [WAIT] WaitForFrames()
+11:10:26.977 [OK] Frames received
+11:10:26.990 [STATUS] [OK] Frames reçues
+11:10:27.005 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.019 [WAIT] WaitForFrames()
+11:10:27.026 [OK] Frames received
+11:10:27.042 [STATUS] [OK] Frames reçues
+11:10:27.069 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.077 [WAIT] WaitForFrames()
+11:10:27.085 [OK] Frames received
+11:10:27.092 [STATUS] [OK] Frames reçues
+11:10:27.103 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.111 [WAIT] WaitForFrames()
+11:10:27.118 [OK] Frames received
+11:10:27.133 [STATUS] [OK] Frames reçues
+11:10:27.150 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.161 [WAIT] WaitForFrames()
+11:10:27.168 [OK] Frames received
+11:10:27.186 [STATUS] [OK] Frames reçues
+11:10:27.201 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.210 [WAIT] WaitForFrames()
+11:10:27.218 [OK] Frames received
+11:10:27.224 [STATUS] [OK] Frames reçues
+11:10:27.237 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.246 [WAIT] WaitForFrames()
+11:10:27.260 [OK] Frames received
+11:10:27.266 [STATUS] [OK] Frames reçues
+11:10:27.281 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.293 [WAIT] WaitForFrames()
+11:10:27.301 [OK] Frames received
+11:10:27.309 [STATUS] [OK] Frames reçues
+11:10:27.319 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.326 [WAIT] WaitForFrames()
+11:10:27.332 [OK] Frames received
+11:10:27.338 [STATUS] [OK] Frames reçues
+11:10:27.347 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.352 [WAIT] WaitForFrames()
+11:10:27.358 [OK] Frames received
+11:10:27.362 [STATUS] [OK] Frames reçues
+11:10:27.372 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.383 [WAIT] WaitForFrames()
+11:10:27.391 [OK] Frames received
+11:10:27.396 [STATUS] [OK] Frames reçues
+11:10:27.406 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.411 [WAIT] WaitForFrames()
+11:10:27.424 [OK] Frames received
+11:10:27.429 [STATUS] [OK] Frames reçues
+11:10:27.439 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.443 [WAIT] WaitForFrames()
+11:10:27.458 [OK] Frames received
+11:10:27.466 [STATUS] [OK] Frames reçues
+11:10:27.481 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.488 [WAIT] WaitForFrames()
+11:10:27.493 [OK] Frames received
+11:10:27.499 [STATUS] [OK] Frames reçues
+11:10:27.510 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.518 [WAIT] WaitForFrames()
+11:10:27.525 [OK] Frames received
+11:10:27.530 [STATUS] [OK] Frames reçues
+11:10:27.540 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.545 [WAIT] WaitForFrames()
+11:10:27.558 [OK] Frames received
+11:10:27.563 [STATUS] [OK] Frames reçues
+11:10:27.571 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.576 [WAIT] WaitForFrames()
+11:10:27.593 [OK] Frames received
+11:10:27.599 [STATUS] [OK] Frames reçues
+11:10:27.615 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.619 [WAIT] WaitForFrames()
+11:10:27.628 [OK] Frames received
+11:10:27.633 [STATUS] [OK] Frames reçues
+11:10:27.641 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.645 [WAIT] WaitForFrames()
+11:10:27.658 [OK] Frames received
+11:10:27.663 [STATUS] [OK] Frames reçues
+11:10:27.673 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.677 [WAIT] WaitForFrames()
+11:10:27.692 [OK] Frames received
+11:10:27.696 [STATUS] [OK] Frames reçues
+11:10:27.705 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.710 [WAIT] WaitForFrames()
+11:10:27.725 [OK] Frames received
+11:10:27.729 [STATUS] [OK] Frames reçues
+11:10:27.737 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.742 [WAIT] WaitForFrames()
+11:10:27.759 [OK] Frames received
+11:10:27.765 [STATUS] [OK] Frames reçues
+11:10:27.779 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.784 [WAIT] WaitForFrames()
+11:10:27.793 [OK] Frames received
+11:10:27.801 [STATUS] [OK] Frames reçues
+11:10:27.816 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.822 [WAIT] WaitForFrames()
+11:10:27.829 [OK] Frames received
+11:10:27.836 [STATUS] [OK] Frames reçues
+11:10:27.854 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.864 [WAIT] WaitForFrames()
+11:10:27.870 [OK] Frames received
+11:10:27.875 [STATUS] [OK] Frames reçues
+11:10:27.890 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.896 [WAIT] WaitForFrames()
+11:10:27.901 [OK] Frames received
+11:10:27.907 [STATUS] [OK] Frames reçues
+11:10:27.915 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.920 [WAIT] WaitForFrames()
+11:10:27.926 [OK] Frames received
+11:10:27.930 [STATUS] [OK] Frames reçues
+11:10:27.934 [OK] FrameCount=30
+11:10:27.945 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.949 [WAIT] WaitForFrames()
+11:10:27.959 [OK] Frames received
+11:10:27.965 [STATUS] [OK] Frames reçues
+11:10:27.979 [STATUS] [WAIT] WaitForFrames() ...
+11:10:27.983 [WAIT] WaitForFrames()
+11:10:27.992 [OK] Frames received
+11:10:27.997 [STATUS] [OK] Frames reçues
+11:10:28.006 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.010 [WAIT] WaitForFrames()
+11:10:28.025 [OK] Frames received
+11:10:28.029 [STATUS] [OK] Frames reçues
+11:10:28.039 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.044 [WAIT] WaitForFrames()
+11:10:28.061 [OK] Frames received
+11:10:28.065 [STATUS] [OK] Frames reçues
+11:10:28.077 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.081 [WAIT] WaitForFrames()
+11:10:28.093 [OK] Frames received
+11:10:28.099 [STATUS] [OK] Frames reçues
+11:10:28.108 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.119 [WAIT] WaitForFrames()
+11:10:28.128 [OK] Frames received
+11:10:28.135 [STATUS] [OK] Frames reçues
+11:10:28.148 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.153 [WAIT] WaitForFrames()
+11:10:28.160 [OK] Frames received
+11:10:28.166 [STATUS] [OK] Frames reçues
+11:10:28.175 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.180 [WAIT] WaitForFrames()
+11:10:28.192 [OK] Frames received
+11:10:28.197 [STATUS] [OK] Frames reçues
+11:10:28.207 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.215 [WAIT] WaitForFrames()
+11:10:28.227 [OK] Frames received
+11:10:28.232 [STATUS] [OK] Frames reçues
+11:10:28.243 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.248 [WAIT] WaitForFrames()
+11:10:28.259 [OK] Frames received
+11:10:28.264 [STATUS] [OK] Frames reçues
+11:10:28.274 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.280 [WAIT] WaitForFrames()
+11:10:28.295 [OK] Frames received
+11:10:28.303 [STATUS] [OK] Frames reçues
+11:10:28.313 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.318 [WAIT] WaitForFrames()
+11:10:28.329 [OK] Frames received
+11:10:28.335 [STATUS] [OK] Frames reçues
+11:10:28.346 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.351 [WAIT] WaitForFrames()
+11:10:28.359 [OK] Frames received
+11:10:28.365 [STATUS] [OK] Frames reçues
+11:10:28.381 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.386 [WAIT] WaitForFrames()
+11:10:28.395 [OK] Frames received
+11:10:28.404 [STATUS] [OK] Frames reçues
+11:10:28.422 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.428 [WAIT] WaitForFrames()
+11:10:28.434 [OK] Frames received
+11:10:28.442 [STATUS] [OK] Frames reçues
+11:10:28.455 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.460 [WAIT] WaitForFrames()
+11:10:28.466 [OK] Frames received
+11:10:28.474 [STATUS] [OK] Frames reçues
+11:10:28.486 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.492 [WAIT] WaitForFrames()
+11:10:28.498 [OK] Frames received
+11:10:28.508 [STATUS] [OK] Frames reçues
+11:10:28.519 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.527 [WAIT] WaitForFrames()
+11:10:28.534 [OK] Frames received
+11:10:28.542 [STATUS] [OK] Frames reçues
+11:10:28.554 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.559 [WAIT] WaitForFrames()
+11:10:28.565 [OK] Frames received
+11:10:28.576 [STATUS] [OK] Frames reçues
+11:10:28.589 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.599 [WAIT] WaitForFrames()
+11:10:28.605 [OK] Frames received
+11:10:28.610 [STATUS] [OK] Frames reçues
+11:10:28.623 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.629 [WAIT] WaitForFrames()
+11:10:28.633 [OK] Frames received
+11:10:28.638 [STATUS] [OK] Frames reçues
+11:10:28.648 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.652 [WAIT] WaitForFrames()
+11:10:28.659 [OK] Frames received
+11:10:28.664 [STATUS] [OK] Frames reçues
+11:10:28.676 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.680 [WAIT] WaitForFrames()
+11:10:28.694 [OK] Frames received
+11:10:28.699 [STATUS] [OK] Frames reçues
+11:10:28.710 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.716 [WAIT] WaitForFrames()
+11:10:28.726 [OK] Frames received
+11:10:28.731 [STATUS] [OK] Frames reçues
+11:10:28.742 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.747 [WAIT] WaitForFrames()
+11:10:28.760 [OK] Frames received
+11:10:28.765 [STATUS] [OK] Frames reçues
+11:10:28.775 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.779 [WAIT] WaitForFrames()
+11:10:28.793 [OK] Frames received
+11:10:28.798 [STATUS] [OK] Frames reçues
+11:10:28.809 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.813 [WAIT] WaitForFrames()
+11:10:28.828 [OK] Frames received
+11:10:28.832 [STATUS] [OK] Frames reçues
+11:10:28.842 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.846 [WAIT] WaitForFrames()
+11:10:28.860 [OK] Frames received
+11:10:28.865 [STATUS] [OK] Frames reçues
+11:10:28.877 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.881 [WAIT] WaitForFrames()
+11:10:28.894 [OK] Frames received
+11:10:28.898 [STATUS] [OK] Frames reçues
+11:10:28.907 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.913 [WAIT] WaitForFrames()
+11:10:28.927 [OK] Frames received
+11:10:28.931 [STATUS] [OK] Frames reçues
+11:10:28.935 [OK] FrameCount=60
+11:10:28.947 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.959 [WAIT] WaitForFrames()
+11:10:28.965 [OK] Frames received
+11:10:28.969 [STATUS] [OK] Frames reçues
+11:10:28.979 [STATUS] [WAIT] WaitForFrames() ...
+11:10:28.983 [WAIT] WaitForFrames()
+11:10:28.994 [OK] Frames received
+11:10:28.999 [STATUS] [OK] Frames reçues
+11:10:29.009 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.014 [WAIT] WaitForFrames()
+11:10:29.027 [OK] Frames received
+11:10:29.031 [STATUS] [OK] Frames reçues
+11:10:29.044 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.048 [WAIT] WaitForFrames()
+11:10:29.060 [OK] Frames received
+11:10:29.064 [STATUS] [OK] Frames reçues
+11:10:29.073 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.078 [WAIT] WaitForFrames()
+11:10:29.093 [OK] Frames received
+11:10:29.097 [STATUS] [OK] Frames reçues
+11:10:29.106 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.110 [WAIT] WaitForFrames()
+11:10:29.126 [OK] Frames received
+11:10:29.130 [STATUS] [OK] Frames reçues
+11:10:29.139 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.144 [WAIT] WaitForFrames()
+11:10:29.160 [OK] Frames received
+11:10:29.164 [STATUS] [OK] Frames reçues
+11:10:29.172 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.178 [WAIT] WaitForFrames()
+11:10:29.194 [OK] Frames received
+11:10:29.198 [STATUS] [OK] Frames reçues
+11:10:29.210 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.214 [WAIT] WaitForFrames()
+11:10:29.228 [OK] Frames received
+11:10:29.233 [STATUS] [OK] Frames reçues
+11:10:29.245 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.249 [WAIT] WaitForFrames()
+11:10:29.260 [OK] Frames received
+11:10:29.266 [STATUS] [OK] Frames reçues
+11:10:29.275 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.280 [WAIT] WaitForFrames()
+11:10:29.293 [OK] Frames received
+11:10:29.299 [STATUS] [OK] Frames reçues
+11:10:29.310 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.314 [WAIT] WaitForFrames()
+11:10:29.327 [OK] Frames received
+11:10:29.332 [STATUS] [OK] Frames reçues
+11:10:29.340 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.345 [WAIT] WaitForFrames()
+11:10:29.360 [OK] Frames received
+11:10:29.364 [STATUS] [OK] Frames reçues
+11:10:29.373 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.378 [WAIT] WaitForFrames()
+11:10:29.394 [OK] Frames received
+11:10:29.398 [STATUS] [OK] Frames reçues
+11:10:29.406 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.410 [WAIT] WaitForFrames()
+11:10:29.427 [OK] Frames received
+11:10:29.432 [STATUS] [OK] Frames reçues
+11:10:29.442 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.447 [WAIT] WaitForFrames()
+11:10:29.460 [OK] Frames received
+11:10:29.464 [STATUS] [OK] Frames reçues
+11:10:29.475 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.480 [WAIT] WaitForFrames()
+11:10:29.494 [OK] Frames received
+11:10:29.498 [STATUS] [OK] Frames reçues
+11:10:29.507 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.512 [WAIT] WaitForFrames()
+11:10:29.527 [OK] Frames received
+11:10:29.533 [STATUS] [OK] Frames reçues
+11:10:29.543 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.547 [WAIT] WaitForFrames()
+11:10:29.560 [OK] Frames received
+11:10:29.563 [STATUS] [OK] Frames reçues
+11:10:29.572 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.576 [WAIT] WaitForFrames()
+11:10:29.593 [OK] Frames received
+11:10:29.597 [STATUS] [OK] Frames reçues
+11:10:29.604 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.608 [WAIT] WaitForFrames()
+11:10:29.627 [OK] Frames received
+11:10:29.630 [STATUS] [OK] Frames reçues
+11:10:29.638 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.642 [WAIT] WaitForFrames()
+11:10:29.661 [OK] Frames received
+11:10:29.666 [STATUS] [OK] Frames reçues
+11:10:29.674 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.679 [WAIT] WaitForFrames()
+11:10:29.694 [OK] Frames received
+11:10:29.699 [STATUS] [OK] Frames reçues
+11:10:29.710 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.715 [WAIT] WaitForFrames()
+11:10:29.728 [OK] Frames received
+11:10:29.731 [STATUS] [OK] Frames reçues
+11:10:29.740 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.744 [WAIT] WaitForFrames()
+11:10:29.760 [OK] Frames received
+11:10:29.763 [STATUS] [OK] Frames reçues
+11:10:29.770 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.774 [WAIT] WaitForFrames()
+11:10:29.793 [OK] Frames received
+11:10:29.797 [STATUS] [OK] Frames reçues
+11:10:29.803 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.807 [WAIT] WaitForFrames()
+11:10:29.827 [OK] Frames received
+11:10:29.830 [STATUS] [OK] Frames reçues
+11:10:29.836 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.840 [WAIT] WaitForFrames()
+11:10:29.860 [OK] Frames received
+11:10:29.864 [STATUS] [OK] Frames reçues
+11:10:29.874 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.878 [WAIT] WaitForFrames()
+11:10:29.894 [OK] Frames received
+11:10:29.897 [STATUS] [OK] Frames reçues
+11:10:29.905 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.909 [WAIT] WaitForFrames()
+11:10:29.927 [OK] Frames received
+11:10:29.931 [STATUS] [OK] Frames reçues
+11:10:29.935 [OK] FrameCount=90
+11:10:29.944 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.948 [WAIT] WaitForFrames()
+11:10:29.961 [OK] Frames received
+11:10:29.966 [STATUS] [OK] Frames reçues
+11:10:29.975 [STATUS] [WAIT] WaitForFrames() ...
+11:10:29.979 [WAIT] WaitForFrames()
+11:10:29.993 [OK] Frames received
+11:10:29.997 [STATUS] [OK] Frames reçues
+11:10:30.004 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.008 [WAIT] WaitForFrames()
+11:10:30.027 [OK] Frames received
+11:10:30.030 [STATUS] [OK] Frames reçues
+11:10:30.037 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.040 [WAIT] WaitForFrames()
+11:10:30.060 [OK] Frames received
+11:10:30.064 [STATUS] [OK] Frames reçues
+11:10:30.071 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.075 [WAIT] WaitForFrames()
+11:10:30.094 [OK] Frames received
+11:10:30.097 [STATUS] [OK] Frames reçues
+11:10:30.103 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.108 [WAIT] WaitForFrames()
+11:10:30.127 [OK] Frames received
+11:10:30.131 [STATUS] [OK] Frames reçues
+11:10:30.138 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.143 [WAIT] WaitForFrames()
+11:10:30.160 [OK] Frames received
+11:10:30.164 [STATUS] [OK] Frames reçues
+11:10:30.172 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.177 [WAIT] WaitForFrames()
+11:10:30.194 [OK] Frames received
+11:10:30.198 [STATUS] [OK] Frames reçues
+11:10:30.207 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.211 [WAIT] WaitForFrames()
+11:10:30.227 [OK] Frames received
+11:10:30.230 [STATUS] [OK] Frames reçues
+11:10:30.236 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.241 [WAIT] WaitForFrames()
+11:10:30.260 [OK] Frames received
+11:10:30.263 [STATUS] [OK] Frames reçues
+11:10:30.269 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.273 [WAIT] WaitForFrames()
+11:10:30.294 [OK] Frames received
+11:10:30.297 [STATUS] [OK] Frames reçues
+11:10:30.304 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.308 [WAIT] WaitForFrames()
+11:10:30.327 [OK] Frames received
+11:10:30.331 [STATUS] [OK] Frames reçues
+11:10:30.337 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.342 [WAIT] WaitForFrames()
+11:10:30.361 [OK] Frames received
+11:10:30.363 [STATUS] [OK] Frames reçues
+11:10:30.369 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.372 [WAIT] WaitForFrames()
+11:10:30.394 [OK] Frames received
+11:10:30.397 [STATUS] [OK] Frames reçues
+11:10:30.403 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.408 [WAIT] WaitForFrames()
+11:10:30.428 [OK] Frames received
+11:10:30.432 [STATUS] [OK] Frames reçues
+11:10:30.445 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.449 [WAIT] WaitForFrames()
+11:10:30.462 [OK] Frames received
+11:10:30.467 [STATUS] [OK] Frames reçues
+11:10:30.476 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.480 [WAIT] WaitForFrames()
+11:10:30.494 [OK] Frames received
+11:10:30.497 [STATUS] [OK] Frames reçues
+11:10:30.503 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.507 [WAIT] WaitForFrames()
+11:10:30.527 [OK] Frames received
+11:10:30.530 [STATUS] [OK] Frames reçues
+11:10:30.537 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.541 [WAIT] WaitForFrames()
+11:10:30.561 [OK] Frames received
+11:10:30.564 [STATUS] [OK] Frames reçues
+11:10:30.571 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.575 [WAIT] WaitForFrames()
+11:10:30.595 [OK] Frames received
+11:10:30.599 [STATUS] [OK] Frames reçues
+11:10:30.607 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.611 [WAIT] WaitForFrames()
+11:10:30.627 [OK] Frames received
+11:10:30.630 [STATUS] [OK] Frames reçues
+11:10:30.645 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.648 [WAIT] WaitForFrames()
+11:10:30.661 [OK] Frames received
+11:10:30.665 [STATUS] [OK] Frames reçues
+11:10:30.671 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.676 [WAIT] WaitForFrames()
+11:10:30.694 [OK] Frames received
+11:10:30.697 [STATUS] [OK] Frames reçues
+11:10:30.706 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.711 [WAIT] WaitForFrames()
+11:10:30.728 [OK] Frames received
+11:10:30.731 [STATUS] [OK] Frames reçues
+11:10:30.738 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.741 [WAIT] WaitForFrames()
+11:10:30.761 [OK] Frames received
+11:10:30.764 [STATUS] [OK] Frames reçues
+11:10:30.772 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.776 [WAIT] WaitForFrames()
+11:10:30.795 [OK] Frames received
+11:10:30.800 [STATUS] [OK] Frames reçues
+11:10:30.808 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.811 [WAIT] WaitForFrames()
+11:10:30.828 [OK] Frames received
+11:10:30.831 [STATUS] [OK] Frames reçues
+11:10:30.839 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.844 [WAIT] WaitForFrames()
+11:10:30.861 [OK] Frames received
+11:10:30.864 [STATUS] [OK] Frames reçues
+11:10:30.872 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.876 [WAIT] WaitForFrames()
+11:10:30.895 [OK] Frames received
+11:10:30.899 [STATUS] [OK] Frames reçues
+11:10:30.906 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.910 [WAIT] WaitForFrames()
+11:10:30.928 [OK] Frames received
+11:10:30.931 [STATUS] [OK] Frames reçues
+11:10:30.934 [OK] FrameCount=120
+11:10:30.942 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.945 [WAIT] WaitForFrames()
+11:10:30.961 [OK] Frames received
+11:10:30.965 [STATUS] [OK] Frames reçues
+11:10:30.975 [STATUS] [WAIT] WaitForFrames() ...
+11:10:30.979 [WAIT] WaitForFrames()
+11:10:30.995 [OK] Frames received
+11:10:30.997 [STATUS] [OK] Frames reçues
+11:10:31.003 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.007 [WAIT] WaitForFrames()
+11:10:31.028 [OK] Frames received
+11:10:31.032 [STATUS] [OK] Frames reçues
+11:10:31.041 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.045 [WAIT] WaitForFrames()
+11:10:31.062 [OK] Frames received
+11:10:31.066 [STATUS] [OK] Frames reçues
+11:10:31.072 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.076 [WAIT] WaitForFrames()
+11:10:31.095 [OK] Frames received
+11:10:31.100 [STATUS] [OK] Frames reçues
+11:10:31.110 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.113 [WAIT] WaitForFrames()
+11:10:31.129 [OK] Frames received
+11:10:31.134 [STATUS] [OK] Frames reçues
+11:10:31.145 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.150 [WAIT] WaitForFrames()
+11:10:31.162 [OK] Frames received
+11:10:31.166 [STATUS] [OK] Frames reçues
+11:10:31.175 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.180 [WAIT] WaitForFrames()
+11:10:31.195 [OK] Frames received
+11:10:31.199 [STATUS] [OK] Frames reçues
+11:10:31.218 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.221 [WAIT] WaitForFrames()
+11:10:31.229 [OK] Frames received
+11:10:31.234 [STATUS] [OK] Frames reçues
+11:10:31.243 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.249 [WAIT] WaitForFrames()
+11:10:31.262 [OK] Frames received
+11:10:31.265 [STATUS] [OK] Frames reçues
+11:10:31.274 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.277 [WAIT] WaitForFrames()
+11:10:31.295 [OK] Frames received
+11:10:31.298 [STATUS] [OK] Frames reçues
+11:10:31.307 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.311 [WAIT] WaitForFrames()
+11:10:31.329 [OK] Frames received
+11:10:31.332 [STATUS] [OK] Frames reçues
+11:10:31.337 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.341 [WAIT] WaitForFrames()
+11:10:31.362 [OK] Frames received
+11:10:31.367 [STATUS] [OK] Frames reçues
+11:10:31.375 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.378 [WAIT] WaitForFrames()
+11:10:31.395 [OK] Frames received
+11:10:31.398 [STATUS] [OK] Frames reçues
+11:10:31.407 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.411 [WAIT] WaitForFrames()
+11:10:31.429 [OK] Frames received
+11:10:31.434 [STATUS] [OK] Frames reçues
+11:10:31.443 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.446 [WAIT] WaitForFrames()
+11:10:31.462 [OK] Frames received
+11:10:31.467 [STATUS] [OK] Frames reçues
+11:10:31.476 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.480 [WAIT] WaitForFrames()
+11:10:31.496 [OK] Frames received
+11:10:31.500 [STATUS] [OK] Frames reçues
+11:10:31.509 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.513 [WAIT] WaitForFrames()
+11:10:31.529 [OK] Frames received
+11:10:31.532 [STATUS] [OK] Frames reçues
+11:10:31.541 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.545 [WAIT] WaitForFrames()
+11:10:31.562 [OK] Frames received
+11:10:31.566 [STATUS] [OK] Frames reçues
+11:10:31.574 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.577 [WAIT] WaitForFrames()
+11:10:31.596 [OK] Frames received
+11:10:31.599 [STATUS] [OK] Frames reçues
+11:10:31.604 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.607 [WAIT] WaitForFrames()
+11:10:31.629 [OK] Frames received
+11:10:31.632 [STATUS] [OK] Frames reçues
+11:10:31.640 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.644 [WAIT] WaitForFrames()
+11:10:31.662 [OK] Frames received
+11:10:31.665 [STATUS] [OK] Frames reçues
+11:10:31.671 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.674 [WAIT] WaitForFrames()
+11:10:31.695 [OK] Frames received
+11:10:31.698 [STATUS] [OK] Frames reçues
+11:10:31.706 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.709 [WAIT] WaitForFrames()
+11:10:31.729 [OK] Frames received
+11:10:31.733 [STATUS] [OK] Frames reçues
+11:10:31.741 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.745 [WAIT] WaitForFrames()
+11:10:31.763 [OK] Frames received
+11:10:31.768 [STATUS] [OK] Frames reçues
+11:10:31.775 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.779 [WAIT] WaitForFrames()
+11:10:31.795 [OK] Frames received
+11:10:31.799 [STATUS] [OK] Frames reçues
+11:10:31.806 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.810 [WAIT] WaitForFrames()
+11:10:31.829 [OK] Frames received
+11:10:31.832 [STATUS] [OK] Frames reçues
+11:10:31.839 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.843 [WAIT] WaitForFrames()
+11:10:31.863 [OK] Frames received
+11:10:31.866 [STATUS] [OK] Frames reçues
+11:10:31.873 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.878 [WAIT] WaitForFrames()
+11:10:31.896 [OK] Frames received
+11:10:31.902 [STATUS] [OK] Frames reçues
+11:10:31.913 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.917 [WAIT] WaitForFrames()
+11:10:31.929 [OK] Frames received
+11:10:31.934 [STATUS] [OK] Frames reçues
+11:10:31.939 [OK] FrameCount=150
+11:10:31.948 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.953 [WAIT] WaitForFrames()
+11:10:31.964 [OK] Frames received
+11:10:31.968 [STATUS] [OK] Frames reçues
+11:10:31.980 [STATUS] [WAIT] WaitForFrames() ...
+11:10:31.985 [WAIT] WaitForFrames()
+11:10:31.997 [OK] Frames received
+11:10:32.002 [STATUS] [OK] Frames reçues
+11:10:32.011 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.019 [WAIT] WaitForFrames()
+11:10:32.030 [OK] Frames received
+11:10:32.035 [STATUS] [OK] Frames reçues
+11:10:32.046 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.053 [WAIT] WaitForFrames()
+11:10:32.064 [OK] Frames received
+11:10:32.069 [STATUS] [OK] Frames reçues
+11:10:32.078 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.082 [WAIT] WaitForFrames()
+11:10:32.096 [OK] Frames received
+11:10:32.099 [STATUS] [OK] Frames reçues
+11:10:32.107 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.112 [WAIT] WaitForFrames()
+11:10:32.130 [OK] Frames received
+11:10:32.135 [STATUS] [OK] Frames reçues
+11:10:32.145 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.149 [WAIT] WaitForFrames()
+11:10:32.163 [OK] Frames received
+11:10:32.167 [STATUS] [OK] Frames reçues
+11:10:32.174 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.179 [WAIT] WaitForFrames()
+11:10:32.198 [OK] Frames received
+11:10:32.204 [STATUS] [OK] Frames reçues
+11:10:32.213 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.217 [WAIT] WaitForFrames()
+11:10:32.229 [OK] Frames received
+11:10:32.233 [STATUS] [OK] Frames reçues
+11:10:32.241 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.245 [WAIT] WaitForFrames()
+11:10:32.264 [OK] Frames received
+11:10:32.269 [STATUS] [OK] Frames reçues
+11:10:32.277 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.280 [WAIT] WaitForFrames()
+11:10:32.296 [OK] Frames received
+11:10:32.299 [STATUS] [OK] Frames reçues
+11:10:32.307 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.311 [WAIT] WaitForFrames()
+11:10:32.329 [OK] Frames received
+11:10:32.332 [STATUS] [OK] Frames reçues
+11:10:32.338 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.342 [WAIT] WaitForFrames()
+11:10:32.363 [OK] Frames received
+11:10:32.367 [STATUS] [OK] Frames reçues
+11:10:32.373 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.376 [WAIT] WaitForFrames()
+11:10:32.396 [OK] Frames received
+11:10:32.399 [STATUS] [OK] Frames reçues
+11:10:32.404 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.407 [WAIT] WaitForFrames()
+11:10:32.430 [OK] Frames received
+11:10:32.433 [STATUS] [OK] Frames reçues
+11:10:32.476 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.481 [WAIT] WaitForFrames()
+11:10:32.485 [OK] Frames received
+11:10:32.488 [STATUS] [OK] Frames reçues
+11:10:32.496 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.501 [WAIT] WaitForFrames()
+11:10:32.506 [OK] Frames received
+11:10:32.510 [STATUS] [OK] Frames reçues
+11:10:32.518 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.522 [WAIT] WaitForFrames()
+11:10:32.531 [OK] Frames received
+11:10:32.535 [STATUS] [OK] Frames reçues
+11:10:32.543 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.547 [WAIT] WaitForFrames()
+11:10:32.564 [OK] Frames received
+11:10:32.568 [STATUS] [OK] Frames reçues
+11:10:32.576 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.580 [WAIT] WaitForFrames()
+11:10:32.597 [OK] Frames received
+11:10:32.601 [STATUS] [OK] Frames reçues
+11:10:32.611 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.614 [WAIT] WaitForFrames()
+11:10:32.630 [OK] Frames received
+11:10:32.634 [STATUS] [OK] Frames reçues
+11:10:32.643 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.646 [WAIT] WaitForFrames()
+11:10:32.663 [OK] Frames received
+11:10:32.666 [STATUS] [OK] Frames reçues
+11:10:32.673 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.677 [WAIT] WaitForFrames()
+11:10:32.696 [OK] Frames received
+11:10:32.700 [STATUS] [OK] Frames reçues
+11:10:32.708 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.712 [WAIT] WaitForFrames()
+11:10:32.730 [OK] Frames received
+11:10:32.733 [STATUS] [OK] Frames reçues
+11:10:32.740 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.744 [WAIT] WaitForFrames()
+11:10:32.764 [OK] Frames received
+11:10:32.768 [STATUS] [OK] Frames reçues
+11:10:32.776 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.780 [WAIT] WaitForFrames()
+11:10:32.797 [OK] Frames received
+11:10:32.801 [STATUS] [OK] Frames reçues
+11:10:32.810 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.813 [WAIT] WaitForFrames()
+11:10:32.830 [OK] Frames received
+11:10:32.834 [STATUS] [OK] Frames reçues
+11:10:32.842 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.846 [WAIT] WaitForFrames()
+11:10:32.864 [OK] Frames received
+11:10:32.869 [STATUS] [OK] Frames reçues
+11:10:32.879 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.882 [WAIT] WaitForFrames()
+11:10:32.898 [OK] Frames received
+11:10:32.903 [STATUS] [OK] Frames reçues
+11:10:32.914 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.920 [WAIT] WaitForFrames()
+11:10:32.931 [OK] Frames received
+11:10:32.935 [STATUS] [OK] Frames reçues
+11:10:32.938 [OK] FrameCount=180
+11:10:32.944 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.947 [WAIT] WaitForFrames()
+11:10:32.963 [OK] Frames received
+11:10:32.966 [STATUS] [OK] Frames reçues
+11:10:32.972 [STATUS] [WAIT] WaitForFrames() ...
+11:10:32.975 [WAIT] WaitForFrames()
+11:10:32.997 [OK] Frames received
+11:10:33.000 [STATUS] [OK] Frames reçues
+11:10:33.005 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.010 [WAIT] WaitForFrames()
+11:10:33.030 [OK] Frames received
+11:10:33.033 [STATUS] [OK] Frames reçues
+11:10:33.041 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.045 [WAIT] WaitForFrames()
+11:10:33.064 [OK] Frames received
+11:10:33.066 [STATUS] [OK] Frames reçues
+11:10:33.074 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.078 [WAIT] WaitForFrames()
+11:10:33.098 [OK] Frames received
+11:10:33.101 [STATUS] [OK] Frames reçues
+11:10:33.109 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.112 [WAIT] WaitForFrames()
+11:10:33.132 [OK] Frames received
+11:10:33.137 [STATUS] [OK] Frames reçues
+11:10:33.146 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.150 [WAIT] WaitForFrames()
+11:10:33.164 [OK] Frames received
+11:10:33.167 [STATUS] [OK] Frames reçues
+11:10:33.174 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.177 [WAIT] WaitForFrames()
+11:10:33.198 [OK] Frames received
+11:10:33.201 [STATUS] [OK] Frames reçues
+11:10:33.209 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.215 [WAIT] WaitForFrames()
+11:10:33.231 [OK] Frames received
+11:10:33.234 [STATUS] [OK] Frames reçues
+11:10:33.241 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.246 [WAIT] WaitForFrames()
+11:10:33.264 [OK] Frames received
+11:10:33.267 [STATUS] [OK] Frames reçues
+11:10:33.276 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.279 [WAIT] WaitForFrames()
+11:10:33.298 [OK] Frames received
+11:10:33.301 [STATUS] [OK] Frames reçues
+11:10:33.309 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.313 [WAIT] WaitForFrames()
+11:10:33.331 [OK] Frames received
+11:10:33.333 [STATUS] [OK] Frames reçues
+11:10:33.339 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.342 [WAIT] WaitForFrames()
+11:10:33.364 [OK] Frames received
+11:10:33.367 [STATUS] [OK] Frames reçues
+11:10:33.374 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.377 [WAIT] WaitForFrames()
+11:10:33.398 [OK] Frames received
+11:10:33.403 [STATUS] [OK] Frames reçues
+11:10:33.409 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.412 [WAIT] WaitForFrames()
+11:10:33.431 [OK] Frames received
+11:10:33.434 [STATUS] [OK] Frames reçues
+11:10:33.440 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.443 [WAIT] WaitForFrames()
+11:10:33.465 [OK] Frames received
+11:10:33.469 [STATUS] [OK] Frames reçues
+11:10:33.475 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.478 [WAIT] WaitForFrames()
+11:10:33.498 [OK] Frames received
+11:10:33.501 [STATUS] [OK] Frames reçues
+11:10:33.508 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.511 [WAIT] WaitForFrames()
+11:10:33.531 [OK] Frames received
+11:10:33.534 [STATUS] [OK] Frames reçues
+11:10:33.544 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.548 [WAIT] WaitForFrames()
+11:10:33.565 [OK] Frames received
+11:10:33.569 [STATUS] [OK] Frames reçues
+11:10:33.578 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.582 [WAIT] WaitForFrames()
+11:10:33.598 [OK] Frames received
+11:10:33.602 [STATUS] [OK] Frames reçues
+11:10:33.611 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.615 [WAIT] WaitForFrames()
+11:10:33.631 [OK] Frames received
+11:10:33.635 [STATUS] [OK] Frames reçues
+11:10:33.645 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.649 [WAIT] WaitForFrames()
+11:10:33.665 [OK] Frames received
+11:10:33.668 [STATUS] [OK] Frames reçues
+11:10:33.675 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.679 [WAIT] WaitForFrames()
+11:10:33.698 [OK] Frames received
+11:10:33.703 [STATUS] [OK] Frames reçues
+11:10:33.713 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.718 [WAIT] WaitForFrames()
+11:10:33.732 [OK] Frames received
+11:10:33.742 [STATUS] [OK] Frames reçues
+11:10:33.751 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.757 [WAIT] WaitForFrames()
+11:10:33.766 [OK] Frames received
+11:10:33.771 [STATUS] [OK] Frames reçues
+11:10:33.780 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.784 [WAIT] WaitForFrames()
+11:10:33.799 [OK] Frames received
+11:10:33.805 [STATUS] [OK] Frames reçues
+11:10:33.814 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.818 [WAIT] WaitForFrames()
+11:10:33.832 [OK] Frames received
+11:10:33.838 [STATUS] [OK] Frames reçues
+11:10:33.847 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.851 [WAIT] WaitForFrames()
+11:10:33.865 [OK] Frames received
+11:10:33.869 [STATUS] [OK] Frames reçues
+11:10:33.878 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.882 [WAIT] WaitForFrames()
+11:10:33.898 [OK] Frames received
+11:10:33.901 [STATUS] [OK] Frames reçues
+11:10:33.907 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.911 [WAIT] WaitForFrames()
+11:10:33.932 [OK] Frames received
+11:10:33.936 [STATUS] [OK] Frames reçues
+11:10:33.941 [OK] FrameCount=210
+11:10:33.947 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.951 [WAIT] WaitForFrames()
+11:10:33.965 [OK] Frames received
+11:10:33.968 [STATUS] [OK] Frames reçues
+11:10:33.975 [STATUS] [WAIT] WaitForFrames() ...
+11:10:33.979 [WAIT] WaitForFrames()
+11:10:33.998 [OK] Frames received
+11:10:34.001 [STATUS] [OK] Frames reçues
+11:10:34.007 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.010 [WAIT] WaitForFrames()
+11:10:34.031 [OK] Frames received
+11:10:34.035 [STATUS] [OK] Frames reçues
+11:10:34.043 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.047 [WAIT] WaitForFrames()
+11:10:34.065 [OK] Frames received
+11:10:34.068 [STATUS] [OK] Frames reçues
+11:10:34.075 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.078 [WAIT] WaitForFrames()
+11:10:34.099 [OK] Frames received
+11:10:34.102 [STATUS] [OK] Frames reçues
+11:10:34.110 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.113 [WAIT] WaitForFrames()
+11:10:34.132 [OK] Frames received
+11:10:34.135 [STATUS] [OK] Frames reçues
+11:10:34.144 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.148 [WAIT] WaitForFrames()
+11:10:34.166 [OK] Frames received
+11:10:34.169 [STATUS] [OK] Frames reçues
+11:10:34.177 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.181 [WAIT] WaitForFrames()
+11:10:34.199 [OK] Frames received
+11:10:34.202 [STATUS] [OK] Frames reçues
+11:10:34.211 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.215 [WAIT] WaitForFrames()
+11:10:34.232 [OK] Frames received
+11:10:34.235 [STATUS] [OK] Frames reçues
+11:10:34.244 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.249 [WAIT] WaitForFrames()
+11:10:34.266 [OK] Frames received
+11:10:34.271 [STATUS] [OK] Frames reçues
+11:10:34.282 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.286 [WAIT] WaitForFrames()
+11:10:34.299 [OK] Frames received
+11:10:34.302 [STATUS] [OK] Frames reçues
+11:10:34.312 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.317 [WAIT] WaitForFrames()
+11:10:34.333 [OK] Frames received
+11:10:34.338 [STATUS] [OK] Frames reçues
+11:10:34.346 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.349 [WAIT] WaitForFrames()
+11:10:34.366 [OK] Frames received
+11:10:34.370 [STATUS] [OK] Frames reçues
+11:10:34.378 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.380 [WAIT] WaitForFrames()
+11:10:34.399 [OK] Frames received
+11:10:34.402 [STATUS] [OK] Frames reçues
+11:10:34.411 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.415 [WAIT] WaitForFrames()
+11:10:34.432 [OK] Frames received
+11:10:34.435 [STATUS] [OK] Frames reçues
+11:10:34.441 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.444 [WAIT] WaitForFrames()
+11:10:34.465 [OK] Frames received
+11:10:34.468 [STATUS] [OK] Frames reçues
+11:10:34.476 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.479 [WAIT] WaitForFrames()
+11:10:34.499 [OK] Frames received
+11:10:34.502 [STATUS] [OK] Frames reçues
+11:10:34.510 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.514 [WAIT] WaitForFrames()
+11:10:34.532 [OK] Frames received
+11:10:34.535 [STATUS] [OK] Frames reçues
+11:10:34.542 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.545 [WAIT] WaitForFrames()
+11:10:34.565 [OK] Frames received
+11:10:34.568 [STATUS] [OK] Frames reçues
+11:10:34.576 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.581 [WAIT] WaitForFrames()
+11:10:34.599 [OK] Frames received
+11:10:34.602 [STATUS] [OK] Frames reçues
+11:10:34.609 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.612 [WAIT] WaitForFrames()
+11:10:34.633 [OK] Frames received
+11:10:34.636 [STATUS] [OK] Frames reçues
+11:10:34.643 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.647 [WAIT] WaitForFrames()
+11:10:34.666 [OK] Frames received
+11:10:34.670 [STATUS] [OK] Frames reçues
+11:10:34.678 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.682 [WAIT] WaitForFrames()
+11:10:34.699 [OK] Frames received
+11:10:34.702 [STATUS] [OK] Frames reçues
+11:10:34.710 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.713 [WAIT] WaitForFrames()
+11:10:34.732 [OK] Frames received
+11:10:34.735 [STATUS] [OK] Frames reçues
+11:10:34.742 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.745 [WAIT] WaitForFrames()
+11:10:34.766 [OK] Frames received
+11:10:34.768 [STATUS] [OK] Frames reçues
+11:10:34.775 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.778 [WAIT] WaitForFrames()
+11:10:34.799 [OK] Frames received
+11:10:34.802 [STATUS] [OK] Frames reçues
+11:10:34.812 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.816 [WAIT] WaitForFrames()
+11:10:34.833 [OK] Frames received
+11:10:34.836 [STATUS] [OK] Frames reçues
+11:10:34.844 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.848 [WAIT] WaitForFrames()
+11:10:34.866 [OK] Frames received
+11:10:34.870 [STATUS] [OK] Frames reçues
+11:10:34.880 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.883 [WAIT] WaitForFrames()
+11:10:34.900 [OK] Frames received
+11:10:34.903 [STATUS] [OK] Frames reçues
+11:10:34.911 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.914 [WAIT] WaitForFrames()
+11:10:34.933 [OK] Frames received
+11:10:34.936 [STATUS] [OK] Frames reçues
+11:10:34.941 [OK] FrameCount=240
+11:10:34.947 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.951 [WAIT] WaitForFrames()
+11:10:34.966 [OK] Frames received
+11:10:34.970 [STATUS] [OK] Frames reçues
+11:10:34.979 [STATUS] [WAIT] WaitForFrames() ...
+11:10:34.982 [WAIT] WaitForFrames()
+11:10:35.000 [OK] Frames received
+11:10:35.003 [STATUS] [OK] Frames reçues
+11:10:35.012 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.015 [WAIT] WaitForFrames()
+11:10:35.033 [OK] Frames received
+11:10:35.036 [STATUS] [OK] Frames reçues
+11:10:35.046 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.049 [WAIT] WaitForFrames()
+11:10:35.067 [OK] Frames received
+11:10:35.071 [STATUS] [OK] Frames reçues
+11:10:35.080 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.083 [WAIT] WaitForFrames()
+11:10:35.101 [OK] Frames received
+11:10:35.106 [STATUS] [OK] Frames reçues
+11:10:35.115 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.119 [WAIT] WaitForFrames()
+11:10:35.133 [OK] Frames received
+11:10:35.137 [STATUS] [OK] Frames reçues
+11:10:35.146 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.148 [WAIT] WaitForFrames()
+11:10:35.166 [OK] Frames received
+11:10:35.169 [STATUS] [OK] Frames reçues
+11:10:35.175 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.178 [WAIT] WaitForFrames()
+11:10:35.200 [OK] Frames received
+11:10:35.202 [STATUS] [OK] Frames reçues
+11:10:35.210 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.214 [WAIT] WaitForFrames()
+11:10:35.233 [OK] Frames received
+11:10:35.237 [STATUS] [OK] Frames reçues
+11:10:35.248 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.252 [WAIT] WaitForFrames()
+11:10:35.267 [OK] Frames received
+11:10:35.272 [STATUS] [OK] Frames reçues
+11:10:35.281 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.285 [WAIT] WaitForFrames()
+11:10:35.300 [OK] Frames received
+11:10:35.303 [STATUS] [OK] Frames reçues
+11:10:35.311 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.313 [WAIT] WaitForFrames()
+11:10:35.334 [OK] Frames received
+11:10:35.341 [STATUS] [OK] Frames reçues
+11:10:35.352 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.360 [WAIT] WaitForFrames()
+11:10:35.369 [OK] Frames received
+11:10:35.377 [STATUS] [OK] Frames reçues
+11:10:35.388 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.394 [WAIT] WaitForFrames()
+11:10:35.402 [OK] Frames received
+11:10:35.407 [STATUS] [OK] Frames reçues
+11:10:35.413 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.416 [WAIT] WaitForFrames()
+11:10:35.434 [OK] Frames received
+11:10:35.439 [STATUS] [OK] Frames reçues
+11:10:35.451 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.457 [WAIT] WaitForFrames()
+11:10:35.467 [OK] Frames received
+11:10:35.472 [STATUS] [OK] Frames reçues
+11:10:35.481 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.484 [WAIT] WaitForFrames()
+11:10:35.500 [OK] Frames received
+11:10:35.503 [STATUS] [OK] Frames reçues
+11:10:35.512 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.517 [WAIT] WaitForFrames()
+11:10:35.533 [OK] Frames received
+11:10:35.537 [STATUS] [OK] Frames reçues
+11:10:35.545 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.548 [WAIT] WaitForFrames()
+11:10:35.567 [OK] Frames received
+11:10:35.572 [STATUS] [OK] Frames reçues
+11:10:35.579 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.583 [WAIT] WaitForFrames()
+11:10:35.601 [OK] Frames received
+11:10:35.606 [STATUS] [OK] Frames reçues
+11:10:35.614 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.619 [WAIT] WaitForFrames()
+11:10:35.634 [OK] Frames received
+11:10:35.640 [STATUS] [OK] Frames reçues
+11:10:35.647 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.650 [WAIT] WaitForFrames()
+11:10:35.667 [OK] Frames received
+11:10:35.672 [STATUS] [OK] Frames reçues
+11:10:35.680 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.683 [WAIT] WaitForFrames()
+11:10:35.700 [OK] Frames received
+11:10:35.704 [STATUS] [OK] Frames reçues
+11:10:35.712 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.714 [WAIT] WaitForFrames()
+11:10:35.734 [OK] Frames received
+11:10:35.737 [STATUS] [OK] Frames reçues
+11:10:35.745 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.748 [WAIT] WaitForFrames()
+11:10:35.771 [OK] Frames received
+11:10:35.783 [STATUS] [OK] Frames reçues
+11:10:35.793 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.798 [WAIT] WaitForFrames()
+11:10:35.803 [OK] Frames received
+11:10:35.808 [STATUS] [OK] Frames reçues
+11:10:35.818 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.824 [WAIT] WaitForFrames()
+11:10:35.836 [OK] Frames received
+11:10:35.842 [STATUS] [OK] Frames reçues
+11:10:35.850 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.857 [WAIT] WaitForFrames()
+11:10:35.869 [OK] Frames received
+11:10:35.877 [STATUS] [OK] Frames reçues
+11:10:35.892 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.899 [WAIT] WaitForFrames()
+11:10:35.905 [OK] Frames received
+11:10:35.910 [STATUS] [OK] Frames reçues
+11:10:35.916 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.920 [WAIT] WaitForFrames()
+11:10:35.934 [OK] Frames received
+11:10:35.937 [STATUS] [OK] Frames reçues
+11:10:35.941 [OK] FrameCount=270
+11:10:35.947 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.950 [WAIT] WaitForFrames()
+11:10:35.967 [OK] Frames received
+11:10:35.970 [STATUS] [OK] Frames reçues
+11:10:35.978 [STATUS] [WAIT] WaitForFrames() ...
+11:10:35.981 [WAIT] WaitForFrames()
+11:10:36.001 [OK] Frames received
+11:10:36.004 [STATUS] [OK] Frames reçues
+11:10:36.011 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.014 [WAIT] WaitForFrames()
+11:10:36.034 [OK] Frames received
+11:10:36.039 [STATUS] [OK] Frames reçues
+11:10:36.047 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.050 [WAIT] WaitForFrames()
+11:10:36.068 [OK] Frames received
+11:10:36.072 [STATUS] [OK] Frames reçues
+11:10:36.079 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.083 [WAIT] WaitForFrames()
+11:10:36.101 [OK] Frames received
+11:10:36.106 [STATUS] [OK] Frames reçues
+11:10:36.112 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.116 [WAIT] WaitForFrames()
+11:10:36.134 [OK] Frames received
+11:10:36.139 [STATUS] [OK] Frames reçues
+11:10:36.146 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.149 [WAIT] WaitForFrames()
+11:10:36.168 [OK] Frames received
+11:10:36.172 [STATUS] [OK] Frames reçues
+11:10:36.178 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.181 [WAIT] WaitForFrames()
+11:10:36.201 [OK] Frames received
+11:10:36.206 [STATUS] [OK] Frames reçues
+11:10:36.214 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.218 [WAIT] WaitForFrames()
+11:10:36.234 [OK] Frames received
+11:10:36.239 [STATUS] [OK] Frames reçues
+11:10:36.246 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.248 [WAIT] WaitForFrames()
+11:10:36.268 [OK] Frames received
+11:10:36.272 [STATUS] [OK] Frames reçues
+11:10:36.280 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.283 [WAIT] WaitForFrames()
+11:10:36.302 [OK] Frames received
+11:10:36.306 [STATUS] [OK] Frames reçues
+11:10:36.314 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.318 [WAIT] WaitForFrames()
+11:10:36.334 [OK] Frames received
+11:10:36.338 [STATUS] [OK] Frames reçues
+11:10:36.346 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.349 [WAIT] WaitForFrames()
+11:10:36.368 [OK] Frames received
+11:10:36.372 [STATUS] [OK] Frames reçues
+11:10:36.379 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.382 [WAIT] WaitForFrames()
+11:10:36.401 [OK] Frames received
+11:10:36.404 [STATUS] [OK] Frames reçues
+11:10:36.421 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.425 [WAIT] WaitForFrames()
+11:10:36.435 [OK] Frames received
+11:10:36.439 [STATUS] [OK] Frames reçues
+11:10:36.446 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.450 [WAIT] WaitForFrames()
+11:10:36.468 [OK] Frames received
+11:10:36.472 [STATUS] [OK] Frames reçues
+11:10:36.478 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.481 [WAIT] WaitForFrames()
+11:10:36.501 [OK] Frames received
+11:10:36.504 [STATUS] [OK] Frames reçues
+11:10:36.510 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.513 [WAIT] WaitForFrames()
+11:10:36.535 [OK] Frames received
+11:10:36.539 [STATUS] [OK] Frames reçues
+11:10:36.547 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.551 [WAIT] WaitForFrames()
+11:10:36.568 [OK] Frames received
+11:10:36.573 [STATUS] [OK] Frames reçues
+11:10:36.580 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.583 [WAIT] WaitForFrames()
+11:10:36.601 [OK] Frames received
+11:10:36.606 [STATUS] [OK] Frames reçues
+11:10:36.614 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.618 [WAIT] WaitForFrames()
+11:10:36.635 [OK] Frames received
+11:10:36.639 [STATUS] [OK] Frames reçues
+11:10:36.645 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.649 [WAIT] WaitForFrames()
+11:10:36.668 [OK] Frames received
+11:10:36.673 [STATUS] [OK] Frames reçues
+11:10:36.679 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.682 [WAIT] WaitForFrames()
+11:10:36.702 [OK] Frames received
+11:10:36.706 [STATUS] [OK] Frames reçues
+11:10:36.713 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.717 [WAIT] WaitForFrames()
+11:10:36.735 [OK] Frames received
+11:10:36.739 [STATUS] [OK] Frames reçues
+11:10:36.745 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.748 [WAIT] WaitForFrames()
+11:10:36.768 [OK] Frames received
+11:10:36.772 [STATUS] [OK] Frames reçues
+11:10:36.781 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.785 [WAIT] WaitForFrames()
+11:10:36.801 [OK] Frames received
+11:10:36.806 [STATUS] [OK] Frames reçues
+11:10:36.813 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.816 [WAIT] WaitForFrames()
+11:10:36.835 [OK] Frames received
+11:10:36.839 [STATUS] [OK] Frames reçues
+11:10:36.846 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.850 [WAIT] WaitForFrames()
+11:10:36.868 [OK] Frames received
+11:10:36.872 [STATUS] [OK] Frames reçues
+11:10:36.881 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.886 [WAIT] WaitForFrames()
+11:10:36.902 [OK] Frames received
+11:10:36.907 [STATUS] [OK] Frames reçues
+11:10:36.915 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.920 [WAIT] WaitForFrames()
+11:10:36.935 [OK] Frames received
+11:10:36.940 [STATUS] [OK] Frames reçues
+11:10:36.943 [OK] FrameCount=300
+11:10:36.950 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.954 [WAIT] WaitForFrames()
+11:10:36.969 [OK] Frames received
+11:10:36.974 [STATUS] [OK] Frames reçues
+11:10:36.982 [STATUS] [WAIT] WaitForFrames() ...
+11:10:36.985 [WAIT] WaitForFrames()
+11:10:37.002 [OK] Frames received
+11:10:37.006 [STATUS] [OK] Frames reçues
+11:10:37.013 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.017 [WAIT] WaitForFrames()
+11:10:37.036 [OK] Frames received
+11:10:37.041 [STATUS] [OK] Frames reçues
+11:10:37.049 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.053 [WAIT] WaitForFrames()
+11:10:37.069 [OK] Frames received
+11:10:37.074 [STATUS] [OK] Frames reçues
+11:10:37.081 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.086 [WAIT] WaitForFrames()
+11:10:37.102 [OK] Frames received
+11:10:37.107 [STATUS] [OK] Frames reçues
+11:10:37.114 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.118 [WAIT] WaitForFrames()
+11:10:37.136 [OK] Frames received
+11:10:37.145 [STATUS] [OK] Frames reçues
+11:10:37.154 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.158 [WAIT] WaitForFrames()
+11:10:37.169 [OK] Frames received
+11:10:37.174 [STATUS] [OK] Frames reçues
+11:10:37.181 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.185 [WAIT] WaitForFrames()
+11:10:37.202 [OK] Frames received
+11:10:37.205 [STATUS] [OK] Frames reçues
+11:10:37.212 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.215 [WAIT] WaitForFrames()
+11:10:37.235 [OK] Frames received
+11:10:37.239 [STATUS] [OK] Frames reçues
+11:10:37.246 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.249 [WAIT] WaitForFrames()
+11:10:37.269 [OK] Frames received
+11:10:37.273 [STATUS] [OK] Frames reçues
+11:10:37.281 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.285 [WAIT] WaitForFrames()
+11:10:37.302 [OK] Frames received
+11:10:37.307 [STATUS] [OK] Frames reçues
+11:10:37.315 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.318 [WAIT] WaitForFrames()
+11:10:37.336 [OK] Frames received
+11:10:37.341 [STATUS] [OK] Frames reçues
+11:10:37.347 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.350 [WAIT] WaitForFrames()
+11:10:37.369 [OK] Frames received
+11:10:37.373 [STATUS] [OK] Frames reçues
+11:10:37.379 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.382 [WAIT] WaitForFrames()
+11:10:37.403 [OK] Frames received
+11:10:37.407 [STATUS] [OK] Frames reçues
+11:10:37.415 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.419 [WAIT] WaitForFrames()
+11:10:37.436 [OK] Frames received
+11:10:37.440 [STATUS] [OK] Frames reçues
+11:10:37.446 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.450 [WAIT] WaitForFrames()
+11:10:37.469 [OK] Frames received
+11:10:37.473 [STATUS] [OK] Frames reçues
+11:10:37.481 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.484 [WAIT] WaitForFrames()
+11:10:37.502 [OK] Frames received
+11:10:37.507 [STATUS] [OK] Frames reçues
+11:10:37.514 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.517 [WAIT] WaitForFrames()
+11:10:37.535 [OK] Frames received
+11:10:37.539 [STATUS] [OK] Frames reçues
+11:10:37.545 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.548 [WAIT] WaitForFrames()
+11:10:37.569 [OK] Frames received
+11:10:37.573 [STATUS] [OK] Frames reçues
+11:10:37.579 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.581 [WAIT] WaitForFrames()
+11:10:37.603 [OK] Frames received
+11:10:37.606 [STATUS] [OK] Frames reçues
+11:10:37.612 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.615 [WAIT] WaitForFrames()
+11:10:37.636 [OK] Frames received
+11:10:37.640 [STATUS] [OK] Frames reçues
+11:10:37.646 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.649 [WAIT] WaitForFrames()
+11:10:37.669 [OK] Frames received
+11:10:37.673 [STATUS] [OK] Frames reçues
+11:10:37.679 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.683 [WAIT] WaitForFrames()
+11:10:37.703 [OK] Frames received
+11:10:37.706 [STATUS] [OK] Frames reçues
+11:10:37.713 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.716 [WAIT] WaitForFrames()
+11:10:37.736 [OK] Frames received
+11:10:37.740 [STATUS] [OK] Frames reçues
+11:10:37.746 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.749 [WAIT] WaitForFrames()
+11:10:37.769 [OK] Frames received
+11:10:37.773 [STATUS] [OK] Frames reçues
+11:10:37.783 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.786 [WAIT] WaitForFrames()
+11:10:37.803 [OK] Frames received
+11:10:37.809 [STATUS] [OK] Frames reçues
+11:10:37.818 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.824 [WAIT] WaitForFrames()
+11:10:37.836 [OK] Frames received
+11:10:37.842 [STATUS] [OK] Frames reçues
+11:10:37.849 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.852 [WAIT] WaitForFrames()
+11:10:37.869 [OK] Frames received
+11:10:37.873 [STATUS] [OK] Frames reçues
+11:10:37.879 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.882 [WAIT] WaitForFrames()
+11:10:37.903 [OK] Frames received
+11:10:37.907 [STATUS] [OK] Frames reçues
+11:10:37.915 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.918 [WAIT] WaitForFrames()
+11:10:37.936 [OK] Frames received
+11:10:37.941 [STATUS] [OK] Frames reçues
+11:10:37.943 [OK] FrameCount=330
+11:10:37.949 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.952 [WAIT] WaitForFrames()
+11:10:37.969 [OK] Frames received
+11:10:37.973 [STATUS] [OK] Frames reçues
+11:10:37.982 [STATUS] [WAIT] WaitForFrames() ...
+11:10:37.985 [WAIT] WaitForFrames()
+11:10:38.003 [OK] Frames received
+11:10:38.008 [STATUS] [OK] Frames reçues
+11:10:38.015 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.018 [WAIT] WaitForFrames()
+11:10:38.037 [OK] Frames received
+11:10:38.041 [STATUS] [OK] Frames reçues
+11:10:38.048 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.051 [WAIT] WaitForFrames()
+11:10:38.070 [OK] Frames received
+11:10:38.074 [STATUS] [OK] Frames reçues
+11:10:38.080 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.083 [WAIT] WaitForFrames()
+11:10:38.104 [OK] Frames received
+11:10:38.109 [STATUS] [OK] Frames reçues
+11:10:38.117 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.120 [WAIT] WaitForFrames()
+11:10:38.137 [OK] Frames received
+11:10:38.142 [STATUS] [OK] Frames reçues
+11:10:38.151 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.156 [WAIT] WaitForFrames()
+11:10:38.170 [OK] Frames received
+11:10:38.175 [STATUS] [OK] Frames reçues
+11:10:38.183 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.187 [WAIT] WaitForFrames()
+11:10:38.203 [OK] Frames received
+11:10:38.208 [STATUS] [OK] Frames reçues
+11:10:38.215 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.218 [WAIT] WaitForFrames()
+11:10:38.236 [OK] Frames received
+11:10:38.241 [STATUS] [OK] Frames reçues
+11:10:38.249 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.252 [WAIT] WaitForFrames()
+11:10:38.272 [OK] Frames received
+11:10:38.276 [STATUS] [OK] Frames reçues
+11:10:38.286 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.290 [WAIT] WaitForFrames()
+11:10:38.303 [OK] Frames received
+11:10:38.307 [STATUS] [OK] Frames reçues
+11:10:38.313 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.317 [WAIT] WaitForFrames()
+11:10:38.337 [OK] Frames received
+11:10:38.341 [STATUS] [OK] Frames reçues
+11:10:38.346 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.349 [WAIT] WaitForFrames()
+11:10:38.370 [OK] Frames received
+11:10:38.374 [STATUS] [OK] Frames reçues
+11:10:38.381 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.384 [WAIT] WaitForFrames()
+11:10:38.404 [OK] Frames received
+11:10:38.409 [STATUS] [OK] Frames reçues
+11:10:38.415 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.417 [WAIT] WaitForFrames()
+11:10:38.437 [OK] Frames received
+11:10:38.441 [STATUS] [OK] Frames reçues
+11:10:38.448 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.452 [WAIT] WaitForFrames()
+11:10:38.472 [OK] Frames received
+11:10:38.477 [STATUS] [OK] Frames reçues
+11:10:38.484 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.487 [WAIT] WaitForFrames()
+11:10:38.504 [OK] Frames received
+11:10:38.509 [STATUS] [OK] Frames reçues
+11:10:38.515 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.519 [WAIT] WaitForFrames()
+11:10:38.537 [OK] Frames received
+11:10:38.541 [STATUS] [OK] Frames reçues
+11:10:38.547 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.550 [WAIT] WaitForFrames()
+11:10:38.572 [OK] Frames received
+11:10:38.577 [STATUS] [OK] Frames reçues
+11:10:38.584 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.587 [WAIT] WaitForFrames()
+11:10:38.605 [OK] Frames received
+11:10:38.610 [STATUS] [OK] Frames reçues
+11:10:38.616 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.620 [WAIT] WaitForFrames()
+11:10:38.638 [OK] Frames received
+11:10:38.643 [STATUS] [OK] Frames reçues
+11:10:38.651 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.655 [WAIT] WaitForFrames()
+11:10:38.671 [OK] Frames received
+11:10:38.675 [STATUS] [OK] Frames reçues
+11:10:38.681 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.684 [WAIT] WaitForFrames()
+11:10:38.705 [OK] Frames received
+11:10:38.709 [STATUS] [OK] Frames reçues
+11:10:38.716 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.719 [WAIT] WaitForFrames()
+11:10:38.738 [OK] Frames received
+11:10:38.742 [STATUS] [OK] Frames reçues
+11:10:38.749 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.754 [WAIT] WaitForFrames()
+11:10:38.773 [OK] Frames received
+11:10:38.777 [STATUS] [OK] Frames reçues
+11:10:38.785 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.790 [WAIT] WaitForFrames()
+11:10:38.805 [OK] Frames received
+11:10:38.809 [STATUS] [OK] Frames reçues
+11:10:38.816 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.819 [WAIT] WaitForFrames()
+11:10:38.838 [OK] Frames received
+11:10:38.842 [STATUS] [OK] Frames reçues
+11:10:38.848 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.851 [WAIT] WaitForFrames()
+11:10:38.871 [OK] Frames received
+11:10:38.875 [STATUS] [OK] Frames reçues
+11:10:38.881 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.884 [WAIT] WaitForFrames()
+11:10:38.905 [OK] Frames received
+11:10:38.909 [STATUS] [OK] Frames reçues
+11:10:38.915 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.918 [WAIT] WaitForFrames()
+11:10:38.938 [OK] Frames received
+11:10:38.941 [STATUS] [OK] Frames reçues
+11:10:38.944 [OK] FrameCount=360
+11:10:38.950 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.952 [WAIT] WaitForFrames()
+11:10:38.971 [OK] Frames received
+11:10:38.974 [STATUS] [OK] Frames reçues
+11:10:38.980 [STATUS] [WAIT] WaitForFrames() ...
+11:10:38.982 [WAIT] WaitForFrames()
+11:10:39.004 [OK] Frames received
+11:10:39.009 [STATUS] [OK] Frames reçues
+11:10:39.015 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.018 [WAIT] WaitForFrames()
+11:10:39.039 [OK] Frames received
+11:10:39.043 [STATUS] [OK] Frames reçues
+11:10:39.050 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.054 [WAIT] WaitForFrames()
+11:10:39.071 [OK] Frames received
+11:10:39.075 [STATUS] [OK] Frames reçues
+11:10:39.081 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.084 [WAIT] WaitForFrames()
+11:10:39.105 [OK] Frames received
+11:10:39.110 [STATUS] [OK] Frames reçues
+11:10:39.117 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.120 [WAIT] WaitForFrames()
+11:10:39.138 [OK] Frames received
+11:10:39.142 [STATUS] [OK] Frames reçues
+11:10:39.150 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.154 [WAIT] WaitForFrames()
+11:10:39.173 [OK] Frames received
+11:10:39.177 [STATUS] [OK] Frames reçues
+11:10:39.185 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.190 [WAIT] WaitForFrames()
+11:10:39.205 [OK] Frames received
+11:10:39.210 [STATUS] [OK] Frames reçues
+11:10:39.219 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.222 [WAIT] WaitForFrames()
+11:10:39.238 [OK] Frames received
+11:10:39.242 [STATUS] [OK] Frames reçues
+11:10:39.250 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.253 [WAIT] WaitForFrames()
+11:10:39.273 [OK] Frames received
+11:10:39.277 [STATUS] [OK] Frames reçues
+11:10:39.286 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.290 [WAIT] WaitForFrames()
+11:10:39.306 [OK] Frames received
+11:10:39.311 [STATUS] [OK] Frames reçues
+11:10:39.320 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.324 [WAIT] WaitForFrames()
+11:10:39.339 [OK] Frames received
+11:10:39.342 [STATUS] [OK] Frames reçues
+11:10:39.349 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.352 [WAIT] WaitForFrames()
+11:10:39.372 [OK] Frames received
+11:10:39.376 [STATUS] [OK] Frames reçues
+11:10:39.382 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.385 [WAIT] WaitForFrames()
+11:10:39.406 [OK] Frames received
+11:10:39.410 [STATUS] [OK] Frames reçues
+11:10:39.415 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.418 [WAIT] WaitForFrames()
+11:10:39.439 [OK] Frames received
+11:10:39.442 [STATUS] [OK] Frames reçues
+11:10:39.447 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.450 [WAIT] WaitForFrames()
+11:10:39.472 [OK] Frames received
+11:10:39.475 [STATUS] [OK] Frames reçues
+11:10:39.481 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.484 [WAIT] WaitForFrames()
+11:10:39.506 [OK] Frames received
+11:10:39.510 [STATUS] [OK] Frames reçues
+11:10:39.517 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.521 [WAIT] WaitForFrames()
+11:10:39.539 [OK] Frames received
+11:10:39.543 [STATUS] [OK] Frames reçues
+11:10:39.551 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.555 [WAIT] WaitForFrames()
+11:10:39.573 [OK] Frames received
+11:10:39.577 [STATUS] [OK] Frames reçues
+11:10:39.583 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.587 [WAIT] WaitForFrames()
+11:10:39.606 [OK] Frames received
+11:10:39.610 [STATUS] [OK] Frames reçues
+11:10:39.616 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.619 [WAIT] WaitForFrames()
+11:10:39.639 [OK] Frames received
+11:10:39.643 [STATUS] [OK] Frames reçues
+11:10:39.651 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.655 [WAIT] WaitForFrames()
+11:10:39.673 [OK] Frames received
+11:10:39.676 [STATUS] [OK] Frames reçues
+11:10:39.683 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.688 [WAIT] WaitForFrames()
+11:10:39.706 [OK] Frames received
+11:10:39.711 [STATUS] [OK] Frames reçues
+11:10:39.718 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.720 [WAIT] WaitForFrames()
+11:10:39.740 [OK] Frames received
+11:10:39.744 [STATUS] [OK] Frames reçues
+11:10:39.751 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.755 [WAIT] WaitForFrames()
+11:10:39.773 [OK] Frames received
+11:10:39.777 [STATUS] [OK] Frames reçues
+11:10:39.784 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.790 [WAIT] WaitForFrames()
+11:10:39.806 [OK] Frames received
+11:10:39.810 [STATUS] [OK] Frames reçues
+11:10:39.817 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.821 [WAIT] WaitForFrames()
+11:10:39.839 [OK] Frames received
+11:10:39.842 [STATUS] [OK] Frames reçues
+11:10:39.848 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.851 [WAIT] WaitForFrames()
+11:10:39.873 [OK] Frames received
+11:10:39.878 [STATUS] [OK] Frames reçues
+11:10:39.886 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.891 [WAIT] WaitForFrames()
+11:10:39.906 [OK] Frames received
+11:10:39.911 [STATUS] [OK] Frames reçues
+11:10:39.917 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.920 [WAIT] WaitForFrames()
+11:10:39.940 [OK] Frames received
+11:10:39.943 [STATUS] [OK] Frames reçues
+11:10:39.946 [OK] FrameCount=390
+11:10:39.954 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.959 [WAIT] WaitForFrames()
+11:10:39.973 [OK] Frames received
+11:10:39.977 [STATUS] [OK] Frames reçues
+11:10:39.984 [STATUS] [WAIT] WaitForFrames() ...
+11:10:39.988 [WAIT] WaitForFrames()
+11:10:40.006 [OK] Frames received
+11:10:40.009 [STATUS] [OK] Frames reçues
+11:10:40.017 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.021 [WAIT] WaitForFrames()
+11:10:40.040 [OK] Frames received
+11:10:40.044 [STATUS] [OK] Frames reçues
+11:10:40.052 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.056 [WAIT] WaitForFrames()
+11:10:40.073 [OK] Frames received
+11:10:40.078 [STATUS] [OK] Frames reçues
+11:10:40.086 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.091 [WAIT] WaitForFrames()
+11:10:40.106 [OK] Frames received
+11:10:40.109 [STATUS] [OK] Frames reçues
+11:10:40.115 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.117 [WAIT] WaitForFrames()
+11:10:40.124 [STATUS] [INFO] Active USE_DEPTH=true pour mesurer la distance.
+11:10:40.139 [OK] Frames received
+11:10:40.143 [STATUS] [OK] Frames reçues
+11:10:40.149 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.152 [WAIT] WaitForFrames()
+11:10:40.173 [OK] Frames received
+11:10:40.176 [STATUS] [OK] Frames reçues
+11:10:40.183 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.187 [WAIT] WaitForFrames()
+11:10:40.206 [OK] Frames received
+11:10:40.209 [STATUS] [OK] Frames reçues
+11:10:40.216 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.219 [WAIT] WaitForFrames()
+11:10:40.240 [OK] Frames received
+11:10:40.243 [STATUS] [OK] Frames reçues
+11:10:40.250 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.254 [WAIT] WaitForFrames()
+11:10:40.273 [OK] Frames received
+11:10:40.278 [STATUS] [OK] Frames reçues
+11:10:40.285 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.289 [WAIT] WaitForFrames()
+11:10:40.306 [OK] Frames received
+11:10:40.311 [STATUS] [OK] Frames reçues
+11:10:40.317 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.320 [WAIT] WaitForFrames()
+11:10:40.340 [OK] Frames received
+11:10:40.343 [STATUS] [OK] Frames reçues
+11:10:40.349 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.352 [WAIT] WaitForFrames()
+11:10:40.373 [OK] Frames received
+11:10:40.376 [STATUS] [OK] Frames reçues
+11:10:40.381 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.384 [WAIT] WaitForFrames()
+11:10:40.407 [OK] Frames received
+11:10:40.410 [STATUS] [OK] Frames reçues
+11:10:40.416 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.420 [WAIT] WaitForFrames()
+11:10:40.440 [OK] Frames received
+11:10:40.444 [STATUS] [OK] Frames reçues
+11:10:40.449 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.453 [WAIT] WaitForFrames()
+11:10:40.474 [OK] Frames received
+11:10:40.479 [STATUS] [OK] Frames reçues
+11:10:40.488 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.493 [WAIT] WaitForFrames()
+11:10:40.508 [OK] Frames received
+11:10:40.514 [STATUS] [OK] Frames reçues
+11:10:40.522 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.526 [WAIT] WaitForFrames()
+11:10:40.540 [OK] Frames received
+11:10:40.543 [STATUS] [OK] Frames reçues
+11:10:40.548 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.551 [WAIT] WaitForFrames()
+11:10:40.573 [OK] Frames received
+11:10:40.576 [STATUS] [OK] Frames reçues
+11:10:40.582 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.584 [WAIT] WaitForFrames()
+11:10:40.606 [OK] Frames received
+11:10:40.610 [STATUS] [OK] Frames reçues
+11:10:40.616 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.619 [WAIT] WaitForFrames()
+11:10:40.641 [OK] Frames received
+11:10:40.644 [STATUS] [OK] Frames reçues
+11:10:40.651 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.655 [WAIT] WaitForFrames()
+11:10:40.673 [OK] Frames received
+11:10:40.675 [STATUS] [OK] Frames reçues
+11:10:40.682 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.685 [WAIT] WaitForFrames()
+11:10:40.706 [OK] Frames received
+11:10:40.709 [STATUS] [OK] Frames reçues
+11:10:40.715 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.718 [WAIT] WaitForFrames()
+11:10:40.740 [OK] Frames received
+11:10:40.743 [STATUS] [OK] Frames reçues
+11:10:40.749 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.753 [WAIT] WaitForFrames()
+11:10:40.774 [OK] Frames received
+11:10:40.778 [STATUS] [OK] Frames reçues
+11:10:40.785 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.789 [WAIT] WaitForFrames()
+11:10:40.808 [OK] Frames received
+11:10:40.812 [STATUS] [OK] Frames reçues
+11:10:40.818 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.822 [WAIT] WaitForFrames()
+11:10:40.840 [OK] Frames received
+11:10:40.843 [STATUS] [OK] Frames reçues
+11:10:40.849 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.853 [WAIT] WaitForFrames()
+11:10:40.873 [OK] Frames received
+11:10:40.876 [STATUS] [OK] Frames reçues
+11:10:40.881 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.885 [WAIT] WaitForFrames()
+11:10:40.907 [OK] Frames received
+11:10:40.909 [STATUS] [OK] Frames reçues
+11:10:40.918 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.922 [WAIT] WaitForFrames()
+11:10:40.940 [OK] Frames received
+11:10:40.943 [STATUS] [OK] Frames reçues
+11:10:40.945 [OK] FrameCount=420
+11:10:40.951 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.954 [WAIT] WaitForFrames()
+11:10:40.973 [OK] Frames received
+11:10:40.976 [STATUS] [OK] Frames reçues
+11:10:40.982 [STATUS] [WAIT] WaitForFrames() ...
+11:10:40.985 [WAIT] WaitForFrames()
+11:10:41.007 [OK] Frames received
+11:10:41.010 [STATUS] [OK] Frames reçues
+11:10:41.020 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.024 [WAIT] WaitForFrames()
+11:10:41.041 [OK] Frames received
+11:10:41.044 [STATUS] [OK] Frames reçues
+11:10:41.050 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.053 [WAIT] WaitForFrames()
+11:10:41.074 [OK] Frames received
+11:10:41.077 [STATUS] [OK] Frames reçues
+11:10:41.087 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.091 [WAIT] WaitForFrames()
+11:10:41.107 [OK] Frames received
+11:10:41.111 [STATUS] [OK] Frames reçues
+11:10:41.117 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.120 [WAIT] WaitForFrames()
+11:10:41.142 [OK] Frames received
+11:10:41.147 [STATUS] [OK] Frames reçues
+11:10:41.155 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.160 [WAIT] WaitForFrames()
+11:10:41.174 [OK] Frames received
+11:10:41.177 [STATUS] [OK] Frames reçues
+11:10:41.184 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.188 [WAIT] WaitForFrames()
+11:10:41.207 [OK] Frames received
+11:10:41.211 [STATUS] [OK] Frames reçues
+11:10:41.218 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.221 [WAIT] WaitForFrames()
+11:10:41.240 [OK] Frames received
+11:10:41.243 [STATUS] [OK] Frames reçues
+11:10:41.252 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.257 [WAIT] WaitForFrames()
+11:10:41.274 [OK] Frames received
+11:10:41.278 [STATUS] [OK] Frames reçues
+11:10:41.285 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.288 [WAIT] WaitForFrames()
+11:10:41.309 [OK] Frames received
+11:10:41.313 [STATUS] [OK] Frames reçues
+11:10:41.319 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.324 [WAIT] WaitForFrames()
+11:10:41.341 [OK] Frames received
+11:10:41.344 [STATUS] [OK] Frames reçues
+11:10:41.350 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.353 [WAIT] WaitForFrames()
+11:10:41.375 [OK] Frames received
+11:10:41.378 [STATUS] [OK] Frames reçues
+11:10:41.384 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.390 [WAIT] WaitForFrames()
+11:10:41.407 [OK] Frames received
+11:10:41.410 [STATUS] [OK] Frames reçues
+11:10:41.417 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.420 [WAIT] WaitForFrames()
+11:10:41.441 [OK] Frames received
+11:10:41.444 [STATUS] [OK] Frames reçues
+11:10:41.450 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.454 [WAIT] WaitForFrames()
+11:10:41.474 [OK] Frames received
+11:10:41.478 [STATUS] [OK] Frames reçues
+11:10:41.486 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.490 [WAIT] WaitForFrames()
+11:10:41.508 [OK] Frames received
+11:10:41.511 [STATUS] [OK] Frames reçues
+11:10:41.517 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.521 [WAIT] WaitForFrames()
+11:10:41.541 [OK] Frames received
+11:10:41.543 [STATUS] [OK] Frames reçues
+11:10:41.549 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.552 [WAIT] WaitForFrames()
+11:10:41.574 [OK] Frames received
+11:10:41.577 [STATUS] [OK] Frames reçues
+11:10:41.583 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.586 [WAIT] WaitForFrames()
+11:10:41.607 [OK] Frames received
+11:10:41.610 [STATUS] [OK] Frames reçues
+11:10:41.615 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.618 [WAIT] WaitForFrames()
+11:10:41.641 [OK] Frames received
+11:10:41.644 [STATUS] [OK] Frames reçues
+11:10:41.650 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.654 [WAIT] WaitForFrames()
+11:10:41.674 [OK] Frames received
+11:10:41.678 [STATUS] [OK] Frames reçues
+11:10:41.686 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.690 [WAIT] WaitForFrames()
+11:10:41.708 [OK] Frames received
+11:10:41.712 [STATUS] [OK] Frames reçues
+11:10:41.719 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.723 [WAIT] WaitForFrames()
+11:10:41.741 [OK] Frames received
+11:10:41.745 [STATUS] [OK] Frames reçues
+11:10:41.751 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.754 [WAIT] WaitForFrames()
+11:10:41.775 [OK] Frames received
+11:10:41.778 [STATUS] [OK] Frames reçues
+11:10:41.785 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.789 [WAIT] WaitForFrames()
+11:10:41.808 [OK] Frames received
+11:10:41.812 [STATUS] [OK] Frames reçues
+11:10:41.820 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.825 [WAIT] WaitForFrames()
+11:10:41.841 [OK] Frames received
+11:10:41.845 [STATUS] [OK] Frames reçues
+11:10:41.851 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.855 [WAIT] WaitForFrames()
+11:10:41.874 [OK] Frames received
+11:10:41.877 [STATUS] [OK] Frames reçues
+11:10:41.884 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.888 [WAIT] WaitForFrames()
+11:10:41.908 [OK] Frames received
+11:10:41.911 [STATUS] [OK] Frames reçues
+11:10:41.918 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.921 [WAIT] WaitForFrames()
+11:10:41.941 [OK] Frames received
+11:10:41.944 [STATUS] [OK] Frames reçues
+11:10:41.947 [OK] FrameCount=450
+11:10:41.953 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.956 [WAIT] WaitForFrames()
+11:10:41.975 [OK] Frames received
+11:10:41.978 [STATUS] [OK] Frames reçues
+11:10:41.985 [STATUS] [WAIT] WaitForFrames() ...
+11:10:41.989 [WAIT] WaitForFrames()
+11:10:42.008 [OK] Frames received
+11:10:42.012 [STATUS] [OK] Frames reçues
+11:10:42.023 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.026 [WAIT] WaitForFrames()
+11:10:42.041 [OK] Frames received
+11:10:42.045 [STATUS] [OK] Frames reçues
+11:10:42.051 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.055 [WAIT] WaitForFrames()
+11:10:42.075 [OK] Frames received
+11:10:42.078 [STATUS] [OK] Frames reçues
+11:10:42.087 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.091 [WAIT] WaitForFrames()
+11:10:42.108 [OK] Frames received
+11:10:42.111 [STATUS] [OK] Frames reçues
+11:10:42.119 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.123 [WAIT] WaitForFrames()
+11:10:42.141 [OK] Frames received
+11:10:42.145 [STATUS] [OK] Frames reçues
+11:10:42.152 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.156 [WAIT] WaitForFrames()
+11:10:42.174 [OK] Frames received
+11:10:42.178 [STATUS] [OK] Frames reçues
+11:10:42.188 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.192 [WAIT] WaitForFrames()
+11:10:42.208 [OK] Frames received
+11:10:42.212 [STATUS] [OK] Frames reçues
+11:10:42.218 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.221 [WAIT] WaitForFrames()
+11:10:42.242 [OK] Frames received
+11:10:42.247 [STATUS] [OK] Frames reçues
+11:10:42.257 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.261 [WAIT] WaitForFrames()
+11:10:42.275 [OK] Frames received
+11:10:42.278 [STATUS] [OK] Frames reçues
+11:10:42.286 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.291 [WAIT] WaitForFrames()
+11:10:42.308 [OK] Frames received
+11:10:42.311 [STATUS] [OK] Frames reçues
+11:10:42.316 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.321 [WAIT] WaitForFrames()
+11:10:42.341 [OK] Frames received
+11:10:42.344 [STATUS] [OK] Frames reçues
+11:10:42.352 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.355 [WAIT] WaitForFrames()
+11:10:42.375 [OK] Frames received
+11:10:42.378 [STATUS] [OK] Frames reçues
+11:10:42.384 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.388 [WAIT] WaitForFrames()
+11:10:42.408 [OK] Frames received
+11:10:42.411 [STATUS] [OK] Frames reçues
+11:10:42.417 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.420 [WAIT] WaitForFrames()
+11:10:42.441 [OK] Frames received
+11:10:42.445 [STATUS] [OK] Frames reçues
+11:10:42.454 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.458 [WAIT] WaitForFrames()
+11:10:42.475 [OK] Frames received
+11:10:42.478 [STATUS] [OK] Frames reçues
+11:10:42.483 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.486 [WAIT] WaitForFrames()
+11:10:42.508 [OK] Frames received
+11:10:42.512 [STATUS] [OK] Frames reçues
+11:10:42.519 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.524 [WAIT] WaitForFrames()
+11:10:42.542 [OK] Frames received
+11:10:42.545 [STATUS] [OK] Frames reçues
+11:10:42.552 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.557 [WAIT] WaitForFrames()
+11:10:42.575 [OK] Frames received
+11:10:42.578 [STATUS] [OK] Frames reçues
+11:10:42.584 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.591 [WAIT] WaitForFrames()
+11:10:42.609 [OK] Frames received
+11:10:42.612 [STATUS] [OK] Frames reçues
+11:10:42.618 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.622 [WAIT] WaitForFrames()
+11:10:42.642 [OK] Frames received
+11:10:42.645 [STATUS] [OK] Frames reçues
+11:10:42.652 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.657 [WAIT] WaitForFrames()
+11:10:42.675 [OK] Frames received
+11:10:42.679 [STATUS] [OK] Frames reçues
+11:10:42.686 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.690 [WAIT] WaitForFrames()
+11:10:42.709 [OK] Frames received
+11:10:42.712 [STATUS] [OK] Frames reçues
+11:10:42.719 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.723 [WAIT] WaitForFrames()
+11:10:42.742 [OK] Frames received
+11:10:42.745 [STATUS] [OK] Frames reçues
+11:10:42.753 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.757 [WAIT] WaitForFrames()
+11:10:42.775 [OK] Frames received
+11:10:42.779 [STATUS] [OK] Frames reçues
+11:10:42.785 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.788 [WAIT] WaitForFrames()
+11:10:42.808 [OK] Frames received
+11:10:42.811 [STATUS] [OK] Frames reçues
+11:10:42.817 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.820 [WAIT] WaitForFrames()
+11:10:42.842 [OK] Frames received
+11:10:42.844 [STATUS] [OK] Frames reçues
+11:10:42.850 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.853 [WAIT] WaitForFrames()
+11:10:42.876 [OK] Frames received
+11:10:42.879 [STATUS] [OK] Frames reçues
+11:10:42.887 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.892 [WAIT] WaitForFrames()
+11:10:42.909 [OK] Frames received
+11:10:42.912 [STATUS] [OK] Frames reçues
+11:10:42.920 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.924 [WAIT] WaitForFrames()
+11:10:42.942 [OK] Frames received
+11:10:42.945 [STATUS] [OK] Frames reçues
+11:10:42.948 [OK] FrameCount=480
+11:10:42.955 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.959 [WAIT] WaitForFrames()
+11:10:42.976 [OK] Frames received
+11:10:42.979 [STATUS] [OK] Frames reçues
+11:10:42.986 [STATUS] [WAIT] WaitForFrames() ...
+11:10:42.990 [WAIT] WaitForFrames()
+11:10:43.009 [OK] Frames received
+11:10:43.013 [STATUS] [OK] Frames reçues
+11:10:43.021 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.025 [WAIT] WaitForFrames()
+11:10:43.043 [OK] Frames received
+11:10:43.046 [STATUS] [OK] Frames reçues
+11:10:43.051 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.055 [WAIT] WaitForFrames()
+11:10:43.076 [OK] Frames received
+11:10:43.079 [STATUS] [OK] Frames reçues
+11:10:43.086 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.090 [WAIT] WaitForFrames()
+11:10:43.110 [OK] Frames received
+11:10:43.113 [STATUS] [OK] Frames reçues
+11:10:43.120 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.124 [WAIT] WaitForFrames()
+11:10:43.143 [OK] Frames received
+11:10:43.147 [STATUS] [OK] Frames reçues
+11:10:43.154 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.159 [WAIT] WaitForFrames()
+11:10:43.176 [OK] Frames received
+11:10:43.179 [STATUS] [OK] Frames reçues
+11:10:43.187 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.191 [WAIT] WaitForFrames()
+11:10:43.209 [OK] Frames received
+11:10:43.214 [STATUS] [OK] Frames reçues
+11:10:43.222 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.226 [WAIT] WaitForFrames()
+11:10:43.243 [OK] Frames received
+11:10:43.247 [STATUS] [OK] Frames reçues
+11:10:43.256 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.261 [WAIT] WaitForFrames()
+11:10:43.276 [OK] Frames received
+11:10:43.279 [STATUS] [OK] Frames reçues
+11:10:43.286 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.291 [WAIT] WaitForFrames()
+11:10:43.310 [OK] Frames received
+11:10:43.314 [STATUS] [OK] Frames reçues
+11:10:43.322 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.326 [WAIT] WaitForFrames()
+11:10:43.343 [OK] Frames received
+11:10:43.347 [STATUS] [OK] Frames reçues
+11:10:43.357 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.360 [WAIT] WaitForFrames()
+11:10:43.376 [OK] Frames received
+11:10:43.380 [STATUS] [OK] Frames reçues
+11:10:43.387 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.392 [WAIT] WaitForFrames()
+11:10:43.409 [OK] Frames received
+11:10:43.413 [STATUS] [OK] Frames reçues
+11:10:43.421 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.425 [WAIT] WaitForFrames()
+11:10:43.443 [OK] Frames received
+11:10:43.446 [STATUS] [OK] Frames reçues
+11:10:43.453 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.456 [WAIT] WaitForFrames()
+11:10:43.476 [OK] Frames received
+11:10:43.479 [STATUS] [OK] Frames reçues
+11:10:43.484 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.488 [WAIT] WaitForFrames()
+11:10:43.510 [OK] Frames received
+11:10:43.512 [STATUS] [OK] Frames reçues
+11:10:43.541 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.545 [WAIT] WaitForFrames()
+11:10:43.548 [OK] Frames received
+11:10:43.552 [STATUS] [OK] Frames reçues
+11:10:43.558 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.561 [WAIT] WaitForFrames()
+11:10:43.577 [OK] Frames received
+11:10:43.579 [STATUS] [OK] Frames reçues
+11:10:43.585 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.589 [WAIT] WaitForFrames()
+11:10:43.610 [OK] Frames received
+11:10:43.614 [STATUS] [OK] Frames reçues
+11:10:43.621 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.624 [WAIT] WaitForFrames()
+11:10:43.643 [OK] Frames received
+11:10:43.646 [STATUS] [OK] Frames reçues
+11:10:43.651 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.654 [WAIT] WaitForFrames()
+11:10:43.677 [OK] Frames received
+11:10:43.680 [STATUS] [OK] Frames reçues
+11:10:43.691 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.696 [WAIT] WaitForFrames()
+11:10:43.711 [OK] Frames received
+11:10:43.716 [STATUS] [OK] Frames reçues
+11:10:43.725 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.730 [WAIT] WaitForFrames()
+11:10:43.744 [OK] Frames received
+11:10:43.749 [STATUS] [OK] Frames reçues
+11:10:43.759 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.764 [WAIT] WaitForFrames()
+11:10:43.778 [OK] Frames received
+11:10:43.783 [STATUS] [OK] Frames reçues
+11:10:43.793 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.797 [WAIT] WaitForFrames()
+11:10:43.811 [OK] Frames received
+11:10:43.816 [STATUS] [OK] Frames reçues
+11:10:43.825 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.830 [WAIT] WaitForFrames()
+11:10:43.844 [OK] Frames received
+11:10:43.849 [STATUS] [OK] Frames reçues
+11:10:43.859 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.863 [WAIT] WaitForFrames()
+11:10:43.877 [OK] Frames received
+11:10:43.881 [STATUS] [OK] Frames reçues
+11:10:43.889 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.894 [WAIT] WaitForFrames()
+11:10:43.910 [OK] Frames received
+11:10:43.914 [STATUS] [OK] Frames reçues
+11:10:43.922 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.925 [WAIT] WaitForFrames()
+11:10:43.943 [OK] Frames received
+11:10:43.947 [STATUS] [OK] Frames reçues
+11:10:43.950 [OK] FrameCount=510
+11:10:43.958 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.961 [WAIT] WaitForFrames()
+11:10:43.977 [OK] Frames received
+11:10:43.980 [STATUS] [OK] Frames reçues
+11:10:43.987 [STATUS] [WAIT] WaitForFrames() ...
+11:10:43.991 [WAIT] WaitForFrames()
+11:10:44.010 [OK] Frames received
+11:10:44.013 [STATUS] [OK] Frames reçues
+11:10:44.022 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.026 [WAIT] WaitForFrames()
+11:10:44.044 [OK] Frames received
+11:10:44.047 [STATUS] [OK] Frames reçues
+11:10:44.054 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.058 [WAIT] WaitForFrames()
+11:10:44.077 [OK] Frames received
+11:10:44.081 [STATUS] [OK] Frames reçues
+11:10:44.090 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.094 [WAIT] WaitForFrames()
+11:10:44.110 [OK] Frames received
+11:10:44.115 [STATUS] [OK] Frames reçues
+11:10:44.124 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.128 [WAIT] WaitForFrames()
+11:10:44.144 [OK] Frames received
+11:10:44.148 [STATUS] [OK] Frames reçues
+11:10:44.155 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.161 [WAIT] WaitForFrames()
+11:10:44.177 [OK] Frames received
+11:10:44.180 [STATUS] [OK] Frames reçues
+11:10:44.186 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.189 [WAIT] WaitForFrames()
+11:10:44.211 [OK] Frames received
+11:10:44.214 [STATUS] [OK] Frames reçues
+11:10:44.219 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.223 [WAIT] WaitForFrames()
+11:10:44.244 [OK] Frames received
+11:10:44.247 [STATUS] [OK] Frames reçues
+11:10:44.253 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.257 [WAIT] WaitForFrames()
+11:10:44.277 [OK] Frames received
+11:10:44.281 [STATUS] [OK] Frames reçues
+11:10:44.290 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.293 [WAIT] WaitForFrames()
+11:10:44.311 [OK] Frames received
+11:10:44.314 [STATUS] [OK] Frames reçues
+11:10:44.319 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.322 [WAIT] WaitForFrames()
+11:10:44.344 [OK] Frames received
+11:10:44.349 [STATUS] [OK] Frames reçues
+11:10:44.357 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.361 [WAIT] WaitForFrames()
+11:10:44.378 [OK] Frames received
+11:10:44.382 [STATUS] [OK] Frames reçues
+11:10:44.390 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.394 [WAIT] WaitForFrames()
+11:10:44.411 [OK] Frames received
+11:10:44.416 [STATUS] [OK] Frames reçues
+11:10:44.425 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.429 [WAIT] WaitForFrames()
+11:10:44.444 [OK] Frames received
+11:10:44.448 [STATUS] [OK] Frames reçues
+11:10:44.457 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.460 [WAIT] WaitForFrames()
+11:10:44.477 [OK] Frames received
+11:10:44.480 [STATUS] [OK] Frames reçues
+11:10:44.487 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.491 [WAIT] WaitForFrames()
+11:10:44.511 [OK] Frames received
+11:10:44.513 [STATUS] [OK] Frames reçues
+11:10:44.520 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.523 [WAIT] WaitForFrames()
+11:10:44.544 [OK] Frames received
+11:10:44.547 [STATUS] [OK] Frames reçues
+11:10:44.553 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.557 [WAIT] WaitForFrames()
+11:10:44.578 [OK] Frames received
+11:10:44.580 [STATUS] [OK] Frames reçues
+11:10:44.586 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.589 [WAIT] WaitForFrames()
+11:10:44.611 [OK] Frames received
+11:10:44.615 [STATUS] [OK] Frames reçues
+11:10:44.621 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.625 [WAIT] WaitForFrames()
+11:10:44.644 [OK] Frames received
+11:10:44.647 [STATUS] [OK] Frames reçues
+11:10:44.652 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.657 [WAIT] WaitForFrames()
+11:10:44.677 [OK] Frames received
+11:10:44.680 [STATUS] [OK] Frames reçues
+11:10:44.687 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.691 [WAIT] WaitForFrames()
+11:10:44.711 [OK] Frames received
+11:10:44.714 [STATUS] [OK] Frames reçues
+11:10:44.721 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.726 [WAIT] WaitForFrames()
+11:10:44.744 [OK] Frames received
+11:10:44.747 [STATUS] [OK] Frames reçues
+11:10:44.753 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.757 [WAIT] WaitForFrames()
+11:10:44.778 [OK] Frames received
+11:10:44.781 [STATUS] [OK] Frames reçues
+11:10:44.789 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.793 [WAIT] WaitForFrames()
+11:10:44.811 [OK] Frames received
+11:10:44.815 [STATUS] [OK] Frames reçues
+11:10:44.823 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.827 [WAIT] WaitForFrames()
+11:10:44.845 [OK] Frames received
+11:10:44.848 [STATUS] [OK] Frames reçues
+11:10:44.856 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.863 [WAIT] WaitForFrames()
+11:10:44.878 [OK] Frames received
+11:10:44.881 [STATUS] [OK] Frames reçues
+11:10:44.888 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.892 [WAIT] WaitForFrames()
+11:10:44.911 [OK] Frames received
+11:10:44.915 [STATUS] [OK] Frames reçues
+11:10:44.923 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.933 [WAIT] WaitForFrames()
+11:10:44.945 [OK] Frames received
+11:10:44.948 [STATUS] [OK] Frames reçues
+11:10:44.952 [OK] FrameCount=540
+11:10:44.960 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.964 [WAIT] WaitForFrames()
+11:10:44.978 [OK] Frames received
+11:10:44.982 [STATUS] [OK] Frames reçues
+11:10:44.989 [STATUS] [WAIT] WaitForFrames() ...
+11:10:44.993 [WAIT] WaitForFrames()
+11:10:45.011 [OK] Frames received
+11:10:45.015 [STATUS] [OK] Frames reçues
+11:10:45.022 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.026 [WAIT] WaitForFrames()
+11:10:45.045 [OK] Frames received
+11:10:45.049 [STATUS] [OK] Frames reçues
+11:10:45.056 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.060 [WAIT] WaitForFrames()
+11:10:45.078 [OK] Frames received
+11:10:45.081 [STATUS] [OK] Frames reçues
+11:10:45.088 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.091 [WAIT] WaitForFrames()
+11:10:45.111 [OK] Frames received
+11:10:45.115 [STATUS] [OK] Frames reçues
+11:10:45.122 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.125 [WAIT] WaitForFrames()
+11:10:45.145 [OK] Frames received
+11:10:45.147 [STATUS] [OK] Frames reçues
+11:10:45.154 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.158 [WAIT] WaitForFrames()
+11:10:45.178 [OK] Frames received
+11:10:45.181 [STATUS] [OK] Frames reçues
+11:10:45.189 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.192 [WAIT] WaitForFrames()
+11:10:45.212 [OK] Frames received
+11:10:45.216 [STATUS] [OK] Frames reçues
+11:10:45.224 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.227 [WAIT] WaitForFrames()
+11:10:45.245 [OK] Frames received
+11:10:45.248 [STATUS] [OK] Frames reçues
+11:10:45.255 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.261 [WAIT] WaitForFrames()
+11:10:45.278 [OK] Frames received
+11:10:45.283 [STATUS] [OK] Frames reçues
+11:10:45.290 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.294 [WAIT] WaitForFrames()
+11:10:45.312 [OK] Frames received
+11:10:45.325 [STATUS] [OK] Frames reçues
+11:10:45.333 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.336 [WAIT] WaitForFrames()
+11:10:45.345 [OK] Frames received
+11:10:45.348 [STATUS] [OK] Frames reçues
+11:10:45.353 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.357 [WAIT] WaitForFrames()
+11:10:45.378 [OK] Frames received
+11:10:45.381 [STATUS] [OK] Frames reçues
+11:10:45.386 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.389 [WAIT] WaitForFrames()
+11:10:45.412 [OK] Frames received
+11:10:45.415 [STATUS] [OK] Frames reçues
+11:10:45.424 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.426 [WAIT] WaitForFrames()
+11:10:45.446 [OK] Frames received
+11:10:45.451 [STATUS] [OK] Frames reçues
+11:10:45.459 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.462 [WAIT] WaitForFrames()
+11:10:45.479 [OK] Frames received
+11:10:45.484 [STATUS] [OK] Frames reçues
+11:10:45.493 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.497 [WAIT] WaitForFrames()
+11:10:45.513 [OK] Frames received
+11:10:45.519 [STATUS] [OK] Frames reçues
+11:10:45.528 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.534 [WAIT] WaitForFrames()
+11:10:45.546 [OK] Frames received
+11:10:45.551 [STATUS] [OK] Frames reçues
+11:10:45.559 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.563 [WAIT] WaitForFrames()
+11:10:45.579 [OK] Frames received
+11:10:45.583 [STATUS] [OK] Frames reçues
+11:10:45.591 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.594 [WAIT] WaitForFrames()
+11:10:45.612 [OK] Frames received
+11:10:45.615 [STATUS] [OK] Frames reçues
+11:10:45.622 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.626 [WAIT] WaitForFrames()
+11:10:45.645 [OK] Frames received
+11:10:45.648 [STATUS] [OK] Frames reçues
+11:10:45.655 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.658 [WAIT] WaitForFrames()
+11:10:45.679 [OK] Frames received
+11:10:45.683 [STATUS] [OK] Frames reçues
+11:10:45.689 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.692 [WAIT] WaitForFrames()
+11:10:45.712 [OK] Frames received
+11:10:45.715 [STATUS] [OK] Frames reçues
+11:10:45.720 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.724 [WAIT] WaitForFrames()
+11:10:45.745 [OK] Frames received
+11:10:45.749 [STATUS] [OK] Frames reçues
+11:10:45.756 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.760 [WAIT] WaitForFrames()
+11:10:45.779 [OK] Frames received
+11:10:45.782 [STATUS] [OK] Frames reçues
+11:10:45.790 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.794 [WAIT] WaitForFrames()
+11:10:45.812 [OK] Frames received
+11:10:45.816 [STATUS] [OK] Frames reçues
+11:10:45.824 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.832 [WAIT] WaitForFrames()
+11:10:45.846 [OK] Frames received
+11:10:45.850 [STATUS] [OK] Frames reçues
+11:10:45.859 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.862 [WAIT] WaitForFrames()
+11:10:45.879 [OK] Frames received
+11:10:45.882 [STATUS] [OK] Frames reçues
+11:10:45.890 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.893 [WAIT] WaitForFrames()
+11:10:45.912 [OK] Frames received
+11:10:45.915 [STATUS] [OK] Frames reçues
+11:10:45.923 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.927 [WAIT] WaitForFrames()
+11:10:45.946 [OK] Frames received
+11:10:45.948 [STATUS] [OK] Frames reçues
+11:10:45.951 [OK] FrameCount=570
+11:10:45.957 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.960 [WAIT] WaitForFrames()
+11:10:45.979 [OK] Frames received
+11:10:45.982 [STATUS] [OK] Frames reçues
+11:10:45.990 [STATUS] [WAIT] WaitForFrames() ...
+11:10:45.993 [WAIT] WaitForFrames()
+11:10:46.013 [OK] Frames received
+11:10:46.016 [STATUS] [OK] Frames reçues
+11:10:46.024 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.027 [WAIT] WaitForFrames()
+11:10:46.046 [OK] Frames received
+11:10:46.050 [STATUS] [OK] Frames reçues
+11:10:46.058 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.061 [WAIT] WaitForFrames()
+11:10:46.079 [OK] Frames received
+11:10:46.082 [STATUS] [OK] Frames reçues
+11:10:46.091 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.094 [WAIT] WaitForFrames()
+11:10:46.112 [OK] Frames received
+11:10:46.115 [STATUS] [OK] Frames reçues
+11:10:46.121 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.124 [WAIT] WaitForFrames()
+11:10:46.146 [OK] Frames received
+11:10:46.148 [STATUS] [OK] Frames reçues
+11:10:46.155 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.159 [WAIT] WaitForFrames()
+11:10:46.180 [OK] Frames received
+11:10:46.183 [STATUS] [OK] Frames reçues
+11:10:46.191 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.195 [WAIT] WaitForFrames()
+11:10:46.213 [OK] Frames received
+11:10:46.216 [STATUS] [OK] Frames reçues
+11:10:46.250 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.254 [WAIT] WaitForFrames()
+11:10:46.257 [OK] Frames received
+11:10:46.262 [STATUS] [OK] Frames reçues
+11:10:46.270 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.274 [WAIT] WaitForFrames()
+11:10:46.280 [OK] Frames received
+11:10:46.284 [STATUS] [OK] Frames reçues
+11:10:46.291 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.295 [WAIT] WaitForFrames()
+11:10:46.313 [OK] Frames received
+11:10:46.316 [STATUS] [OK] Frames reçues
+11:10:46.324 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.326 [WAIT] WaitForFrames()
+11:10:46.346 [OK] Frames received
+11:10:46.350 [STATUS] [OK] Frames reçues
+11:10:46.358 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.361 [WAIT] WaitForFrames()
+11:10:46.380 [OK] Frames received
+11:10:46.383 [STATUS] [OK] Frames reçues
+11:10:46.389 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.393 [WAIT] WaitForFrames()
+11:10:46.413 [OK] Frames received
+11:10:46.416 [STATUS] [OK] Frames reçues
+11:10:46.423 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.427 [WAIT] WaitForFrames()
+11:10:46.446 [OK] Frames received
+11:10:46.451 [STATUS] [OK] Frames reçues
+11:10:46.458 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.462 [WAIT] WaitForFrames()
+11:10:46.480 [OK] Frames received
+11:10:46.483 [STATUS] [OK] Frames reçues
+11:10:46.490 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.492 [WAIT] WaitForFrames()
+11:10:46.513 [OK] Frames received
+11:10:46.516 [STATUS] [OK] Frames reçues
+11:10:46.523 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.526 [WAIT] WaitForFrames()
+11:10:46.547 [OK] Frames received
+11:10:46.552 [STATUS] [OK] Frames reçues
+11:10:46.561 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.565 [WAIT] WaitForFrames()
+11:10:46.580 [OK] Frames received
+11:10:46.585 [STATUS] [OK] Frames reçues
+11:10:46.595 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.600 [WAIT] WaitForFrames()
+11:10:46.615 [OK] Frames received
+11:10:46.621 [STATUS] [OK] Frames reçues
+11:10:46.630 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.635 [WAIT] WaitForFrames()
+11:10:46.647 [OK] Frames received
+11:10:46.652 [STATUS] [OK] Frames reçues
+11:10:46.663 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.668 [WAIT] WaitForFrames()
+11:10:46.681 [OK] Frames received
+11:10:46.691 [STATUS] [OK] Frames reçues
+11:10:46.700 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.707 [WAIT] WaitForFrames()
+11:10:46.714 [OK] Frames received
+11:10:46.720 [STATUS] [OK] Frames reçues
+11:10:46.731 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.735 [WAIT] WaitForFrames()
+11:10:46.747 [OK] Frames received
+11:10:46.751 [STATUS] [OK] Frames reçues
+11:10:46.760 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.764 [WAIT] WaitForFrames()
+11:10:46.781 [OK] Frames received
+11:10:46.785 [STATUS] [OK] Frames reçues
+11:10:46.794 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.798 [WAIT] WaitForFrames()
+11:10:46.814 [OK] Frames received
+11:10:46.818 [STATUS] [OK] Frames reçues
+11:10:46.827 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.831 [WAIT] WaitForFrames()
+11:10:46.847 [OK] Frames received
+11:10:46.852 [STATUS] [OK] Frames reçues
+11:10:46.861 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.865 [WAIT] WaitForFrames()
+11:10:46.882 [OK] Frames received
+11:10:46.887 [STATUS] [OK] Frames reçues
+11:10:46.898 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.903 [WAIT] WaitForFrames()
+11:10:46.915 [OK] Frames received
+11:10:46.919 [STATUS] [OK] Frames reçues
+11:10:46.931 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.935 [WAIT] WaitForFrames()
+11:10:46.947 [OK] Frames received
+11:10:46.951 [STATUS] [OK] Frames reçues
+11:10:46.955 [OK] FrameCount=600
+11:10:46.965 [STATUS] [WAIT] WaitForFrames() ...
+11:10:46.969 [WAIT] WaitForFrames()
+11:10:46.982 [OK] Frames received
+11:10:46.991 [STATUS] [OK] Frames reçues
+11:10:47.002 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.007 [WAIT] WaitForFrames()
+11:10:47.014 [OK] Frames received
+11:10:47.018 [STATUS] [OK] Frames reçues
+11:10:47.027 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.030 [WAIT] WaitForFrames()
+11:10:47.048 [OK] Frames received
+11:10:47.057 [STATUS] [OK] Frames reçues
+11:10:47.067 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.073 [WAIT] WaitForFrames()
+11:10:47.081 [OK] Frames received
+11:10:47.089 [STATUS] [OK] Frames reçues
+11:10:47.100 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.103 [WAIT] WaitForFrames()
+11:10:47.115 [OK] Frames received
+11:10:47.119 [STATUS] [OK] Frames reçues
+11:10:47.128 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.132 [WAIT] WaitForFrames()
+11:10:47.148 [OK] Frames received
+11:10:47.152 [STATUS] [OK] Frames reçues
+11:10:47.163 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.166 [WAIT] WaitForFrames()
+11:10:47.181 [OK] Frames received
+11:10:47.184 [STATUS] [OK] Frames reçues
+11:10:47.193 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.197 [WAIT] WaitForFrames()
+11:10:47.215 [OK] Frames received
+11:10:47.225 [STATUS] [OK] Frames reçues
+11:10:47.233 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.236 [WAIT] WaitForFrames()
+11:10:47.249 [OK] Frames received
+11:10:47.253 [STATUS] [OK] Frames reçues
+11:10:47.268 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.274 [WAIT] WaitForFrames()
+11:10:47.282 [OK] Frames received
+11:10:47.287 [STATUS] [OK] Frames reçues
+11:10:47.298 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.303 [WAIT] WaitForFrames()
+11:10:47.315 [OK] Frames received
+11:10:47.322 [STATUS] [OK] Frames reçues
+11:10:47.332 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.336 [WAIT] WaitForFrames()
+11:10:47.348 [OK] Frames received
+11:10:47.352 [STATUS] [OK] Frames reçues
+11:10:47.360 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.364 [WAIT] WaitForFrames()
+11:10:47.382 [OK] Frames received
+11:10:47.387 [STATUS] [OK] Frames reçues
+11:10:47.398 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.401 [WAIT] WaitForFrames()
+11:10:47.415 [OK] Frames received
+11:10:47.420 [STATUS] [OK] Frames reçues
+11:10:47.432 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.436 [WAIT] WaitForFrames()
+11:10:47.448 [OK] Frames received
+11:10:47.461 [STATUS] [OK] Frames reçues
+11:10:47.477 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.483 [WAIT] WaitForFrames()
+11:10:47.495 [OK] Frames received
+11:10:47.500 [STATUS] [OK] Frames reçues
+11:10:47.513 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.518 [WAIT] WaitForFrames()
+11:10:47.525 [OK] Frames received
+11:10:47.529 [STATUS] [OK] Frames reçues
+11:10:47.536 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.541 [WAIT] WaitForFrames()
+11:10:47.548 [OK] Frames received
+11:10:47.555 [STATUS] [OK] Frames reçues
+11:10:47.565 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.572 [WAIT] WaitForFrames()
+11:10:47.582 [OK] Frames received
+11:10:47.587 [STATUS] [OK] Frames reçues
+11:10:47.596 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.602 [WAIT] WaitForFrames()
+11:10:47.615 [OK] Frames received
+11:10:47.620 [STATUS] [OK] Frames reçues
+11:10:47.629 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.633 [WAIT] WaitForFrames()
+11:10:47.649 [OK] Frames received
+11:10:47.652 [STATUS] [OK] Frames reçues
+11:10:47.661 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.664 [WAIT] WaitForFrames()
+11:10:47.681 [OK] Frames received
+11:10:47.685 [STATUS] [OK] Frames reçues
+11:10:47.694 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.697 [WAIT] WaitForFrames()
+11:10:47.715 [OK] Frames received
+11:10:47.718 [STATUS] [OK] Frames reçues
+11:10:47.726 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.731 [WAIT] WaitForFrames()
+11:10:47.748 [OK] Frames received
+11:10:47.752 [STATUS] [OK] Frames reçues
+11:10:47.761 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.764 [WAIT] WaitForFrames()
+11:10:47.782 [OK] Frames received
+11:10:47.786 [STATUS] [OK] Frames reçues
+11:10:47.795 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.798 [WAIT] WaitForFrames()
+11:10:47.816 [OK] Frames received
+11:10:47.822 [STATUS] [OK] Frames reçues
+11:10:47.834 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.840 [WAIT] WaitForFrames()
+11:10:47.850 [OK] Frames received
+11:10:47.854 [STATUS] [OK] Frames reçues
+11:10:47.863 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.867 [WAIT] WaitForFrames()
+11:10:47.885 [OK] Frames received
+11:10:47.891 [STATUS] [OK] Frames reçues
+11:10:47.900 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.903 [WAIT] WaitForFrames()
+11:10:47.915 [OK] Frames received
+11:10:47.921 [STATUS] [OK] Frames reçues
+11:10:47.930 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.936 [WAIT] WaitForFrames()
+11:10:47.951 [OK] Frames received
+11:10:47.959 [STATUS] [OK] Frames reçues
+11:10:47.965 [OK] FrameCount=630
+11:10:47.977 [STATUS] [WAIT] WaitForFrames() ...
+11:10:47.987 [WAIT] WaitForFrames()
+11:10:47.999 [OK] Frames received
+11:10:48.007 [STATUS] [OK] Frames reçues
+11:10:48.021 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.030 [WAIT] WaitForFrames()
+11:10:48.038 [OK] Frames received
+11:10:48.045 [STATUS] [OK] Frames reçues
+11:10:48.060 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.067 [WAIT] WaitForFrames()
+11:10:48.079 [OK] Frames received
+11:10:48.084 [STATUS] [OK] Frames reçues
+11:10:48.095 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.102 [WAIT] WaitForFrames()
+11:10:48.107 [OK] Frames received
+11:10:48.113 [STATUS] [OK] Frames reçues
+11:10:48.126 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.131 [WAIT] WaitForFrames()
+11:10:48.136 [OK] Frames received
+11:10:48.141 [STATUS] [OK] Frames reçues
+11:10:48.152 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.160 [WAIT] WaitForFrames()
+11:10:48.166 [OK] Frames received
+11:10:48.172 [STATUS] [OK] Frames reçues
+11:10:48.181 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.187 [WAIT] WaitForFrames()
+11:10:48.194 [OK] Frames received
+11:10:48.198 [STATUS] [OK] Frames reçues
+11:10:48.207 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.213 [WAIT] WaitForFrames()
+11:10:48.217 [OK] Frames received
+11:10:48.222 [STATUS] [OK] Frames reçues
+11:10:48.234 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.239 [WAIT] WaitForFrames()
+11:10:48.252 [OK] Frames received
+11:10:48.258 [STATUS] [OK] Frames reçues
+11:10:48.268 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.274 [WAIT] WaitForFrames()
+11:10:48.284 [OK] Frames received
+11:10:48.296 [STATUS] [OK] Frames reçues
+11:10:48.312 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.317 [WAIT] WaitForFrames()
+11:10:48.323 [OK] Frames received
+11:10:48.328 [STATUS] [OK] Frames reçues
+11:10:48.335 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.341 [WAIT] WaitForFrames()
+11:10:48.351 [OK] Frames received
+11:10:48.361 [STATUS] [OK] Frames reçues
+11:10:48.369 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.375 [WAIT] WaitForFrames()
+11:10:48.387 [OK] Frames received
+11:10:48.392 [STATUS] [OK] Frames reçues
+11:10:48.400 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.408 [WAIT] WaitForFrames()
+11:10:48.416 [OK] Frames received
+11:10:48.421 [STATUS] [OK] Frames reçues
+11:10:48.429 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.432 [WAIT] WaitForFrames()
+11:10:48.450 [OK] Frames received
+11:10:48.455 [STATUS] [OK] Frames reçues
+11:10:48.466 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.474 [WAIT] WaitForFrames()
+11:10:48.483 [OK] Frames received
+11:10:48.487 [STATUS] [OK] Frames reçues
+11:10:48.497 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.505 [WAIT] WaitForFrames()
+11:10:48.516 [OK] Frames received
+11:10:48.521 [STATUS] [OK] Frames reçues
+11:10:48.534 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.540 [WAIT] WaitForFrames()
+11:10:48.551 [OK] Frames received
+11:10:48.555 [STATUS] [OK] Frames reçues
+11:10:48.568 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.572 [WAIT] WaitForFrames()
+11:10:48.582 [OK] Frames received
+11:10:48.586 [STATUS] [OK] Frames reçues
+11:10:48.594 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.601 [WAIT] WaitForFrames()
+11:10:48.616 [OK] Frames received
+11:10:48.619 [STATUS] [OK] Frames reçues
+11:10:48.628 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.635 [WAIT] WaitForFrames()
+11:10:48.650 [OK] Frames received
+11:10:48.654 [STATUS] [OK] Frames reçues
+11:10:48.664 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.667 [WAIT] WaitForFrames()
+11:10:48.683 [OK] Frames received
+11:10:48.686 [STATUS] [OK] Frames reçues
+11:10:48.696 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.699 [WAIT] WaitForFrames()
+11:10:48.716 [OK] Frames received
+11:10:48.721 [STATUS] [OK] Frames reçues
+11:10:48.730 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.733 [WAIT] WaitForFrames()
+11:10:48.749 [OK] Frames received
+11:10:48.753 [STATUS] [OK] Frames reçues
+11:10:48.762 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.765 [WAIT] WaitForFrames()
+11:10:48.783 [OK] Frames received
+11:10:48.787 [STATUS] [OK] Frames reçues
+11:10:48.797 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.800 [WAIT] WaitForFrames()
+11:10:48.816 [OK] Frames received
+11:10:48.819 [STATUS] [OK] Frames reçues
+11:10:48.827 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.830 [WAIT] WaitForFrames()
+11:10:48.850 [OK] Frames received
+11:10:48.854 [STATUS] [OK] Frames reçues
+11:10:48.862 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.865 [WAIT] WaitForFrames()
+11:10:48.883 [OK] Frames received
+11:10:48.886 [STATUS] [OK] Frames reçues
+11:10:48.893 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.896 [WAIT] WaitForFrames()
+11:10:48.916 [OK] Frames received
+11:10:48.919 [STATUS] [OK] Frames reçues
+11:10:48.926 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.929 [WAIT] WaitForFrames()
+11:10:48.950 [OK] Frames received
+11:10:48.953 [STATUS] [OK] Frames reçues
+11:10:48.957 [OK] FrameCount=660
+11:10:48.965 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.968 [WAIT] WaitForFrames()
+11:10:48.983 [OK] Frames received
+11:10:48.986 [STATUS] [OK] Frames reçues
+11:10:48.994 [STATUS] [WAIT] WaitForFrames() ...
+11:10:48.997 [WAIT] WaitForFrames()
+11:10:49.016 [OK] Frames received
+11:10:49.019 [STATUS] [OK] Frames reçues
+11:10:49.028 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.032 [WAIT] WaitForFrames()
+11:10:49.050 [OK] Frames received
+11:10:49.053 [STATUS] [OK] Frames reçues
+11:10:49.062 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.066 [WAIT] WaitForFrames()
+11:10:49.083 [OK] Frames received
+11:10:49.087 [STATUS] [OK] Frames reçues
+11:10:49.095 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.098 [WAIT] WaitForFrames()
+11:10:49.116 [OK] Frames received
+11:10:49.120 [STATUS] [OK] Frames reçues
+11:10:49.128 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.131 [WAIT] WaitForFrames()
+11:10:49.150 [OK] Frames received
+11:10:49.154 [STATUS] [OK] Frames reçues
+11:10:49.163 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.167 [WAIT] WaitForFrames()
+11:10:49.183 [OK] Frames received
+11:10:49.188 [STATUS] [OK] Frames reçues
+11:10:49.198 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.201 [WAIT] WaitForFrames()
+11:10:49.217 [OK] Frames received
+11:10:49.220 [STATUS] [OK] Frames reçues
+11:10:49.228 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.230 [WAIT] WaitForFrames()
+11:10:49.250 [OK] Frames received
+11:10:49.256 [STATUS] [OK] Frames reçues
+11:10:49.262 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.266 [WAIT] WaitForFrames()
+11:10:49.284 [OK] Frames received
+11:10:49.289 [STATUS] [OK] Frames reçues
+11:10:49.296 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.298 [WAIT] WaitForFrames()
+11:10:49.317 [OK] Frames received
+11:10:49.322 [STATUS] [OK] Frames reçues
+11:10:49.329 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.332 [WAIT] WaitForFrames()
+11:10:49.350 [OK] Frames received
+11:10:49.352 [STATUS] [OK] Frames reçues
+11:10:49.360 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.363 [WAIT] WaitForFrames()
+11:10:49.383 [OK] Frames received
+11:10:49.386 [STATUS] [OK] Frames reçues
+11:10:49.393 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.398 [WAIT] WaitForFrames()
+11:10:49.417 [OK] Frames received
+11:10:49.421 [STATUS] [OK] Frames reçues
+11:10:49.428 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.432 [WAIT] WaitForFrames()
+11:10:49.450 [OK] Frames received
+11:10:49.455 [STATUS] [OK] Frames reçues
+11:10:49.463 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.467 [WAIT] WaitForFrames()
+11:10:49.484 [OK] Frames received
+11:10:49.488 [STATUS] [OK] Frames reçues
+11:10:49.495 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.502 [WAIT] WaitForFrames()
+11:10:49.517 [OK] Frames received
+11:10:49.522 [STATUS] [OK] Frames reçues
+11:10:49.531 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.536 [WAIT] WaitForFrames()
+11:10:49.551 [OK] Frames received
+11:10:49.555 [STATUS] [OK] Frames reçues
+11:10:49.563 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.567 [WAIT] WaitForFrames()
+11:10:49.584 [OK] Frames received
+11:10:49.589 [STATUS] [OK] Frames reçues
+11:10:49.596 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.601 [WAIT] WaitForFrames()
+11:10:49.620 [OK] Frames received
+11:10:49.625 [STATUS] [OK] Frames reçues
+11:10:49.637 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.642 [WAIT] WaitForFrames()
+11:10:49.651 [OK] Frames received
+11:10:49.657 [STATUS] [OK] Frames reçues
+11:10:49.665 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.673 [WAIT] WaitForFrames()
+11:10:49.684 [OK] Frames received
+11:10:49.688 [STATUS] [OK] Frames reçues
+11:10:49.696 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.699 [WAIT] WaitForFrames()
+11:10:49.717 [OK] Frames received
+11:10:49.721 [STATUS] [OK] Frames reçues
+11:10:49.732 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.737 [WAIT] WaitForFrames()
+11:10:49.751 [OK] Frames received
+11:10:49.755 [STATUS] [OK] Frames reçues
+11:10:49.764 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.768 [WAIT] WaitForFrames()
+11:10:49.784 [OK] Frames received
+11:10:49.788 [STATUS] [OK] Frames reçues
+11:10:49.800 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.805 [WAIT] WaitForFrames()
+11:10:49.817 [OK] Frames received
+11:10:49.820 [STATUS] [OK] Frames reçues
+11:10:49.827 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.830 [WAIT] WaitForFrames()
+11:10:49.851 [OK] Frames received
+11:10:49.854 [STATUS] [OK] Frames reçues
+11:10:49.861 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.864 [WAIT] WaitForFrames()
+11:10:49.884 [OK] Frames received
+11:10:49.887 [STATUS] [OK] Frames reçues
+11:10:49.895 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.898 [WAIT] WaitForFrames()
+11:10:49.918 [OK] Frames received
+11:10:49.922 [STATUS] [OK] Frames reçues
+11:10:49.929 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.933 [WAIT] WaitForFrames()
+11:10:49.951 [OK] Frames received
+11:10:49.955 [STATUS] [OK] Frames reçues
+11:10:49.959 [OK] FrameCount=690
+11:10:49.967 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.970 [WAIT] WaitForFrames()
+11:10:49.984 [OK] Frames received
+11:10:49.988 [STATUS] [OK] Frames reçues
+11:10:49.996 [STATUS] [WAIT] WaitForFrames() ...
+11:10:49.999 [WAIT] WaitForFrames()
+11:10:50.018 [OK] Frames received
+11:10:50.023 [STATUS] [OK] Frames reçues
+11:10:50.029 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.032 [WAIT] WaitForFrames()
+11:10:50.051 [OK] Frames received
+11:10:50.055 [STATUS] [OK] Frames reçues
+11:10:50.064 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.068 [WAIT] WaitForFrames()
+11:10:50.084 [OK] Frames received
+11:10:50.089 [STATUS] [OK] Frames reçues
+11:10:50.095 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.099 [WAIT] WaitForFrames()
+11:10:50.118 [OK] Frames received
+11:10:50.126 [STATUS] [OK] Frames reçues
+11:10:50.135 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.139 [WAIT] WaitForFrames()
+11:10:50.152 [OK] Frames received
+11:10:50.157 [STATUS] [OK] Frames reçues
+11:10:50.167 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.171 [WAIT] WaitForFrames()
+11:10:50.185 [OK] Frames received
+11:10:50.192 [STATUS] [OK] Frames reçues
+11:10:50.202 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.208 [WAIT] WaitForFrames()
+11:10:50.219 [OK] Frames received
+11:10:50.226 [STATUS] [OK] Frames reçues
+11:10:50.241 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.248 [WAIT] WaitForFrames()
+11:10:50.253 [OK] Frames received
+11:10:50.267 [STATUS] [OK] Frames reçues
+11:10:50.282 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.291 [WAIT] WaitForFrames()
+11:10:50.304 [OK] Frames received
+11:10:50.316 [STATUS] [OK] Frames reçues
+11:10:50.329 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.336 [WAIT] WaitForFrames()
+11:10:50.341 [OK] Frames received
+11:10:50.349 [STATUS] [OK] Frames reçues
+11:10:50.358 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.368 [WAIT] WaitForFrames()
+11:10:50.373 [OK] Frames received
+11:10:50.381 [STATUS] [OK] Frames reçues
+11:10:50.390 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.400 [WAIT] WaitForFrames()
+11:10:50.406 [OK] Frames received
+11:10:50.414 [STATUS] [OK] Frames reçues
+11:10:50.423 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.431 [WAIT] WaitForFrames()
+11:10:50.435 [OK] Frames received
+11:10:50.439 [STATUS] [OK] Frames reçues
+11:10:50.451 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.457 [WAIT] WaitForFrames()
+11:10:50.470 [OK] Frames received
+11:10:50.475 [STATUS] [OK] Frames reçues
+11:10:50.489 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.498 [WAIT] WaitForFrames()
+11:10:50.502 [OK] Frames received
+11:10:50.506 [STATUS] [OK] Frames reçues
+11:10:50.518 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.527 [WAIT] WaitForFrames()
+11:10:50.532 [OK] Frames received
+11:10:50.537 [STATUS] [OK] Frames reçues
+11:10:50.554 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.561 [WAIT] WaitForFrames()
+11:10:50.566 [OK] Frames received
+11:10:50.570 [STATUS] [OK] Frames reçues
+11:10:50.582 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.589 [WAIT] WaitForFrames()
+11:10:50.595 [OK] Frames received
+11:10:50.599 [STATUS] [OK] Frames reçues
+11:10:50.609 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.616 [WAIT] WaitForFrames()
+11:10:50.625 [OK] Frames received
+11:10:50.630 [STATUS] [OK] Frames reçues
+11:10:50.638 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.641 [WAIT] WaitForFrames()
+11:10:50.652 [OK] Frames received
+11:10:50.656 [STATUS] [OK] Frames reçues
+11:10:50.662 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.666 [WAIT] WaitForFrames()
+11:10:50.686 [OK] Frames received
+11:10:50.772 [STATUS] [OK] Frames reçues
+11:10:50.788 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.792 [WAIT] WaitForFrames()
+11:10:50.796 [OK] Frames received
+11:10:50.800 [STATUS] [OK] Frames reçues
+11:10:50.810 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.815 [WAIT] WaitForFrames()
+11:10:50.819 [OK] Frames received
+11:10:50.824 [STATUS] [OK] Frames reçues
+11:10:50.879 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.887 [WAIT] WaitForFrames()
+11:10:50.893 [OK] Frames received
+11:10:50.901 [STATUS] [OK] Frames reçues
+11:10:50.913 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.918 [WAIT] WaitForFrames()
+11:10:50.925 [OK] Frames received
+11:10:50.934 [STATUS] [OK] Frames reçues
+11:10:50.944 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.948 [WAIT] WaitForFrames()
+11:10:50.954 [OK] Frames received
+11:10:50.961 [STATUS] [OK] Frames reçues
+11:10:50.972 [STATUS] [WAIT] WaitForFrames() ...
+11:10:50.978 [WAIT] WaitForFrames()
+11:10:50.987 [OK] Frames received
+11:10:50.992 [STATUS] [OK] Frames reçues
+11:10:51.008 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.017 [WAIT] WaitForFrames()
+11:10:51.025 [OK] Frames received
+11:10:51.032 [STATUS] [OK] Frames reçues
+11:10:51.045 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.051 [WAIT] WaitForFrames()
+11:10:51.057 [OK] Frames received
+11:10:51.061 [STATUS] [OK] Frames reçues
+11:10:51.069 [OK] FrameCount=720
+11:10:51.087 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.093 [WAIT] WaitForFrames()
+11:10:51.098 [OK] Frames received
+11:10:51.102 [STATUS] [OK] Frames reçues
+11:10:51.112 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.116 [WAIT] WaitForFrames()
+11:10:51.121 [OK] Frames received
+11:10:51.126 [STATUS] [OK] Frames reçues
+11:10:51.137 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.142 [WAIT] WaitForFrames()
+11:10:51.153 [OK] Frames received
+11:10:51.158 [STATUS] [OK] Frames reçues
+11:10:51.167 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.173 [WAIT] WaitForFrames()
+11:10:51.187 [OK] Frames received
+11:10:51.196 [STATUS] [OK] Frames reçues
+11:10:51.206 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.211 [WAIT] WaitForFrames()
+11:10:51.219 [OK] Frames received
+11:10:51.225 [STATUS] [OK] Frames reçues
+11:10:51.233 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.238 [WAIT] WaitForFrames()
+11:10:51.254 [OK] Frames received
+11:10:51.261 [STATUS] [OK] Frames reçues
+11:10:51.273 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.282 [WAIT] WaitForFrames()
+11:10:51.288 [OK] Frames received
+11:10:51.298 [STATUS] [OK] Frames reçues
+11:10:51.315 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.319 [WAIT] WaitForFrames()
+11:10:51.323 [OK] Frames received
+11:10:51.331 [STATUS] [OK] Frames reçues
+11:10:51.341 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.346 [WAIT] WaitForFrames()
+11:10:51.355 [OK] Frames received
+11:10:51.361 [STATUS] [OK] Frames reçues
+11:10:51.372 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.376 [WAIT] WaitForFrames()
+11:10:51.386 [OK] Frames received
+11:10:51.393 [STATUS] [OK] Frames reçues
+11:10:51.402 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.408 [WAIT] WaitForFrames()
+11:10:51.420 [OK] Frames received
+11:10:51.425 [STATUS] [OK] Frames reçues
+11:10:51.434 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.442 [WAIT] WaitForFrames()
+11:10:51.454 [OK] Frames received
+11:10:51.463 [STATUS] [OK] Frames reçues
+11:10:51.477 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.483 [WAIT] WaitForFrames()
+11:10:51.489 [OK] Frames received
+11:10:51.495 [STATUS] [OK] Frames reçues
+11:10:51.504 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.511 [WAIT] WaitForFrames()
+11:10:51.521 [OK] Frames received
+11:10:51.528 [STATUS] [OK] Frames reçues
+11:10:51.537 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.544 [WAIT] WaitForFrames()
+11:10:51.553 [OK] Frames received
+11:10:51.559 [STATUS] [OK] Frames reçues
+11:10:51.567 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.574 [WAIT] WaitForFrames()
+11:10:51.588 [OK] Frames received
+11:10:51.594 [STATUS] [OK] Frames reçues
+11:10:51.605 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.610 [WAIT] WaitForFrames()
+11:10:51.621 [OK] Frames received
+11:10:51.628 [STATUS] [OK] Frames reçues
+11:10:51.640 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.645 [WAIT] WaitForFrames()
+11:10:51.654 [OK] Frames received
+11:10:51.659 [STATUS] [OK] Frames reçues
+11:10:51.668 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.673 [WAIT] WaitForFrames()
+11:10:51.688 [OK] Frames received
+11:10:51.698 [STATUS] [OK] Frames reçues
+11:10:51.708 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.713 [WAIT] WaitForFrames()
+11:10:51.721 [OK] Frames received
+11:10:51.727 [STATUS] [OK] Frames reçues
+11:10:51.736 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.741 [WAIT] WaitForFrames()
+11:10:51.753 [OK] Frames received
+11:10:51.758 [STATUS] [OK] Frames reçues
+11:10:51.767 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.771 [WAIT] WaitForFrames()
+11:10:51.787 [OK] Frames received
+11:10:51.792 [STATUS] [OK] Frames reçues
+11:10:51.801 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.805 [WAIT] WaitForFrames()
+11:10:51.820 [OK] Frames received
+11:10:51.826 [STATUS] [OK] Frames reçues
+11:10:51.833 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.837 [WAIT] WaitForFrames()
+11:10:51.853 [OK] Frames received
+11:10:51.858 [STATUS] [OK] Frames reçues
+11:10:51.865 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.869 [WAIT] WaitForFrames()
+11:10:51.886 [OK] Frames received
+11:10:51.890 [STATUS] [OK] Frames reçues
+11:10:51.897 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.900 [WAIT] WaitForFrames()
+11:10:51.921 [OK] Frames received
+11:10:51.925 [STATUS] [OK] Frames reçues
+11:10:51.934 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.939 [WAIT] WaitForFrames()
+11:10:51.954 [OK] Frames received
+11:10:51.961 [STATUS] [OK] Frames reçues
+11:10:51.970 [STATUS] [WAIT] WaitForFrames() ...
+11:10:51.976 [WAIT] WaitForFrames()
+11:10:51.988 [OK] Frames received
+11:10:51.993 [STATUS] [OK] Frames reçues
+11:10:52.001 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.005 [WAIT] WaitForFrames()
+11:10:52.021 [OK] Frames received
+11:10:52.026 [STATUS] [OK] Frames reçues
+11:10:52.035 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.040 [WAIT] WaitForFrames()
+11:10:52.054 [OK] Frames received
+11:10:52.059 [STATUS] [OK] Frames reçues
+11:10:52.063 [OK] FrameCount=750
+11:10:52.070 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.074 [WAIT] WaitForFrames()
+11:10:52.087 [OK] Frames received
+11:10:52.091 [STATUS] [OK] Frames reçues
+11:10:52.098 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.103 [WAIT] WaitForFrames()
+11:10:52.121 [OK] Frames received
+11:10:52.126 [STATUS] [OK] Frames reçues
+11:10:52.135 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.139 [WAIT] WaitForFrames()
+11:10:52.153 [OK] Frames received
+11:10:52.157 [STATUS] [OK] Frames reçues
+11:10:52.163 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.167 [WAIT] WaitForFrames()
+11:10:52.187 [OK] Frames received
+11:10:52.190 [STATUS] [OK] Frames reçues
+11:10:52.195 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.198 [WAIT] WaitForFrames()
+11:10:52.220 [OK] Frames received
+11:10:52.224 [STATUS] [OK] Frames reçues
+11:10:52.231 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.237 [WAIT] WaitForFrames()
+11:10:52.257 [OK] Frames received
+11:10:52.267 [STATUS] [OK] Frames reçues
+11:10:52.284 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.294 [WAIT] WaitForFrames()
+11:10:52.303 [OK] Frames received
+11:10:52.316 [STATUS] [OK] Frames reçues
+11:10:52.328 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.336 [WAIT] WaitForFrames()
+11:10:52.345 [OK] Frames received
+11:10:52.350 [STATUS] [OK] Frames reçues
+11:10:52.362 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.367 [WAIT] WaitForFrames()
+11:10:52.374 [OK] Frames received
+11:10:52.379 [STATUS] [OK] Frames reçues
+11:10:52.388 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.394 [WAIT] WaitForFrames()
+11:10:52.398 [OK] Frames received
+11:10:52.401 [STATUS] [OK] Frames reçues
+11:10:52.417 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.445 [WAIT] WaitForFrames()
+11:10:52.469 [OK] Frames received
+11:10:52.481 [STATUS] [OK] Frames reçues
+11:10:52.493 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.500 [WAIT] WaitForFrames()
+11:10:52.508 [OK] Frames received
+11:10:52.514 [STATUS] [OK] Frames reçues
+11:10:52.523 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.526 [WAIT] WaitForFrames()
+11:10:52.530 [OK] Frames received
+11:10:52.535 [STATUS] [OK] Frames reçues
+11:10:52.543 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.549 [WAIT] WaitForFrames()
+11:10:52.555 [OK] Frames received
+11:10:52.604 [STATUS] [OK] Frames reçues
+11:10:52.620 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.624 [WAIT] WaitForFrames()
+11:10:52.628 [OK] Frames received
+11:10:52.634 [STATUS] [OK] Frames reçues
+11:10:52.645 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.648 [WAIT] WaitForFrames()
+11:10:52.655 [OK] Frames received
+11:10:52.658 [STATUS] [OK] Frames reçues
+11:10:52.666 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.671 [WAIT] WaitForFrames()
+11:10:52.689 [OK] Frames received
+11:10:52.693 [STATUS] [OK] Frames reçues
+11:10:52.701 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.706 [WAIT] WaitForFrames()
+11:10:52.722 [OK] Frames received
+11:10:52.726 [STATUS] [OK] Frames reçues
+11:10:52.733 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.736 [WAIT] WaitForFrames()
+11:10:52.756 [OK] Frames received
+11:10:52.759 [STATUS] [OK] Frames reçues
+11:10:52.768 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.771 [WAIT] WaitForFrames()
+11:10:52.788 [OK] Frames received
+11:10:52.792 [STATUS] [OK] Frames reçues
+11:10:52.801 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.804 [WAIT] WaitForFrames()
+11:10:52.822 [OK] Frames received
+11:10:52.924 [STATUS] [OK] Frames reçues
+11:10:52.937 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.942 [WAIT] WaitForFrames()
+11:10:52.946 [OK] Frames received
+11:10:52.949 [STATUS] [OK] Frames reçues
+11:10:52.959 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.962 [WAIT] WaitForFrames()
+11:10:52.966 [OK] Frames received
+11:10:52.971 [STATUS] [OK] Frames reçues
+11:10:52.978 [STATUS] [WAIT] WaitForFrames() ...
+11:10:52.982 [WAIT] WaitForFrames()
+11:10:52.989 [OK] Frames received
+11:10:52.993 [STATUS] [OK] Frames reçues
+11:10:52.998 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.001 [WAIT] WaitForFrames()
+11:10:53.022 [OK] Frames received
+11:10:53.025 [STATUS] [OK] Frames reçues
+11:10:53.032 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.035 [WAIT] WaitForFrames()
+11:10:53.056 [OK] Frames received
+11:10:53.061 [STATUS] [OK] Frames reçues
+11:10:53.069 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.073 [WAIT] WaitForFrames()
+11:10:53.089 [OK] Frames received
+11:10:53.092 [STATUS] [OK] Frames reçues
+11:10:53.099 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.101 [WAIT] WaitForFrames()
+11:10:53.122 [OK] Frames received
+11:10:53.125 [STATUS] [OK] Frames reçues
+11:10:53.132 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.135 [WAIT] WaitForFrames()
+11:10:53.156 [OK] Frames received
+11:10:53.166 [STATUS] [OK] Frames reçues
+11:10:53.175 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.178 [WAIT] WaitForFrames()
+11:10:53.189 [OK] Frames received
+11:10:53.192 [STATUS] [OK] Frames reçues
+11:10:53.195 [OK] FrameCount=780
+11:10:53.203 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.207 [WAIT] WaitForFrames()
+11:10:53.222 [OK] Frames received
+11:10:53.226 [STATUS] [OK] Frames reçues
+11:10:53.233 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.236 [WAIT] WaitForFrames()
+11:10:53.256 [OK] Frames received
+11:10:53.260 [STATUS] [OK] Frames reçues
+11:10:53.268 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.291 [WAIT] WaitForFrames()
+11:10:53.297 [OK] Frames received
+11:10:53.338 [STATUS] [OK] Frames reçues
+11:10:53.351 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.369 [WAIT] WaitForFrames()
+11:10:53.375 [OK] Frames received
+11:10:53.385 [STATUS] [OK] Frames reçues
+11:10:53.399 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.403 [WAIT] WaitForFrames()
+11:10:53.412 [OK] Frames received
+11:10:53.417 [STATUS] [OK] Frames reçues
+11:10:53.431 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.435 [WAIT] WaitForFrames()
+11:10:53.439 [OK] Frames received
+11:10:53.443 [STATUS] [OK] Frames reçues
+11:10:53.449 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.452 [WAIT] WaitForFrames()
+11:10:53.455 [OK] Frames received
+11:10:53.538 [STATUS] [OK] Frames reçues
+11:10:53.558 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.562 [WAIT] WaitForFrames()
+11:10:53.566 [OK] Frames received
+11:10:53.571 [STATUS] [OK] Frames reçues
+11:10:53.579 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.584 [WAIT] WaitForFrames()
+11:10:53.590 [OK] Frames received
+11:10:53.595 [STATUS] [OK] Frames reçues
+11:10:53.603 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.609 [WAIT] WaitForFrames()
+11:10:53.623 [OK] Frames received
+11:10:53.627 [STATUS] [OK] Frames reçues
+11:10:53.647 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.652 [WAIT] WaitForFrames()
+11:10:53.658 [OK] Frames received
+11:10:53.661 [STATUS] [OK] Frames reçues
+11:10:53.667 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.671 [WAIT] WaitForFrames()
+11:10:53.689 [OK] Frames received
+11:10:53.693 [STATUS] [OK] Frames reçues
+11:10:53.699 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.702 [WAIT] WaitForFrames()
+11:10:53.722 [OK] Frames received
+11:10:53.725 [STATUS] [OK] Frames reçues
+11:10:53.730 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.733 [WAIT] WaitForFrames()
+11:10:53.757 [OK] Frames received
+11:10:53.859 [STATUS] [OK] Frames reçues
+11:10:53.968 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.973 [WAIT] WaitForFrames()
+11:10:53.977 [OK] Frames received
+11:10:53.982 [STATUS] [OK] Frames reçues
+11:10:53.991 [STATUS] [WAIT] WaitForFrames() ...
+11:10:53.995 [WAIT] WaitForFrames()
+11:10:53.999 [OK] Frames received
+11:10:54.002 [STATUS] [OK] Frames reçues
+11:10:54.010 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.014 [WAIT] WaitForFrames()
+11:10:54.024 [OK] Frames received
+11:10:54.028 [STATUS] [OK] Frames reçues
+11:10:54.038 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.043 [WAIT] WaitForFrames()
+11:10:54.057 [OK] Frames received
+11:10:54.061 [STATUS] [OK] Frames reçues
+11:10:54.067 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.071 [WAIT] WaitForFrames()
+11:10:54.090 [OK] Frames received
+11:10:54.094 [STATUS] [OK] Frames reçues
+11:10:54.101 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.105 [WAIT] WaitForFrames()
+11:10:54.123 [OK] Frames received
+11:10:54.128 [STATUS] [OK] Frames reçues
+11:10:54.136 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.140 [WAIT] WaitForFrames()
+11:10:54.156 [OK] Frames received
+11:10:54.159 [STATUS] [OK] Frames reçues
+11:10:54.165 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.168 [WAIT] WaitForFrames()
+11:10:54.189 [OK] Frames received
+11:10:54.192 [STATUS] [OK] Frames reçues
+11:10:54.201 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.204 [WAIT] WaitForFrames()
+11:10:54.223 [OK] Frames received
+11:10:54.226 [STATUS] [OK] Frames reçues
+11:10:54.234 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.237 [WAIT] WaitForFrames()
+11:10:54.256 [OK] Frames received
+11:10:54.261 [STATUS] [OK] Frames reçues
+11:10:54.269 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.274 [WAIT] WaitForFrames()
+11:10:54.290 [OK] Frames received
+11:10:54.293 [STATUS] [OK] Frames reçues
+11:10:54.302 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.331 [WAIT] WaitForFrames()
+11:10:54.373 [OK] Frames received
+11:10:54.382 [STATUS] [OK] Frames reçues
+11:10:54.401 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.412 [WAIT] WaitForFrames()
+11:10:54.419 [OK] Frames received
+11:10:54.426 [STATUS] [OK] Frames reçues
+11:10:54.440 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.445 [WAIT] WaitForFrames()
+11:10:54.451 [OK] Frames received
+11:10:54.457 [STATUS] [OK] Frames reçues
+11:10:54.468 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.472 [WAIT] WaitForFrames()
+11:10:54.477 [OK] Frames received
+11:10:54.481 [STATUS] [OK] Frames reçues
+11:10:54.489 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.493 [WAIT] WaitForFrames()
+11:10:54.551 [OK] Frames received
+11:10:54.557 [STATUS] [OK] Frames reçues
+11:10:54.564 [OK] FrameCount=810
+11:10:54.578 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.584 [WAIT] WaitForFrames()
+11:10:54.588 [OK] Frames received
+11:10:54.593 [STATUS] [OK] Frames reçues
+11:10:54.603 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.608 [WAIT] WaitForFrames()
+11:10:54.612 [OK] Frames received
+11:10:54.616 [STATUS] [OK] Frames reçues
+11:10:54.626 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.629 [WAIT] WaitForFrames()
+11:10:54.633 [OK] Frames received
+11:10:54.637 [STATUS] [OK] Frames reçues
+11:10:54.645 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.648 [WAIT] WaitForFrames()
+11:10:54.658 [OK] Frames received
+11:10:54.661 [STATUS] [OK] Frames reçues
+11:10:54.668 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.672 [WAIT] WaitForFrames()
+11:10:54.691 [OK] Frames received
+11:10:54.697 [STATUS] [OK] Frames reçues
+11:10:54.705 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.709 [WAIT] WaitForFrames()
+11:10:54.724 [OK] Frames received
+11:10:54.728 [STATUS] [OK] Frames reçues
+11:10:54.734 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.737 [WAIT] WaitForFrames()
+11:10:54.757 [OK] Frames received
+11:10:54.760 [STATUS] [OK] Frames reçues
+11:10:54.766 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.769 [WAIT] WaitForFrames()
+11:10:54.791 [OK] Frames received
+11:10:54.796 [STATUS] [OK] Frames reçues
+11:10:54.809 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.817 [WAIT] WaitForFrames()
+11:10:54.824 [OK] Frames received
+11:10:54.828 [STATUS] [OK] Frames reçues
+11:10:54.836 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.841 [WAIT] WaitForFrames()
+11:10:54.857 [OK] Frames received
+11:10:54.860 [STATUS] [OK] Frames reçues
+11:10:54.902 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.908 [WAIT] WaitForFrames()
+11:10:54.912 [OK] Frames received
+11:10:54.916 [STATUS] [OK] Frames reçues
+11:10:54.923 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.929 [WAIT] WaitForFrames()
+11:10:54.934 [OK] Frames received
+11:10:54.939 [STATUS] [OK] Frames reçues
+11:10:54.947 [STATUS] [WAIT] WaitForFrames() ...
+11:10:54.951 [WAIT] WaitForFrames()
+11:10:54.958 [OK] Frames received
+11:10:54.963 [STATUS] [OK] Frames reçues
+11:10:54.972 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.001 [WAIT] WaitForFrames()
+11:10:55.005 [OK] Frames received
+11:10:55.009 [STATUS] [OK] Frames reçues
+11:10:55.015 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.018 [WAIT] WaitForFrames()
+11:10:55.024 [OK] Frames received
+11:10:55.027 [STATUS] [OK] Frames reçues
+11:10:55.034 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.038 [WAIT] WaitForFrames()
+11:10:55.057 [OK] Frames received
+11:10:55.060 [STATUS] [OK] Frames reçues
+11:10:55.065 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.067 [WAIT] WaitForFrames()
+11:10:55.090 [OK] Frames received
+11:10:55.093 [STATUS] [OK] Frames reçues
+11:10:55.099 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.102 [WAIT] WaitForFrames()
+11:10:55.124 [OK] Frames received
+11:10:55.127 [STATUS] [OK] Frames reçues
+11:10:55.134 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.137 [WAIT] WaitForFrames()
+11:10:55.157 [OK] Frames received
+11:10:55.159 [STATUS] [OK] Frames reçues
+11:10:55.166 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.169 [WAIT] WaitForFrames()
+11:10:55.190 [OK] Frames received
+11:10:55.193 [STATUS] [OK] Frames reçues
+11:10:55.199 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.202 [WAIT] WaitForFrames()
+11:10:55.225 [OK] Frames received
+11:10:55.229 [STATUS] [OK] Frames reçues
+11:10:55.236 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.242 [WAIT] WaitForFrames()
+11:10:55.258 [OK] Frames received
+11:10:55.262 [STATUS] [OK] Frames reçues
+11:10:55.269 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.272 [WAIT] WaitForFrames()
+11:10:55.290 [OK] Frames received
+11:10:55.294 [STATUS] [OK] Frames reçues
+11:10:55.299 [STATUS] [WAIT] WaitForFrames() ...
+11:10:55.301 [WAIT] WaitForFrames()
+11:10:55.324 [OK] Frames received
+11:10:55.399 [STATUS] [OK] Frames reçues
+11:10:55.405 [UI] OnFormClosing() -> StopCamera()
+11:10:55.412 [STOP] StopCamera() called
+11:10:55.416 [THREAD] CaptureLoop exit
+11:10:55.442 [STOP] Waiting capture task...
+11:10:55.447 [STOP] Capture task ended or timeout
+11:10:55.450 [STOP] Align disposed
+11:10:56.735 [STOP] Pipeline stopped
+11:10:56.769 [STOP] Pipeline disposed
+11:10:56.773 [STOP] CTS disposed
+11:10:56.776 [OK] StopCamera finished

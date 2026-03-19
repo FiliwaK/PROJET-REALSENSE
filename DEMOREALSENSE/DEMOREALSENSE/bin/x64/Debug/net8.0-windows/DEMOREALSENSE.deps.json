@@ -1,0 +1,228 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "DEMOREALSENSE/1.0.0": {
+        "dependencies": {
+          "Intel.ML.OnnxRuntime.OpenVino": "1.24.1",
+          "Intel.RealSenseWithNativeDll": "2.51.1.1"
+        },
+        "runtime": {
+          "DEMOREALSENSE.dll": {}
+        }
+      },
+      "Intel.ML.OnnxRuntime.OpenVino/1.24.1": {
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.24.1"
+        },
+        "runtimeTargets": {
+          "runtimes/win-x64/native/onnxruntime.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.24.1.0"
+          },
+          "runtimes/win-x64/native/onnxruntime.lib": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/onnxruntime_providers_openvino.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.24.1.0"
+          },
+          "runtimes/win-x64/native/onnxruntime_providers_shared.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.24.1.0"
+          },
+          "runtimes/win-x64/native/openvino.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_auto_batch_plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_auto_plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_c.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_hetero_plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_intel_cpu_plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_intel_gpu_plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_intel_npu_plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_ir_frontend.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_onnx_frontend.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_paddle_frontend.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_pytorch_frontend.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_tensorflow_frontend.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/openvino_tensorflow_lite_frontend.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2025.4.1.20426"
+          },
+          "runtimes/win-x64/native/tbb12.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbb12_debug.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbbbind_2_5.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbbbind_2_5_debug.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbbmalloc.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbbmalloc_debug.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbbmalloc_proxy.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          },
+          "runtimes/win-x64/native/tbbmalloc_proxy_debug.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2021.2.6.0"
+          }
+        }
+      },
+      "Intel.RealSenseWithNativeDll/2.51.1.1": {
+        "runtime": {
+          "lib/net5.0/Intel.RealSense.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Microsoft.ML.OnnxRuntime.Managed/1.24.1": {
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Numerics.Tensors": "9.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.ML.OnnxRuntime.dll": {
+            "assemblyVersion": "1.24.1.0",
+            "fileVersion": "1.24.1.0"
+          }
+        }
+      },
+      "System.Memory/4.5.5": {},
+      "System.Numerics.Tensors/9.0.0": {
+        "runtime": {
+          "lib/net8.0/System.Numerics.Tensors.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DEMOREALSENSE/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Intel.ML.OnnxRuntime.OpenVino/1.24.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5pBUTxtcVqaiXRnI/8CdcRv2QXxDMuvhnxFt72kxJWAflTcL3qgKN1Oenn01ZQ6WxRQ3KWcZIKnXwWxnLNzH1g==",
+      "path": "intel.ml.onnxruntime.openvino/1.24.1",
+      "hashPath": "intel.ml.onnxruntime.openvino.1.24.1.nupkg.sha512"
+    },
+    "Intel.RealSenseWithNativeDll/2.51.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XZgqaeeT81JT5PqjTBT5KaUreCkDcffmdnNs3I9gfoVhm0PrMu1M7qMjE0cXG6oElytXR6lAmSpW/Cu/5OcOOg==",
+      "path": "intel.realsensewithnativedll/2.51.1.1",
+      "hashPath": "intel.realsensewithnativedll.2.51.1.1.nupkg.sha512"
+    },
+    "Microsoft.ML.OnnxRuntime.Managed/1.24.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UbpBby1DX/3IJSiPnyQ4LA6vr6na8pEvSxba/UZVDNGZNNbtPiGoo8dqCMEm/8uHTBcUZpJBdwoROfyWwJWwjw==",
+      "path": "microsoft.ml.onnxruntime.managed/1.24.1",
+      "hashPath": "microsoft.ml.onnxruntime.managed.1.24.1.nupkg.sha512"
+    },
+    "System.Memory/4.5.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
+      "path": "system.memory/4.5.5",
+      "hashPath": "system.memory.4.5.5.nupkg.sha512"
+    },
+    "System.Numerics.Tensors/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hyJB4UlpAi19Xr9AXzu2NuagKC4lPfHObNMEAA0HmqFz2rX7wKgzeYzO/jM/eBHDhnUGFFEjk5cOoJaxqg5J4A==",
+      "path": "system.numerics.tensors/9.0.0",
+      "hashPath": "system.numerics.tensors.9.0.0.nupkg.sha512"
+    }
+  }
+}

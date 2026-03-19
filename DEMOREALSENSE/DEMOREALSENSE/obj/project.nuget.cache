@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "BZ9IDSoTz7I=",
+  "success": true,
+  "projectFilePath": "C:\\wamp64\\www\\PROJET-REALSENSE\\DEMOREALSENSE\\DEMOREALSENSE\\DEMOREALSENSE.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\louis\\.nuget\\packages\\intel.ml.onnxruntime.openvino\\1.24.1\\intel.ml.onnxruntime.openvino.1.24.1.nupkg.sha512",
+    "C:\\Users\\louis\\.nuget\\packages\\intel.realsensewithnativedll\\2.51.1.1\\intel.realsensewithnativedll.2.51.1.1.nupkg.sha512",
+    "C:\\Users\\louis\\.nuget\\packages\\microsoft.ml.onnxruntime.managed\\1.24.1\\microsoft.ml.onnxruntime.managed.1.24.1.nupkg.sha512",
+    "C:\\Users\\louis\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\louis\\.nuget\\packages\\system.numerics.tensors\\9.0.0\\system.numerics.tensors.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
