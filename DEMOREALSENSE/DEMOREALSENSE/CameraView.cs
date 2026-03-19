@@ -67,6 +67,19 @@ namespace DEMOREALSENSE
 
         private static readonly string BallOnnx = FindOnnx("ball_detect.onnx");
         private static readonly string LineOnnx = FindOnnx("line_seg.onnx");
+        private static readonly string BallOpenVino = FindOpenVino("ball_openvino");
+        private static readonly string LineOpenVino = FindOpenVino("line_openvino");
+
+        private static string FindOpenVino(string dirName)
+        {
+            string[] candidates = {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dirName),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models", dirName),
+            };
+            foreach (var p in candidates)
+                if (Directory.Exists(p)) return p;
+            return "";
+        }
 
         private CancellationTokenSource? _cts;
         private Task? _task;
@@ -418,7 +431,9 @@ namespace DEMOREALSENSE
                     }
                     try
                     {
-                        _yoloStrategy = new YoloDetectionStrategy(BallOnnx, LineOnnx);
+                        _yoloStrategy = new YoloDetectionStrategy(
+                            BallOnnx, LineOnnx,
+                            BallOpenVino, LineOpenVino);
                     }
                     catch (Exception ex)
                     {

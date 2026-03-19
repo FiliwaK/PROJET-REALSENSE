@@ -3,131 +3,103 @@
 namespace DEMOREALSENSE
 {
     /// <summary>
-    /// Détecteur de rebond — vecteur vitesse + inversion brusque.
+    /// Détecteur de rebond par PIC LOCAL SUR Y.
     ///
-    /// CORRECTIONS vs version précédente :
-    ///   1. avgFallVel calculé sur les frames AVANT le dy courant (i=1..N)
-    ///      pour ne pas biaiser avec la remontée
-    ///   2. Balle immobile : si avgFallVel < MinFallVelocity → jamais de rebond
-    ///   3. La position LastBounceY est le _maxY de la descente (bas réel de la balle)
+    /// PRINCIPE (inspiré des algorithmes de détection de pic en signal processing) :
+    ///   On stocke une fenêtre glissante de N positions Y.
+    ///   Un rebond = le Y central est strictement supérieur à TOUS ses voisins
+    ///   d'au moins MinDeltaPx pixels des deux côtés.
     ///
-    /// ALGORITHME — 4 conditions simultanées :
-    ///   1. prevDy > 0 (descendait la frame d'avant)
-    ///   2. dy < -RiseThreshPx (remonte franchement maintenant)
-    ///   3. avgFallVel >= MinFallVelocity (vitesse de descente moyenne suffisante)
-    ///   4. dx/avgFallVel <= HorizMaxRatio (pas principalement horizontal)
+    ///   En coordonnées image : Y augmente vers le bas.
+    ///   Rebond = balle au point le plus bas = Y maximum local.
+    ///
+    /// AVANTAGES vs approche vitesse :
+    ///   - Pas de seuil de vitesse → fonctionne balle lente et rapide
+    ///   - Pas de filtre horizontal → pas de faux positifs sur mouvement X
+    ///   - Simple et déterministe → pas d'état complexe
+    ///   - Détection ~HalfWindow frames après le vrai rebond (délai fixe et prévisible)
+    ///
+    /// PARAMÈTRES :
+    ///   HalfWindow  — nb frames de chaque côté du pic (total = 2*HalfWindow+1)
+    ///                 ex: 3 → fenêtre de 7 frames, délai = 3 frames (~100ms à 30fps)
+    ///   MinDeltaPx  — le pic doit dépasser tous ses voisins d'au moins MinDeltaPx
+    ///                 élimine les micro-oscillations du tracker
+    ///   CooldownMs  — délai min entre deux rebonds détectés
     /// </summary>
     public sealed class ImpactDetector
     {
-        public float MinFallVelocity { get; set; } = 3.5f;  // px/frame descente moyenne min
-        public float RiseThreshPx { get; set; } = 2.5f;  // remontée min sur 1 frame
-        public float BrutalChangePx { get; set; } = 7.0f;  // |prevDy|+|dy| min
-        public int VelocityWindow { get; set; } = 5;     // frames pour vitesse moyenne
-        public float HorizMaxRatio { get; set; } = 2.5f;  // dx/avgFallVel max
-        public int CooldownMs { get; set; } = 350;
+        public int HalfWindow { get; set; } = 3;    // 3 frames de chaque côté
+        public float MinDeltaPx { get; set; } = 5f;   // pic doit dépasser voisins de 5px min
+        public int CooldownMs { get; set; } = 400;
 
-        private readonly float[] _dyBuf = new float[16];
-        private int _dyHead = 0;
-        private int _dyCount = 0;
-
-        private float _prevY = float.NaN;
-        private float _prevX = float.NaN;
-        private float _prevDy = 0f;
-        private float _maxY = float.NaN;
+        // Fenêtre circulaire de positions Y
+        private readonly float[] _win = new float[32];
+        private int _head = 0;
+        private int _count = 0;
         private long _lastFireTicks = 0;
 
+        // Y exact au moment du pic (pour placer la croix)
         public float LastBounceY { get; private set; } = 0f;
 
         public void Reset()
         {
-            _dyHead = 0;
-            _dyCount = 0;
-            _prevY = float.NaN;
-            _prevX = float.NaN;
-            _prevDy = 0f;
-            _maxY = float.NaN;
+            _head = 0;
+            _count = 0;
             _lastFireTicks = 0;
             LastBounceY = 0f;
-            Array.Clear(_dyBuf, 0, _dyBuf.Length);
+            Array.Clear(_win, 0, _win.Length);
         }
 
+        // Compat no-ops
         public void SetSmoothMode(bool smooth) { }
         public bool Update(bool a, bool b, long t) => false;
         public bool UpdateAirToGround(bool a, long t) => false;
-        public bool Update(float contactY, long nowTicks)
-            => UpdateBounce(float.IsNaN(_prevX) ? 0f : _prevX, contactY, nowTicks);
-        public bool Update(float contactY, float yGround, long nowTicks)
-            => UpdateBounce(float.IsNaN(_prevX) ? 0f : _prevX, contactY, nowTicks);
+        public bool Update(float y, float yGround, long t) => Update(y, t);
+        public bool UpdateBounce(float x, float y, long t) => Update(y, t);
 
-        public bool UpdateBounce(float ballX, float contactY, long nowTicks)
+        /// <summary>
+        /// Appeler chaque frame avec le Y centre balle (pixels).
+        /// Retourne true quand un rebond est détecté.
+        /// LastBounceY contient le Y exact du pic.
+        /// </summary>
+        public bool Update(float ballY, long nowTicks)
         {
-            if (float.IsNaN(_prevY))
+            // Enregistre dans la fenêtre circulaire
+            _win[_head % _win.Length] = ballY;
+            _head++;
+            if (_count < _win.Length) _count++;
+
+            int ws = HalfWindow * 2 + 1; // taille totale fenêtre
+            if (_count < ws) return false;
+
+            // Lit le centre de la fenêtre
+            // Index 0 = plus récent, index ws-1 = plus ancien
+            // Le centre est à HalfWindow depuis le plus récent
+            float yCenter = Get(HalfWindow);
+
+            // Vérifie que le centre est un pic strict
+            // = strictement supérieur à tous les voisins d'au moins MinDeltaPx
+            for (int k = 1; k <= HalfWindow; k++)
             {
-                _prevX = ballX;
-                _prevY = contactY;
-                _prevDy = 0f;
-                return false;
+                if (Get(HalfWindow - k) >= yCenter - MinDeltaPx) return false; // voisin récent trop proche
+                if (Get(HalfWindow + k) >= yCenter - MinDeltaPx) return false; // voisin ancien trop proche
             }
 
-            float dy = contactY - _prevY;
-            float dx = Math.Abs(ballX - _prevX);
-            float prevDy = _prevDy;
-
-            _prevX = ballX;
-            _prevY = contactY;
-            _prevDy = dy;
-
-            // Enregistre dy AVANT de tester (on exclura dy courant du calcul de vitesse)
-            _dyBuf[_dyHead % _dyBuf.Length] = dy;
-            _dyHead++;
-            if (_dyCount < _dyBuf.Length) _dyCount++;
-
-            // Met à jour _maxY pendant la descente (dy > 0)
-            if (dy > 0)
-            {
-                if (float.IsNaN(_maxY) || contactY > _maxY) _maxY = contactY;
-            }
-            else if (dy < -RiseThreshPx * 3f)
-            {
-                // Remontée forte sans descente préalable → reset _maxY
-                // (balle lancée vers le haut depuis immobile)
-                if (float.IsNaN(_maxY)) { /* rien */ }
-            }
-
-            // ── Condition 1 : inversion — la frame d'avant descendait ──────
-            if (prevDy <= 0f) return false;
-
-            // ── Condition 2 : remontée franche maintenant ─────────────────
-            if (dy >= -RiseThreshPx) return false;
-
-            // ── Condition 3 : changement brutal ───────────────────────────
-            float totalChange = Math.Abs(prevDy) + Math.Abs(dy);
-            if (totalChange < BrutalChangePx) return false;
-
-            // ── Condition 4 : vitesse de descente moyenne AVANT ce frame ──
-            // On calcule sur les frames i=1..N (on exclut i=0 = dy courant négatif)
-            int n = Math.Min(_dyCount - 1, VelocityWindow);
-            if (n < 2) return false;
-
-            float avgFallVel = 0f;
-            for (int i = 1; i <= n; i++)
-            {
-                int idx = (_dyHead - 1 - i + _dyBuf.Length * 2) % _dyBuf.Length;
-                avgFallVel += _dyBuf[idx];
-            }
-            avgFallVel /= n;
-
-            // La descente moyenne doit être significative
-            if (avgFallVel < MinFallVelocity) return false;
-
-            // ── Condition 5 : filtre horizontal ───────────────────────────
-            if (avgFallVel > 0f && dx > HorizMaxRatio * avgFallVel) return false;
-
-            // ── REBOND VALIDÉ ──────────────────────────────────────────────
-            LastBounceY = float.IsNaN(_maxY) ? contactY : _maxY;
-            _maxY = float.NaN;
-
+            // Pic local confirmé
+            LastBounceY = yCenter;
             return TryFire(nowTicks);
+        }
+
+        // ── Helpers ──────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Get(0) = frame la plus récente
+        /// Get(n) = n frames en arrière
+        /// </summary>
+        private float Get(int backIndex)
+        {
+            int i = (_head - 1 - backIndex + _win.Length * 2) % _win.Length;
+            return _win[i];
         }
 
         private bool TryFire(long nowTicks)

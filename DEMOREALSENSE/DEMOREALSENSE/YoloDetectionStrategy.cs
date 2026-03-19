@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 
 namespace DEMOREALSENSE
 {
-    /// <summary>
-    /// Stratégie IA YOLO11.
-    ///
-    /// BALLE : yolo11n detect  → bounding box centre → chaque frame
-    /// LIGNE : yolo11n-seg     → bounding box de la détection → axe médian vertical
-    ///
-    /// POURQUOI bbox et pas masque :
-    ///   Le masque pixel par pixel est lent (~200ms) et sensible au bruit.
-    ///   La bounding box de YOLO est calculée gratuitement pendant l'inférence.
-    ///   La ligne jaune est une bande verticale/diagonale → son axe médian
-    ///   = droite passant par le centre haut et centre bas de la bbox.
-    ///   C'est exact, rapide, et insensible à la balle.
-    /// </summary>
     public sealed class YoloDetectionStrategy : IDetectionStrategy, IDisposable
     {
         public float BallConfThresh { get; set; } = 0.30f;
@@ -31,27 +20,59 @@ namespace DEMOREALSENSE
         private readonly string _lineInputName;
 
         private const int ImgSize = 640;
+        private const int TensorSize = 3 * ImgSize * ImgSize;
 
+        // Tensor balle réutilisé — synchrone
+        private readonly float[] _ballTensor = new float[TensorSize];
+
+        // Ligne async + cache
+        private readonly object _lineLock = new();
         private ClickLineDetector.LineModel? _cachedLine = null;
+        private int _lineRunning = 0;
         private int _frameCount = 0;
+        private readonly float[] _lineTensor = new float[TensorSize];
 
-        public YoloDetectionStrategy(string ballOnnxPath, string lineOnnxPath)
+        public YoloDetectionStrategy(string ballOnnxPath, string lineOnnxPath,
+                                     string? ballOpenVinoDir = null,
+                                     string? lineOpenVinoDir = null)
         {
-            var opts = new SessionOptions();
-            opts.InterOpNumThreads = 2;
-            opts.IntraOpNumThreads = 2;
-            opts.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
-            opts.ExecutionMode = ExecutionMode.ORT_SEQUENTIAL;
-
-            _ballSession = new InferenceSession(ballOnnxPath, opts);
-            _lineSession = new InferenceSession(lineOnnxPath, opts);
+            _ballSession = CreateSession(ballOnnxPath, ballOpenVinoDir);
+            _lineSession = CreateSession(lineOnnxPath, lineOpenVinoDir);
             _ballInputName = _ballSession.InputNames[0];
             _lineInputName = _lineSession.InputNames[0];
         }
 
+        private static InferenceSession CreateSession(string onnxPath, string? openVinoDir)
+        {
+            // Tente OpenVINO GPU Intel
+            if (!string.IsNullOrEmpty(openVinoDir) && Directory.Exists(openVinoDir))
+            {
+                var xmlFiles = Directory.GetFiles(openVinoDir, "*.xml");
+                if (xmlFiles.Length > 0)
+                {
+                    try
+                    {
+                        var opts = new SessionOptions();
+                        opts.AppendExecutionProvider_OpenVINO("GPU");
+                        opts.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
+                        return new InferenceSession(onnxPath, opts);
+                    }
+                    catch { }
+                }
+            }
+
+            // Fallback CPU optimisé
+            var cpu = new SessionOptions();
+            cpu.InterOpNumThreads = 2;
+            cpu.IntraOpNumThreads = 2;
+            cpu.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
+            cpu.ExecutionMode = ExecutionMode.ORT_SEQUENTIAL;
+            return new InferenceSession(onnxPath, cpu);
+        }
+
         public void Reset()
         {
-            _cachedLine = null;
+            lock (_lineLock) _cachedLine = null;
             _frameCount = 0;
         }
 
@@ -60,40 +81,52 @@ namespace DEMOREALSENSE
             var result = new DetectionResult { Mode = DetectionMode.Yolo };
             _frameCount++;
 
-            float[] tensor = BuildTensor(rgb, w, h);
-
-            // ── Balle : chaque frame ─────────────────────────────────────
+            // ── BALLE : synchrone sur frame courante ─────────────────────
+            // Identique à la version originale qui marchait bien.
+            // Pas d'async ici — précision maximale sur la frame courante.
+            BuildTensor(rgb, w, h, _ballTensor);
             try
             {
-                var box = RunBallDetect(tensor);
+                var box = RunBallDetect(_ballTensor);
                 if (box.HasValue)
                 {
                     float sx = w / (float)ImgSize;
                     float sy = h / (float)ImgSize;
                     result.BallCenter = new PointF(box.Value.cx * sx, box.Value.cy * sy);
-                    result.BallRadius = (int)(Math.Max(box.Value.bw, box.Value.bh)
-                                           * Math.Max(sx, sy) / 2f);
+                    result.BallRadius = Math.Max(4, (int)(Math.Max(box.Value.bw, box.Value.bh)
+                                           * Math.Max(sx, sy) / 2f));
                     result.BallConfidence = box.Value.conf;
                 }
             }
             catch { }
 
-            // ── Ligne : throttlée, depuis bbox uniquement ────────────────
-            if (_frameCount % LineEveryNFrames == 0)
+            // ── LIGNE : async toutes les N frames ────────────────────────
+            if (_frameCount % LineEveryNFrames == 0 &&
+                Interlocked.CompareExchange(ref _lineRunning, 1, 0) == 0)
             {
-                try
+                var rgbCopy = new byte[rgb.Length];
+                Buffer.BlockCopy(rgb, 0, rgbCopy, 0, rgb.Length);
+                int capW = w, capH = h;
+
+                Task.Run(() =>
                 {
-                    var line = RunLineFromBbox(tensor, w, h);
-                    if (line.HasValue) _cachedLine = line;
-                }
-                catch { }
+                    try
+                    {
+                        BuildTensor(rgbCopy, capW, capH, _lineTensor);
+                        var line = RunLineFromBbox(_lineTensor, capW, capH);
+                        if (line.HasValue)
+                            lock (_lineLock) _cachedLine = line;
+                    }
+                    catch { }
+                    finally { Interlocked.Exchange(ref _lineRunning, 0); }
+                });
             }
 
-            result.IaLineModel = _cachedLine;
+            lock (_lineLock) result.IaLineModel = _cachedLine;
             return result;
         }
 
-        // ── Détection balle ──────────────────────────────────────────────
+        // ── Inférence balle ──────────────────────────────────────────────
 
         private (float cx, float cy, float bw, float bh, float conf)? RunBallDetect(float[] tensor)
         {
@@ -102,110 +135,68 @@ namespace DEMOREALSENSE
                 NamedOnnxValue.CreateFromTensor(_ballInputName, input) });
 
             var raw = outputs[0].AsTensor<float>();
-            int numDet = raw.Dimensions[2];
-            float bestC = BallConfThresh;
-            (float cx, float cy, float bw, float bh, float conf)? best = null;
+            int n = raw.Dimensions[2];
+            float best = BallConfThresh;
+            (float cx, float cy, float bw, float bh, float conf)? res = null;
 
-            for (int i = 0; i < numDet; i++)
+            for (int i = 0; i < n; i++)
             {
                 float c = raw[0, 4, i];
-                if (c > bestC)
-                {
-                    bestC = c;
-                    best = (raw[0, 0, i], raw[0, 1, i], raw[0, 2, i], raw[0, 3, i], c);
-                }
+                if (c > best) { best = c; res = (raw[0, 0, i], raw[0, 1, i], raw[0, 2, i], raw[0, 3, i], c); }
             }
-            return best;
+            return res;
         }
 
-        // ── Ligne depuis bounding box ────────────────────────────────────
+        // ── Ligne depuis bbox ─────────────────────────────────────────────
 
-        /// <summary>
-        /// Extrait la ligne depuis la bounding box de la segmentation.
-        ///
-        /// La ligne jaune est une bande verticale/diagonale dans l'image.
-        /// Sa bbox YOLO = (cx, cy, bw, bh) en coordonnées 640×640.
-        ///
-        /// On construit le LineModel en passant par :
-        ///   - Point haut  = (cx, cy - bh/2)  → sommet de la bbox
-        ///   - Point bas   = (cx, cy + bh/2)  → bas de la bbox
-        ///   Direction = vecteur normalisé haut→bas reprojeté en coords image.
-        ///
-        /// C'est beaucoup plus stable que le masque et instantané.
-        /// </summary>
         private ClickLineDetector.LineModel? RunLineFromBbox(float[] tensor, int origW, int origH)
         {
-            // On n'a besoin que de la sortie boxes, pas des protos
-            // → on lance quand même les deux sorties car YOLO-seg les produit ensemble
             var input = new DenseTensor<float>(tensor, new[] { 1, 3, ImgSize, ImgSize });
             using var outputs = _lineSession.Run(new[] {
                 NamedOnnxValue.CreateFromTensor(_lineInputName, input) });
 
-            var boxes = outputs[0].AsTensor<float>(); // (1, 37, 8400)
-            int numDet = boxes.Dimensions[2];
+            var boxes = outputs[0].AsTensor<float>();
+            int n = boxes.Dimensions[2];
+            float best = LineConfThresh;
+            int bi = -1;
 
-            float bestC = LineConfThresh;
-            int bestI = -1;
-            for (int i = 0; i < numDet; i++)
+            for (int i = 0; i < n; i++)
             {
                 float c = boxes[0, 4, i];
-                if (c > bestC) { bestC = c; bestI = i; }
+                if (c > best) { best = c; bi = i; }
             }
-            if (bestI < 0) return null;
+            if (bi < 0) return null;
 
-            // Coordonnées bbox en espace 640×640
-            float cx640 = boxes[0, 0, bestI];
-            float cy640 = boxes[0, 1, bestI];
-            float bw640 = boxes[0, 2, bestI];
-            float bh640 = boxes[0, 3, bestI];
-
-            // Reprojection vers image originale
             float sx = origW / (float)ImgSize;
             float sy = origH / (float)ImgSize;
+            float cx = boxes[0, 0, bi] * sx;
+            float cy = boxes[0, 1, bi] * sy;
+            float bw = boxes[0, 2, bi] * sx;
+            float bh = boxes[0, 3, bi] * sy;
 
-            float cx = cx640 * sx;
-            float cy = cy640 * sy;
-            float bh = bh640 * sy;
-            float bw = bw640 * sx;
+            float topX = cx, topY = cy - bh / 2f;
+            float botX = cx, botY = cy + bh / 2f;
 
-            // Points haut et bas de l'axe médian de la bbox
-            // Pour une ligne diagonale : on utilise les coins de la bbox
-            // Point du haut = centre haut de la bbox
-            float topX = cx;
-            float topY = cy - bh / 2f;
-
-            // Point du bas = centre bas de la bbox
-            float botX = cx;
-            float botY = cy + bh / 2f;
-
-            // Si la bbox est plus large que haute (ligne très inclinée)
-            // on utilise les coins gauche/droite à mi-hauteur
             if (bw > bh * 0.7f)
             {
-                topX = cx - bw / 2f;
-                topY = cy;
-                botX = cx + bw / 2f;
-                botY = cy;
+                topX = cx - bw / 2f; topY = cy;
+                botX = cx + bw / 2f; botY = cy;
             }
 
-            // Vecteur direction
             float dx = botX - topX;
             float dy = botY - topY;
             float len = MathF.Sqrt(dx * dx + dy * dy);
             if (len < 5f) return null;
 
-            // Point de référence = centre de la bbox
-            var linePoint = new PointF(cx, cy);
-            var lineDir = new PointF(dx / len, dy / len);
-
-            return new ClickLineDetector.LineModel(linePoint, lineDir);
+            return new ClickLineDetector.LineModel(
+                new PointF(cx, cy),
+                new PointF(dx / len, dy / len));
         }
 
-        // ── Tensor ───────────────────────────────────────────────────────
+        // ── Tensor en place ───────────────────────────────────────────────
 
-        private static float[] BuildTensor(byte[] rgb, int w, int h)
+        private static void BuildTensor(byte[] rgb, int w, int h, float[] t)
         {
-            float[] t = new float[3 * ImgSize * ImgSize];
             float scaleX = w / (float)ImgSize;
             float scaleY = h / (float)ImgSize;
 
@@ -213,15 +204,18 @@ namespace DEMOREALSENSE
             {
                 int sy = (int)(ty * scaleY);
                 int row = sy * w * 3;
+                int offR = ty * ImgSize;
+                int offG = ImgSize * ImgSize + ty * ImgSize;
+                int offB = 2 * ImgSize * ImgSize + ty * ImgSize;
+
                 for (int tx = 0; tx < ImgSize; tx++)
                 {
                     int si = row + (int)(tx * scaleX) * 3;
-                    t[0 * ImgSize * ImgSize + ty * ImgSize + tx] = rgb[si] / 255f;
-                    t[1 * ImgSize * ImgSize + ty * ImgSize + tx] = rgb[si + 1] / 255f;
-                    t[2 * ImgSize * ImgSize + ty * ImgSize + tx] = rgb[si + 2] / 255f;
+                    t[offR + tx] = rgb[si] / 255f;
+                    t[offG + tx] = rgb[si + 1] / 255f;
+                    t[offB + tx] = rgb[si + 2] / 255f;
                 }
             }
-            return t;
         }
 
         public void Dispose()
