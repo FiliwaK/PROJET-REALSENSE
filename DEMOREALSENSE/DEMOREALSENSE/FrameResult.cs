@@ -22,9 +22,12 @@ namespace DEMOREALSENSE
         // VarEngine conservé pour compat
         public VarInOutEngine? VarEngine { get; set; }
 
-        // ✅ Verdict live direct (mis à jour chaque frame)
+        // Verdict live direct (mis à jour chaque frame)
         public InOutSide LiveSide { get; set; } = InOutSide.Unknown;
-        public bool VerdictHeld { get; set; } = false;   // true = OUT figé 5s
+        public bool VerdictHeld { get; set; } = false;
         public long VerdictHeldTicks { get; set; } = 0;
+
+        // ✅ État du plan de table (pour affichage dans le HUD)
+        public bool TablePlaneReady { get; set; } = false;
     }
 }

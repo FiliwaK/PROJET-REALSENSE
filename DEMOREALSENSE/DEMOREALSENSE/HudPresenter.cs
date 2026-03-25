@@ -6,8 +6,8 @@ namespace DEMOREALSENSE
 {
     /// <summary>
     /// Présentation HUD.
-    /// CORRECTIF : distance affichée dès que la balle est détectée,
-    /// même sans mouvement et même sans ligne.
+    /// - Distance affichée dès que la balle est détectée, même sans mouvement.
+    /// - Statut du plan de table affiché dans le label de traitement.
     /// </summary>
     public sealed class HudPresenter
     {
@@ -15,9 +15,9 @@ namespace DEMOREALSENSE
         private readonly Label _frameLabel;
 
         private long _lastUiTicks = 0;
-        private long _uiMinTicks = TimeSpan.TicksPerSecond / 10;  // 10hz général
+        private long _uiMinTicks = TimeSpan.TicksPerSecond / 10;
         private long _lastVerdictTicks = 0;
-        private long _verdictMinTicks = TimeSpan.TicksPerSecond / 20; // 20hz pour IN/OUT
+        private long _verdictMinTicks = TimeSpan.TicksPerSecond / 20;
 
         private long _msgUntilTicks = 0;
         private string? _msgText = null;
@@ -83,7 +83,6 @@ namespace DEMOREALSENSE
             _lastVerdictTicks = nowTicks;
             _lastUiTicks = nowTicks;
 
-            // Distance — toujours calculée si rawDepth disponible
             string distText = "--";
             if (rawDepth != 0)
             {
@@ -100,7 +99,7 @@ namespace DEMOREALSENSE
             RenderWithLatch(distText, latch, nowTicks);
         }
 
-        // ── Rendu live IN/OUT ────────────────────────────────────────────
+        // ── Rendu live IN/OUT ─────────────────────────────────────────────
 
         private void RenderLiveVerdict(
             string distText, InOutSide side,
@@ -117,10 +116,7 @@ namespace DEMOREALSENSE
                     int remSec = Math.Max(0, (int)(remTicks / TimeSpan.TicksPerMillisecond / 1000));
                     verdict = remSec > 0 ? $"❌  OUT  ({remSec}s)" : "❌  OUT";
                 }
-                else
-                {
-                    verdict = "❌  OUT";
-                }
+                else verdict = "❌  OUT";
                 col = Color.Red;
             }
             else
@@ -133,11 +129,11 @@ namespace DEMOREALSENSE
             _distanceLabel.Text = $"{distText} | {verdict}";
         }
 
-        // ── Fallback latch ───────────────────────────────────────────────
+        // ── Fallback latch ────────────────────────────────────────────────
 
         private void RenderWithLatch(string distText, InOutLatch latch, long nowTicks)
         {
-            // Pas encore de ligne détectée — affiche juste la distance sans verdict
+            // Pas encore de ligne → affiche juste la distance
             if (!latch.HasState && !latch.IsLatchedOut)
             {
                 _distanceLabel.ForeColor = Color.Black;
@@ -169,10 +165,16 @@ namespace DEMOREALSENSE
             _distanceLabel.Text = $"{distText} | {inout}";
         }
 
-        public void UpdateFrameTime(double frameMs)
+        /// <summary>
+        /// Met à jour le label de traitement avec le temps de frame
+        /// et le statut du plan de table.
+        /// </summary>
+        public void UpdateFrameTime(double frameMs, string planeStatus = "")
         {
             _frameLabel.ForeColor = Color.Black;
-            _frameLabel.Text = $"Traitement: {frameMs:0.0} ms/frame";
+            _frameLabel.Text = string.IsNullOrEmpty(planeStatus)
+                ? $"Traitement: {frameMs:0.0} ms/frame"
+                : $"Traitement: {frameMs:0.0} ms/frame  |  {planeStatus}";
         }
     }
 }

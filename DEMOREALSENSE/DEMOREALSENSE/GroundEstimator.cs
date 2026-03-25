@@ -3,23 +3,57 @@ using System.Drawing;
 
 namespace DEMOREALSENSE
 {
+    /// <summary>
+    /// Estime la position Y du sol (surface de table) pour un X image donné.
+    ///
+    /// PRIORITÉ :
+    ///   1. TablePlaneDetector (plan 3D RealSense) — colle à la surface réelle
+    ///   2. ClickLineDetector (ligne 2D) — fallback si le plan n'est pas encore prêt
+    /// </summary>
     public sealed class GroundEstimator
     {
-        // En pixels (image)
-        public float NearGroundPx { get; set; } = 35f;   // tolérance verticale autour du sol
-        public float AboveGroundPx { get; set; } = 80f;  // "clairement en l'air"
-
-        // En mètres : tolérance profondeur balle vs sol pour dire "contact"
-        public float ContactDepthEpsMeters { get; set; } = 0.035f; // 3.5 cm (ajuste 0.02..0.06)
+        public float NearGroundPx { get; set; } = 35f;
+        public float AboveGroundPx { get; set; } = 80f;
+        public float ContactDepthEpsMeters { get; set; } = 0.035f;
 
         /// <summary>
-        /// Calcule yGround (sol) au x donné, en utilisant la ligne détectée.
-        /// On suppose que la ligne est tracée AU SOL (ligne de terrain).
+        /// Calcule yGround au x donné.
+        /// Utilise le plan 3D en priorité, puis la ligne 2D en fallback.
         /// </summary>
-        public bool TryGetGroundY(ClickLineDetector detector, object lineLock, int x, out float yGround)
+        public bool TryGetGroundY(
+            ClickLineDetector detector, object lineLock,
+            int x, out float yGround,
+            TablePlaneDetector? plane = null,
+            int imgW = 640, int imgH = 480,
+            float refDepthM = 0f,
+            ushort[]? depth = null, float depthUnits = 0.001f)
         {
             yGround = 0f;
 
+            // ── Priorité 1 : plan 3D ──────────────────────────────────────
+            if (plane != null && plane.IsReady)
+            {
+                // Utilise la profondeur directe si disponible (plus précis)
+                if (depth != null && depthUnits > 0)
+                {
+                    if (plane.TryGetSurfaceYFromDepth(x, imgW, imgH, depth, depthUnits, out float sy1))
+                    {
+                        yGround = sy1;
+                        return true;
+                    }
+                }
+                // Sinon utilise la profondeur de référence de la balle
+                if (refDepthM > 0.05f)
+                {
+                    if (plane.TryGetSurfaceY(x, imgW, imgH, refDepthM, out float sy2))
+                    {
+                        yGround = sy2;
+                        return true;
+                    }
+                }
+            }
+
+            // ── Fallback : ligne 2D ───────────────────────────────────────
             ClickLineDetector.LineModel line;
             lock (lineLock)
             {
@@ -32,52 +66,30 @@ namespace DEMOREALSENSE
             float dx = line.Direction.X;
             float dy = line.Direction.Y;
 
-            // Si la ligne est presque verticale (dx ~ 0), on ne peut pas estimer y(x) proprement
-            if (Math.Abs(dx) < 1e-6f)
-            {
-                // fallback : utiliser y0
-                yGround = y0;
-                return true;
-            }
+            if (Math.Abs(dx) < 1e-6f) { yGround = y0; return true; }
 
-            // Ligne param: P = (x0,y0) + t*(dx,dy)
-            // On veut x = xTarget => t = (x - x0)/dx
             float t = (x - x0) / dx;
             yGround = y0 + t * dy;
             return true;
         }
 
-        /// <summary>
-        /// Renvoie true si le point est clairement en l'air (au-dessus du sol en image)
-        /// </summary>
+        // Surcharge de compatibilité — code existant non cassé
+        public bool TryGetGroundY(ClickLineDetector detector, object lineLock,
+                                   int x, out float yGround)
+            => TryGetGroundY(detector, lineLock, x, out yGround, null, 640, 480, 0f);
+
         public bool IsClearlyInAir(float y, float yGround)
-            => (y < (yGround - AboveGroundPx));
+            => y < (yGround - AboveGroundPx);
 
-        /// <summary>
-        /// Contact sol robuste :
-        /// - la balle est proche en Y du sol (image)
-        /// - ET profondeur balle ~ profondeur sol au même x (évite impact "dans l'air")
-        /// </summary>
         public bool IsContactWithGround(
-            int bx, int by,
-            float yGround,
-            ushort ballRaw, ushort groundRaw,
-            float depthUnits)
+            int bx, int by, float yGround,
+            ushort ballRaw, ushort groundRaw, float depthUnits)
         {
-            // Gate 1 : proximité verticale
-            if (Math.Abs(by - yGround) > NearGroundPx)
-                return false;
-
-            if (ballRaw == 0 || groundRaw == 0)
-                return false;
-
+            if (Math.Abs(by - yGround) > NearGroundPx) return false;
+            if (ballRaw == 0 || groundRaw == 0) return false;
             float ballM = ballRaw * depthUnits;
             float groundM = groundRaw * depthUnits;
-
-            // Gate 2 : cohérence profondeur
-            if (Math.Abs(ballM - groundM) > ContactDepthEpsMeters)
-                return false;
-
+            if (Math.Abs(ballM - groundM) > ContactDepthEpsMeters) return false;
             return true;
         }
     }

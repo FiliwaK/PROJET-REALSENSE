@@ -5,15 +5,15 @@ using System.Drawing;
 namespace DEMOREALSENSE
 {
     /// <summary>
-    /// Pipeline principal — version améliorée.
+    /// Pipeline principal.
     ///
-    /// AMÉLIORATIONS vs version originale :
-    ///   1. VarInOutEngine connecté et utilisé comme source de vérité pour le verdict IN/OUT.
-    ///   2. ImpactDetector.Update() avec les 3 signaux (clearlyInAir + contact + nowTicks)
-    ///      au lieu de l'ancienne logique booléenne simple.
-    ///   3. Croix rebond colorée : VERT si IN, ROUGE si OUT, JAUNE si indéterminé.
-    ///   4. FrameResult expose le VarInOutEngine pour que le HUD puisse afficher le verdict.
-    ///   5. FlipInOutSide : permet d'inverser la convention côté IN d'un appui touche.
+    /// CORRECTIFS :
+    ///   - Ligne 3D dessinée SEULEMENT quand le plan est prêt (IsReady).
+    ///     Avant : fallback 2D classique.
+    ///   - API DrawLineOverlay3D utilise LineRealWidthMeters (en mètres)
+    ///     au lieu de LineWidthPx pour le calcul de largeur perspective.
+    ///   - Rebond : contactY + MinDeltaPx=10.
+    ///   - LineWidthPx conservé pour InOutJudge (zone sur la ligne).
     /// </summary>
     public sealed class CameraPipeline
     {
@@ -31,30 +31,35 @@ namespace DEMOREALSENSE
         private readonly GroundEstimator _ground;
         private readonly InOutLatch _latch;
 
-        // ✅ Moteur VAR connecté — réglé pour réponse rapide sur table
+        // ── Plan de table 3D ──────────────────────────────────────────────
+        public readonly TablePlaneDetector TablePlane = new TablePlaneDetector
+        {
+            ScanBottomFraction = 0.55f,
+            ScanTopSkipFraction = 0.10f,
+            SampleStep = 12,
+            RansacIterations = 80,
+            RansacInlierM = 0.015f,
+            MinInliers = 40,
+            UpdateIntervalMs = 2000
+        };
+
         private readonly VarInOutEngine _var = new VarInOutEngine
         {
-            ConfirmFrames = 2,     // 2 frames consécutives pour confirmer (anti-bruit minimal)
-            FinalizeOnAirOut = false, // sur une table on attend l'impact
+            ConfirmFrames = 2,
+            FinalizeOnAirOut = false,
             ImpactCooldownMs = 300
         };
 
         private IDetectionStrategy? _strategy;
 
-        /// <summary>Change la stratégie de détection à chaud (touche M / bouton).</summary>
         public void SetDetectionStrategy(IDetectionStrategy? strategy)
         {
-            _strategy?.Reset(); // reset l'ancienne
+            _strategy?.Reset();
             _strategy = strategy;
-            _strategy?.Reset(); // reset la nouvelle aussi
+            _strategy?.Reset();
 
-            // Si on revient en mode algo (strategy=null ou AlgoDetectionStrategy),
-            // effacer la ligne IA injectée dans le lineDetector
             if (strategy == null || strategy is AlgoDetectionStrategy)
-            {
-                lock (_lineLock)
-                    _lineDetector.Clear();
-            }
+                lock (_lineLock) _lineDetector.Clear();
 
             ResetLineRelatedStates();
         }
@@ -62,13 +67,21 @@ namespace DEMOREALSENSE
         public bool AutoEnabled { get; set; } = true;
         public bool FlipInOutSide { get; set; } = false;
 
-        /// <summary>Largeur zone "sur la ligne" en pixels — pas de croix dans cette zone.</summary>
-        public float LineWidthPx { get; set; } = 10f;
+        /// <summary>
+        /// Largeur réelle de la ligne de jeu en mètres.
+        /// 0.025f = 2.5 cm. Ajuster selon ton ruban.
+        /// </summary>
+        public float LineRealWidthMeters { get; set; } = 0.025f;
 
-        /// <summary>Durée d'affichage du verdict OUT avant reset automatique (ms).</summary>
+        /// <summary>
+        /// Largeur de la ligne en pixels pour InOutJudge.
+        /// Calculée automatiquement depuis la profondeur.
+        /// </summary>
+        public float LineWidthPx { get; set; } = 6f;
+
         public int OutHoldMs { get; set; } = 5000;
 
-        // ── Croix rebond ─────────────────────────────────────────────────
+        // ── Croix rebond ──────────────────────────────────────────────────
         private PointF? _impactMark = null;
         private long _impactMarkTicks = 0;
         private InOutSide _impactSide = InOutSide.Unknown;
@@ -78,6 +91,9 @@ namespace DEMOREALSENSE
         private bool _verdictHeld = false;
         private long _verdictHeldTicks = 0;
         private InOutSide _heldVerdict = InOutSide.Unknown;
+
+        // ── LineWidthPx mémorisée ──────────────────────────────────────────
+        private float _computedLineWidthPx = -1f;
 
         private readonly Stopwatch _sw = new Stopwatch();
 
@@ -121,6 +137,8 @@ namespace DEMOREALSENSE
             _verdictHeld = false;
             _verdictHeldTicks = 0;
             _heldVerdict = InOutSide.Unknown;
+
+            _computedLineWidthPx = -1f;
         }
 
         public void ResetAllStates()
@@ -128,6 +146,7 @@ namespace DEMOREALSENSE
             _autoTracker.Stop();
             _autoFollower.Reset();
             _strategy?.Reset();
+            TablePlane.Reset();
             ResetLineRelatedStates();
         }
 
@@ -154,6 +173,10 @@ namespace DEMOREALSENSE
             int w = _camera.ColorW;
             int h = _camera.ColorH;
 
+            // ── Détection plan de table (toutes les 2s) ───────────────────
+            TablePlane.TryUpdate(depthU16, w, h, _camera.DepthUnits, nowTicks);
+            res.TablePlaneReady = TablePlane.IsReady;
+
             // ── Tracker manuel ────────────────────────────────────────────
             res.ManualTrackingOk = true;
             if (_manualTracker.IsTracking)
@@ -168,7 +191,7 @@ namespace DEMOREALSENSE
             if (_manualTracker.IsTracking && _manualTracker.X >= 0 && _manualTracker.Y >= 0)
                 overlays.DrawManualBox(bmp, _manualTracker.X, _manualTracker.Y);
 
-            // ── Tracker auto (algo) ou stratégie IA ──────────────────────
+            // ── Stratégie IA ou algo ──────────────────────────────────────
             bool autoOk = false;
             int ax = -1, ay = -1;
 
@@ -180,15 +203,11 @@ namespace DEMOREALSENSE
                     autoOk = true;
                     ax = (int)det.BallCenter.Value.X;
                     ay = (int)det.BallCenter.Value.Y;
-                    // Visuel IA : carré magenta au lieu du cercle bleu
                     overlays.DrawIaCircle(bmp, ax, ay,
                         Math.Max(12, (int)(_autoFollower.LastRadius * 1.2f)));
 
                     if (det.HasIaLine)
-                    {
-                        lock (_lineLock)
-                            _lineDetector.SetLineModel(det.IaLineModel!.Value);
-                    }
+                        lock (_lineLock) _lineDetector.SetLineModel(det.IaLineModel!.Value);
                 }
             }
             else if (AutoEnabled)
@@ -196,21 +215,19 @@ namespace DEMOREALSENSE
                 autoOk = _autoFollower.TryUpdate(rgb, w, h, bmp, out ax, out ay);
             }
 
-            // Cercle algo seulement en mode algo
             if (autoOk && ax >= 0 && ay >= 0 && _strategy == null)
                 overlays.DrawAutoCircle(bmp, ax, ay);
 
-            // ── Choix position balle (auto prioritaire) ───────────────────
+            // ── Position balle ────────────────────────────────────────────
             bool haveBall = false;
             int ballX = -1, ballY = -1;
-            int ballRadius = 8;   // rayon estimé, mis à jour par le tracker auto
+            int ballRadius = 8;
             bool usingAuto = false;
 
             if (autoOk && ax >= 0 && ay >= 0)
             {
                 haveBall = true;
-                ballX = ax;
-                ballY = ay;
+                ballX = ax; ballY = ay;
                 ballRadius = Math.Max(4, _autoFollower.LastRadius);
                 usingAuto = true;
             }
@@ -219,18 +236,14 @@ namespace DEMOREALSENSE
                 haveBall = true;
                 ballX = _manualTracker.X;
                 ballY = _manualTracker.Y;
-                ballRadius = 8; // manuel : pas de rayon connu, valeur neutre
+                ballRadius = 8;
             }
 
-            // ✅ Mode smooth ImpactDetector selon tracker actif
             _impact.SetSmoothMode(usingAuto);
 
-            // ── Point de contact réel = bas de la balle ───────────────────
-            // Le centroïde du tracker est au centre de la balle.
-            // Pour IN/OUT et croix, on utilise le bas de la balle (contact avec la surface).
             int contactY = haveBall ? (ballY + ballRadius) : ballY;
 
-            // ── Distance ──────────────────────────────────────────────────
+            // ── Profondeur balle ──────────────────────────────────────────
             ushort ballRaw = 0;
             if (haveBall)
             {
@@ -239,15 +252,28 @@ namespace DEMOREALSENSE
                     ballX, ballY, radius: 2);
             }
             res.RawDepth = ballRaw;
+            float ballDepthM = ballRaw == 0 ? 0f : ballRaw * _camera.DepthUnits;
 
-            // ── IN/OUT avec zone ligne ────────────────────────────────────
+            // ── LineWidthPx pour InOutJudge (calculé depuis profondeur) ───
+            if (_computedLineWidthPx < 0 && ballRaw != 0)
+            {
+                float distM = ballDepthM;
+                if (distM > 0.1f && distM < 5f)
+                {
+                    float widthAtDist = 2f * distM * MathF.Tan(TablePlaneDetector.HFovRad / 2f);
+                    float pxPerMeter = w / widthAtDist;
+                    _computedLineWidthPx = MathF.Max(3f, LineRealWidthMeters * pxPerMeter);
+                    LineWidthPx = _computedLineWidthPx;
+                }
+            }
+
+            // ── IN/OUT ────────────────────────────────────────────────────
             bool hasLine = false;
             bool isInNow = true;
             InOutJudge.Zone zoneNow = InOutJudge.Zone.In;
 
             if (haveBall)
             {
-                // ✅ On juge sur le BAS de la balle (contactY), pas sur son centre
                 hasLine = InOutJudge.TryGetZone(
                     _lineDetector, _lineLock,
                     new PointF(ballX, contactY),
@@ -259,13 +285,17 @@ namespace DEMOREALSENSE
                             : zoneNow == InOutJudge.Zone.In ? InOutJudge.Zone.Out
                             : InOutJudge.Zone.OnLine;
 
-                // OnLine = IN pour le latch (règle sport)
                 isInNow = zoneNow != InOutJudge.Zone.Out;
-
-                if (hasLine)
-                    _latch.Update(isInNow, nowTicks);
+                if (hasLine) _latch.Update(isInNow, nowTicks);
             }
             res.Latch = _latch;
+
+            // ── Y surface réel pour la croix rebond ───────────────────────
+            bool hasGroundY = _ground.TryGetGroundY(
+                _lineDetector, _lineLock, ballX, out float groundY,
+                TablePlane.IsReady ? TablePlane : null,
+                w, h, ballDepthM, depthU16, _camera.DepthUnits);
+            if (!hasGroundY) groundY = contactY;
 
             // ── Détection rebond ──────────────────────────────────────────
             bool impactFired = false;
@@ -276,27 +306,18 @@ namespace DEMOREALSENSE
 
                 if (impactFired)
                 {
-                    // ✅ Position croix : sur la ligne (yGround) si disponible
-                    // car c'est là où la balle a réellement touché le sol
-                    // Sinon LastBounceY = Y le plus bas enregistré pendant la descente
-                    float crossY = (float)contactY;
-                    if (hasLine && _ground.TryGetGroundY(_lineDetector, _lineLock, ballX, out float yg))
-                        crossY = yg;
-                    else if (_impact.LastBounceY > 0)
-                        crossY = _impact.LastBounceY;
-
+                    float crossY = hasGroundY ? groundY : (float)contactY;
                     _impactMark = new PointF(ballX, crossY);
                     _impactMarkTicks = nowTicks;
                     _impactSide = hasLine
-                        ? ((zoneNow == InOutJudge.Zone.Out) ? InOutSide.Out : InOutSide.In)
+                        ? (zoneNow == InOutJudge.Zone.Out ? InOutSide.Out : InOutSide.In)
                         : InOutSide.Unknown;
                 }
             }
 
-            // ── Verdict IN/OUT : live + hold 5s sur rebond OUT ────────────
+            // ── Verdict IN/OUT avec hold 5s ───────────────────────────────
             if (haveBall && hasLine)
             {
-                // Expiration du hold par timer uniquement
                 if (_verdictHeld)
                 {
                     long elapsed2 = nowTicks - _verdictHeldTicks;
@@ -304,7 +325,6 @@ namespace DEMOREALSENSE
                         _verdictHeld = false;
                 }
 
-                // ✅ Hold déclenché dès qu'un rebond est détecté (indépendant de _impactMark)
                 if (impactFired && zoneNow == InOutJudge.Zone.Out)
                 {
                     _verdictHeld = true;
@@ -316,20 +336,27 @@ namespace DEMOREALSENSE
                     _verdictHeld = false;
                 }
 
-                if (_verdictHeld)
-                    res.LiveSide = InOutSide.Out;
-                else
-                    res.LiveSide = (zoneNow == InOutJudge.Zone.Out) ? InOutSide.Out : InOutSide.In;
+                res.LiveSide = _verdictHeld
+                    ? InOutSide.Out
+                    : (zoneNow == InOutJudge.Zone.Out ? InOutSide.Out : InOutSide.In);
 
                 res.VerdictHeld = _verdictHeld;
                 res.VerdictHeldTicks = _verdictHeldTicks;
             }
 
-            // Garde VarEngine pour compat mais on n'en dépend plus pour l'affichage
             res.VarEngine = _var;
 
             // ── Overlays ──────────────────────────────────────────────────
-            overlays.DrawLineOverlay(bmp, _lineDetector, _lineLock);
+            // La ligne 3D n'est dessinée QUE si le plan est prêt.
+            // Avant : fallback 2D automatique dans DrawLineOverlay3D.
+            overlays.DrawLineOverlay3D(
+                bmp,
+                _lineDetector, _lineLock,
+                LineRealWidthMeters,
+                TablePlane.IsReady ? TablePlane : null,
+                TablePlane.IsReady ? depthU16 : null,
+                _camera.DepthUnits);
+
             DrawImpactIfAlive(bmp, nowTicks, overlays);
 
             res.BitmapToShow = (Bitmap)bmp.Clone();
@@ -339,7 +366,7 @@ namespace DEMOREALSENSE
             return res;
         }
 
-        // ── Dessin croix colorée ──────────────────────────────────────────
+        // ── Dessin croix rebond ───────────────────────────────────────────
 
         private void DrawImpactIfAlive(Bitmap bmp, long nowTicks, OverlayRenderer overlays)
         {
@@ -358,12 +385,12 @@ namespace DEMOREALSENSE
 
             using var g = Graphics.FromImage(bmp);
             using var pen = new Pen(Color.White, 3f);
+            using var penCircle = new Pen(Color.White, 1.5f);
 
             g.DrawLine(pen, p.X - crossSize, p.Y - crossSize, p.X + crossSize, p.Y + crossSize);
             g.DrawLine(pen, p.X - crossSize, p.Y + crossSize, p.X + crossSize, p.Y - crossSize);
 
             float r = crossSize * 0.8f;
-            using var penCircle = new Pen(Color.White, 1.5f);
             g.DrawEllipse(penCircle, p.X - r, p.Y - r, r * 2, r * 2);
         }
     }

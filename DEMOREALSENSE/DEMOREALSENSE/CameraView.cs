@@ -29,7 +29,15 @@ namespace DEMOREALSENSE
         private readonly AutoTemplateFollower _autoFollower;
 
         private readonly TrajectoryTracker _traj = new TrajectoryTracker();
-        private readonly ImpactDetector _impact = new ImpactDetector();
+
+        // MinDeltaPx = 10 : filtre les faux rebonds sur mouvements brusques
+        // CooldownMs = 500 : 500ms minimum entre deux rebonds
+        private readonly ImpactDetector _impact = new ImpactDetector
+        {
+            HalfWindow = 3,
+            MinDeltaPx = 10f,
+            CooldownMs = 500
+        };
 
         private readonly GroundEstimator _ground = new GroundEstimator
         {
@@ -38,7 +46,6 @@ namespace DEMOREALSENSE
         };
 
         private readonly InOutLatch _inOutLatch = new InOutLatch { OutHoldMs = 5000 };
-
         private readonly OverlayRenderer _overlays = new OverlayRenderer { ManualBoxHalf = 12 };
         private readonly SnapshotBuffer _snapshots = new SnapshotBuffer();
 
@@ -84,10 +91,11 @@ namespace DEMOREALSENSE
         private Task? _task;
 
         private readonly string _snapDir =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "RealSense_Captures");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                         "RealSense_Captures");
 
         private const string HelpText =
-            "Click=Tracker | Ctrl+Click=Ligne | Shift+Click=Calibrer balle | A=Auto | R=Reset ligne | F=Flip IN/OUT";
+            "Click=Tracker | Ctrl+Click=Ligne | Shift+Click=Calibrer balle | A=Auto | R=Reset | F=Flip IN/OUT";
 
         private bool _ballSelected = false;
 
@@ -114,7 +122,6 @@ namespace DEMOREALSENSE
             _hud = new HudPresenter(distanceLabel, traitementFrameLabel);
             _hud.SetUiHz(20);
 
-            // ── Stratégies de détection ───────────────────────────────────
             _algoStrategy = new AlgoDetectionStrategy(_ballDetector, _autoFollower);
             _currentStrategy = _algoStrategy;
 
@@ -128,7 +135,10 @@ namespace DEMOREALSENSE
                 _ground,
                 _inOutLatch)
             {
-                LineWidthPx = 10f,
+                // Largeur réelle de ta ligne de ruban.
+                // Ajuste si ta ligne est plus large/étroite.
+                LineRealWidthMeters = 0.025f,
+                LineWidthPx = 6f,   // fallback si profondeur indisponible
                 OutHoldMs = 5000
             };
 
@@ -240,8 +250,7 @@ namespace DEMOREALSENSE
                     if (!r.ManualTrackingOk)
                         _hud?.ShowTempMessage(r.NowTicks, "Objet perdu (reclique).", Color.OrangeRed);
 
-                    // ✅ showDistance = true dès que la balle est visible (rawDepth > 0)
-                    // ou qu'on est en mode IA, ou qu'une balle a été sélectionnée manuellement
+                    // showDistance = true dès que la balle est visible ou mode IA actif
                     bool showInfo = _ballSelected
                         || r.LiveSide != InOutSide.Unknown
                         || r.RawDepth != 0
@@ -260,7 +269,11 @@ namespace DEMOREALSENSE
                         heldTicks: r.VerdictHeldTicks,
                         outHoldMs: 5000);
 
-                    _hud?.UpdateFrameTime(r.FrameMs);
+                    // ✅ Statut du plan de table dans le label de traitement
+                    string planeStatus = r.TablePlaneReady
+                        ? "🟢 Plan OK"
+                        : "🔴 Plan en cours...";
+                    _hud?.UpdateFrameTime(r.FrameMs, planeStatus);
                 });
             }
         }
@@ -411,10 +424,7 @@ namespace DEMOREALSENSE
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            SwitchDetectionMode();
-        }
+        private void button2_Click(object sender, EventArgs e) => SwitchDetectionMode();
 
         private void SwitchDetectionMode()
         {
@@ -431,8 +441,7 @@ namespace DEMOREALSENSE
                     try
                     {
                         _yoloStrategy = new YoloDetectionStrategy(
-                            BallOnnx, LineOnnx,
-                            BallOpenVino, LineOpenVino);
+                            BallOnnx, LineOnnx, BallOpenVino, LineOpenVino);
                     }
                     catch (Exception ex)
                     {
