@@ -2,9 +2,9 @@ from ultralytics import YOLO
 from pathlib import Path
 import shutil
 
-BALL_PT  = Path(r"C:\Users\louis\Desktop\runs_ball\ball_full_cpu\weights\best.pt")
-LINE_PT  = Path(r"C:\Users\louis\Desktop\runs_line\line_full_cpu\weights\best.pt")
-OUT_DIR  = Path(r"C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\Models")
+BALL_PT  = Path(r"C:\Users\louis\Desktop\entrainement_IA\resultats\ball_v2\weights\best.pt")
+LINE_PT  = Path(r"C:\Users\louis\Desktop\entrainement_IA\resultats\line_v2\weights\best.pt")
+OUT_DIR  = Path(r"C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\Models")
 
 print("=== Export BALLE en OpenVINO ===")
 model_ball = YOLO(str(BALL_PT))

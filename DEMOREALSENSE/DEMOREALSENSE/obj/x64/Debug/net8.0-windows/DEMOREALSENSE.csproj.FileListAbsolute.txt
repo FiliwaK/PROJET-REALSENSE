@@ -65,11 +65,11 @@ C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\runtimes\win-x64\native\tbbmalloc_debug.dll
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\runtimes\win-x64\native\tbbmalloc_proxy.dll
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\runtimes\win-x64\native\tbbmalloc_proxy_debug.dll
-C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\ball_detect.onnx
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\ball_openvino\best.bin
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\ball_openvino\best.xml
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\ball_openvino\metadata.yaml
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\line_openvino\best.bin
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\line_openvino\best.xml
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\line_openvino\metadata.yaml
+C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\ball_detect.onnx
 C:\wamp64\www\PROJET-REALSENSE\DEMOREALSENSE\DEMOREALSENSE\bin\x64\Debug\net8.0-windows\Models\line_seg.onnx

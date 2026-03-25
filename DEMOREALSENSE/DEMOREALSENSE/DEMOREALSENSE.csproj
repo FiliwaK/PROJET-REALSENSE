@@ -26,6 +26,17 @@
   <ItemGroup>
     <None Remove="ball_detect.onnx" />
     <None Remove="line_seg.onnx" />
+    <None Remove="Models\ball_detect.onnx" />
+    <None Remove="Models\line_seg.onnx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Models\ball_detect.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Models\line_seg.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -44,13 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Models\ball_openvino\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Models\ball_detect.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Models\ball_openvino\best.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -67,9 +75,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Models\line_openvino\metadata.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Models\line_seg.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
