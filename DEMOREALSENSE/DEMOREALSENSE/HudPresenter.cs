@@ -5,12 +5,9 @@ using System.Windows.Forms;
 namespace DEMOREALSENSE
 {
     /// <summary>
-    /// Présentation HUD — version améliorée.
-    ///
-    /// AMÉLIORATIONS :
-    ///   - Affiche le verdict VarInOutEngine (IN/OUT/Tracking/PendingImpact) quand disponible.
-    ///   - Verdict Final affiché en grand avec couleur claire.
-    ///   - Conserve l'ancienne API RenderHelpOrDistance pour compat.
+    /// Présentation HUD.
+    /// CORRECTIF : distance affichée dès que la balle est détectée,
+    /// même sans mouvement et même sans ligne.
     /// </summary>
     public sealed class HudPresenter
     {
@@ -61,7 +58,7 @@ namespace DEMOREALSENSE
             long heldTicks = 0,
             int outHoldMs = 5000)
         {
-            // Messages temporaires : throttle normal
+            // Messages temporaires prioritaires
             if (_msgText != null && nowTicks <= _msgUntilTicks)
             {
                 if (nowTicks - _lastUiTicks < _uiMinTicks) return;
@@ -81,11 +78,12 @@ namespace DEMOREALSENSE
                 return;
             }
 
-            // ✅ Verdict IN/OUT : throttle 20hz (réactif)
+            // Verdict IN/OUT : throttle 20hz
             if (nowTicks - _lastVerdictTicks < _verdictMinTicks) return;
             _lastVerdictTicks = nowTicks;
             _lastUiTicks = nowTicks;
 
+            // Distance — toujours calculée si rawDepth disponible
             string distText = "--";
             if (rawDepth != 0)
             {
@@ -115,7 +113,6 @@ namespace DEMOREALSENSE
             {
                 if (verdictHeld)
                 {
-                    // Compte à rebours du hold
                     long remTicks = heldTicks + outHoldMs * TimeSpan.TicksPerMillisecond - nowTicks;
                     int remSec = Math.Max(0, (int)(remTicks / TimeSpan.TicksPerMillisecond / 1000));
                     verdict = remSec > 0 ? $"❌  OUT  ({remSec}s)" : "❌  OUT";
@@ -140,8 +137,16 @@ namespace DEMOREALSENSE
 
         private void RenderWithLatch(string distText, InOutLatch latch, long nowTicks)
         {
-            string inout = "IN/OUT: ?";
-            Color col = Color.Black;
+            // Pas encore de ligne détectée — affiche juste la distance sans verdict
+            if (!latch.HasState && !latch.IsLatchedOut)
+            {
+                _distanceLabel.ForeColor = Color.Black;
+                _distanceLabel.Text = distText;
+                return;
+            }
+
+            string inout;
+            Color col;
 
             if (latch.IsLatchedOut)
             {
@@ -149,10 +154,15 @@ namespace DEMOREALSENSE
                 inout = $"OUT ❌ ({rem / 1000.0:0.0}s)";
                 col = Color.Red;
             }
-            else if (latch.HasState)
+            else if (latch.CurrentIsIn)
             {
-                if (latch.CurrentIsIn) { inout = "IN ✅"; col = Color.LimeGreen; }
-                else { inout = "OUT ❌"; col = Color.Red; }
+                inout = "IN ✅";
+                col = Color.LimeGreen;
+            }
+            else
+            {
+                inout = "OUT ❌";
+                col = Color.Red;
             }
 
             _distanceLabel.ForeColor = col;

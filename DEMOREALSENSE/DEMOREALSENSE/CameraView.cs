@@ -37,7 +37,7 @@ namespace DEMOREALSENSE
             AboveGroundPx = 80f
         };
 
-        private readonly InOutLatch _inOutLatch = new InOutLatch { OutHoldMs = 5000 }; // OUT affiché 5s
+        private readonly InOutLatch _inOutLatch = new InOutLatch { OutHoldMs = 5000 };
 
         private readonly OverlayRenderer _overlays = new OverlayRenderer { ManualBoxHalf = 12 };
         private readonly SnapshotBuffer _snapshots = new SnapshotBuffer();
@@ -52,7 +52,6 @@ namespace DEMOREALSENSE
         private YoloDetectionStrategy? _yoloStrategy;
         private DetectionMode _detectionMode = DetectionMode.Algo;
 
-        // Cherche les modèles ONNX : d'abord à la racine du exe, ensuite dans Models/
         private static string FindOnnx(string fileName)
         {
             string[] candidates = {
@@ -62,7 +61,7 @@ namespace DEMOREALSENSE
             };
             foreach (var p in candidates)
                 if (File.Exists(p)) return p;
-            return candidates[0]; // retourne le premier même si absent (pour le message d'erreur)
+            return candidates[0];
         }
 
         private static readonly string BallOnnx = FindOnnx("ball_detect.onnx");
@@ -117,7 +116,7 @@ namespace DEMOREALSENSE
 
             // ── Stratégies de détection ───────────────────────────────────
             _algoStrategy = new AlgoDetectionStrategy(_ballDetector, _autoFollower);
-            _currentStrategy = _algoStrategy; // algo par défaut
+            _currentStrategy = _algoStrategy;
 
             _pipeline = new CameraPipeline(
                 _camera,
@@ -241,9 +240,13 @@ namespace DEMOREALSENSE
                     if (!r.ManualTrackingOk)
                         _hud?.ShowTempMessage(r.NowTicks, "Objet perdu (reclique).", Color.OrangeRed);
 
-                    // Label mode en cours
-                    string modeLabel = _detectionMode == DetectionMode.Yolo ? " 🤖" : "";
-                    bool showInfo = _ballSelected || r.LiveSide != InOutSide.Unknown;
+                    // ✅ showDistance = true dès que la balle est visible (rawDepth > 0)
+                    // ou qu'on est en mode IA, ou qu'une balle a été sélectionnée manuellement
+                    bool showInfo = _ballSelected
+                        || r.LiveSide != InOutSide.Unknown
+                        || r.RawDepth != 0
+                        || _detectionMode == DetectionMode.Yolo;
+
                     _hud?.RenderHelpOrDistance(
                         r.NowTicks,
                         HelpText,
@@ -314,10 +317,7 @@ namespace DEMOREALSENSE
             }
 
             Color c = img.GetPixel(x, y);
-
-            // ✅ Calibration HSV automatique
             _ballDetector.CalibrateFromRgb(c.R, c.G, c.B);
-
             _pipeline?.ResetAllStates();
 
             BallDetector.RgbToHsv(c.R, c.G, c.B, out float hue, out _, out _);
@@ -382,7 +382,6 @@ namespace DEMOREALSENSE
                     }
                     break;
 
-                // ✅ Touche M : switch Algo ↔ IA
                 case Keys.M:
                     SwitchDetectionMode();
                     break;
@@ -449,18 +448,16 @@ namespace DEMOREALSENSE
             else
             {
                 _detectionMode = DetectionMode.Algo;
-                _currentStrategy = null; // null = pipeline utilise AutoTemplateFollower natif
+                _currentStrategy = null;
             }
 
-            // ✅ Reset complet : pipeline, trackers, ligne, marqueurs
-            _tracker.Stop();           // tracker manuel
-            _autoTracker.Stop();       // tracker auto
+            _tracker.Stop();
+            _autoTracker.Stop();
             _pipeline?.SetDetectionStrategy(_currentStrategy);
             _pipeline?.ResetAllStates();
             lock (_lineLock) _lineDetector.Clear();
             _ballSelected = false;
 
-            // Met à jour le bouton et le HUD
             bool isYolo = _detectionMode == DetectionMode.Yolo;
             button2.Text = isYolo ? "🤖 IA" : "⚙️ Algo";
             string msg = isYolo ? "Mode IA YOLO — ligne auto" : "Mode Algo — Ctrl+Click pour ligne";

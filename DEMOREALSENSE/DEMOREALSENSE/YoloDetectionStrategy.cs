@@ -28,6 +28,7 @@ namespace DEMOREALSENSE
         // Ligne async + cache
         private readonly object _lineLock = new();
         private ClickLineDetector.LineModel? _cachedLine = null;
+        private bool _lineLocked = false;   // ← une fois trouvée, la ligne ne bouge plus
         private int _lineRunning = 0;
         private int _frameCount = 0;
         private readonly float[] _lineTensor = new float[TensorSize];
@@ -72,7 +73,7 @@ namespace DEMOREALSENSE
 
         public void Reset()
         {
-            lock (_lineLock) _cachedLine = null;
+            lock (_lineLock) { _cachedLine = null; _lineLocked = false; }
             _frameCount = 0;
         }
 
@@ -82,8 +83,6 @@ namespace DEMOREALSENSE
             _frameCount++;
 
             // ── BALLE : synchrone sur frame courante ─────────────────────
-            // Identique à la version originale qui marchait bien.
-            // Pas d'async ici — précision maximale sur la frame courante.
             BuildTensor(rgb, w, h, _ballTensor);
             try
             {
@@ -100,8 +99,12 @@ namespace DEMOREALSENSE
             }
             catch { }
 
-            // ── LIGNE : async toutes les N frames ────────────────────────
-            if (_frameCount % LineEveryNFrames == 0 &&
+            // ── LIGNE : async toutes les N frames — s'arrête une fois verrouillée ──
+            bool alreadyLocked;
+            lock (_lineLock) alreadyLocked = _lineLocked;
+
+            if (!alreadyLocked &&
+                _frameCount % LineEveryNFrames == 0 &&
                 Interlocked.CompareExchange(ref _lineRunning, 1, 0) == 0)
             {
                 var rgbCopy = new byte[rgb.Length];
@@ -115,7 +118,11 @@ namespace DEMOREALSENSE
                         BuildTensor(rgbCopy, capW, capH, _lineTensor);
                         var line = RunLineFromBbox(_lineTensor, capW, capH);
                         if (line.HasValue)
-                            lock (_lineLock) _cachedLine = line;
+                            lock (_lineLock)
+                            {
+                                _cachedLine = line;
+                                _lineLocked = true;   // ← verrouille définitivement
+                            }
                     }
                     catch { }
                     finally { Interlocked.Exchange(ref _lineRunning, 0); }
