@@ -5,22 +5,16 @@ using Intel.RealSense;
 
 namespace DEMOREALSENSE
 {
-    /// <summary>
-    /// Service caméra RealSense : démarre/stop + récupère frame Color (RGB8) + Depth (Z16) alignée sur la couleur.
-    /// Pas d'UI ici.
-    /// </summary>
     public sealed class RealSenseCameraService : IDisposable
     {
         private Pipeline? _pipe;
         private Align? _alignToColor;
 
         public bool IsRunning { get; private set; }
-
         public float DepthUnits { get; private set; } = 0.001f;
 
         public int ColorW { get; private set; }
         public int ColorH { get; private set; }
-
         public int DepthW { get; private set; }
         public int DepthH { get; private set; }
 
@@ -44,7 +38,6 @@ namespace DEMOREALSENSE
 
             var profile = _pipe.Start(cfg);
 
-            // DepthUnits si dispo
             try
             {
                 foreach (var s in profile.Device.Sensors)
@@ -66,18 +59,13 @@ namespace DEMOREALSENSE
         public void Stop()
         {
             IsRunning = false;
-
             _alignToColor?.Dispose();
             _alignToColor = null;
-
             try { _pipe?.Stop(); } catch { }
             _pipe?.Dispose();
             _pipe = null;
         }
 
-        /// <summary>
-        /// Lit une frame alignée : rgb = R,G,B... (w*h*3) ; depthU16 = Z16 (w*h)
-        /// </summary>
         public bool TryGetAlignedFrames(uint timeoutMs, out byte[] rgb, out ushort[] depthU16)
         {
             rgb = Array.Empty<byte>();
@@ -87,31 +75,24 @@ namespace DEMOREALSENSE
                 return false;
 
             using var frames = _pipe.WaitForFrames(timeoutMs);
-
             using var alignedFrame = _alignToColor.Process(frames);
             using var aligned = alignedFrame.As<FrameSet>();
-
             using var color = aligned.ColorFrame;
             using var depth = aligned.DepthFrame;
 
-            if (color == null || depth == null)
-                return false;
+            if (color == null || depth == null) return false;
 
             ColorW = color.Width;
             ColorH = color.Height;
-
             DepthW = depth.Width;
             DepthH = depth.Height;
 
-            // RGB8
             rgb = new byte[ColorW * ColorH * 3];
             Marshal.Copy(color.Data, rgb, 0, rgb.Length);
 
-            // Z16 -> ushort[]
             int bytes = DepthW * DepthH * 2;
             byte[] tmp = new byte[bytes];
             Marshal.Copy(depth.Data, tmp, 0, bytes);
-
             depthU16 = new ushort[DepthW * DepthH];
             Buffer.BlockCopy(tmp, 0, depthU16, 0, bytes);
 

@@ -1,275 +1,332 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Drawing;
 
-namespace DEMOREALSENSE
-{
-    /// <summary>
-    /// Détecte automatiquement le plan 3D de la table depuis la profondeur RealSense.
-    ///
-    /// PRINCIPE :
-    ///   On échantillonne la zone basse de l'image (là où est la table).
-    ///   Pour chaque pixel on reconstruit sa position 3D (X,Y,Z) depuis la profondeur.
-    ///   On fit un plan ax+by+cz=d par RANSAC pour ignorer les objets posés sur la table.
-    ///
-    ///   Une fois le plan connu :
-    ///   - TryGetSurfaceY(px) retourne le vrai Y image de la surface à ce X pixel
-    ///   - Permet de "coller" la ligne et les croix sur la surface réelle
-    ///
-    /// UTILISATION :
-    ///   Appeler TryUpdate() chaque frame (throttlé par UpdateIntervalMs).
-    ///   IsReady = true dès que le plan est fiable.
-    /// </summary>
-    public sealed class TablePlaneDetector
-    {
-        // ── Paramètres ────────────────────────────────────────────────────
+//namespace DEMOREALSENSE
+//{
+//    /// <summary>
+//    /// Détecte le plan 3D de la table.
+//    ///
+//    /// SOLUTION A (Manuel) : Alt+Click x3 sur la table → plan exact immédiat.
+//    /// SOLUTION B (Auto)   : RANSAC toutes les 1.5s, filtre plans verticaux.
+//    ///
+//    /// Les positions pixel des clics manuels sont stockées pour affichage.
+//    /// </summary>
+//    public sealed class TablePlaneDetector
+//    {
+//        public enum DetectionMode { Auto, Manual }
+//        public DetectionMode Mode { get; set; } = DetectionMode.Auto;
 
-        /// <summary>Fraction de l'image depuis le bas à analyser pour trouver la table.</summary>
-        public float ScanBottomFraction { get; set; } = 0.55f;
+//        // ── Paramètres RANSAC ─────────────────────────────────────────────
+//        public float ScanBottomFraction { get; set; } = 0.55f;
+//        public float ScanTopSkipFraction { get; set; } = 0.05f;
+//        public int SampleStep { get; set; } = 10;
+//        public int RansacIterations { get; set; } = 150;
+//        public float RansacInlierM { get; set; } = 0.015f;
+//        public int MinInliers { get; set; } = 25;
 
-        /// <summary>Fraction du haut de la zone de scan à ignorer (évite l'horizon).</summary>
-        public float ScanTopSkipFraction { get; set; } = 0.10f;
+//        /// <summary>
+//        /// Composante verticale minimale de la normale.
+//        /// Table horizontale → |B| > 0.30.
+//        /// Réduit à 0.30 pour être moins strict (était 0.35).
+//        /// </summary>
+//        public float MinHorizontalness { get; set; } = 0.30f;
+//        public int UpdateIntervalMs { get; set; } = 1500;
 
-        /// <summary>Pas d'échantillonnage en pixels.</summary>
-        public int SampleStep { get; set; } = 12;
+//        // ── État ──────────────────────────────────────────────────────────
+//        public bool IsReady { get; private set; } = false;
+//        public float PlaneA { get; private set; }
+//        public float PlaneB { get; private set; }
+//        public float PlaneC { get; private set; }
+//        public float PlaneD { get; private set; }
 
-        /// <summary>Nombre d'itérations RANSAC.</summary>
-        public int RansacIterations { get; set; } = 80;
+//        // Points 3D pour le calcul
+//        private readonly List<(float x, float y, float z)> _manualPts3D = new();
+//        // Points 2D pixel pour l'affichage visuel
+//        private readonly List<PointF> _manualPts2D = new();
 
-        /// <summary>Distance max au plan pour être inlier (mètres).</summary>
-        public float RansacInlierM { get; set; } = 0.015f;
+//        private long _lastUpdateTicks = 0;
+//        private readonly Random _rng = new Random(42);
 
-        /// <summary>Nombre minimum d'inliers pour valider le plan.</summary>
-        public int MinInliers { get; set; } = 40;
+//        // ── Points de calibration visibles ───────────────────────────────
+//        public IReadOnlyList<PointF> ManualPoints2D => _manualPts2D;
+//        public int ManualPointCount => _manualPts3D.Count;
 
-        /// <summary>Intervalle de mise à jour du plan (ms).</summary>
-        public int UpdateIntervalMs { get; set; } = 2000;
+//        // ── Solution A : 3 clics ──────────────────────────────────────────
 
-        // ── Champ de vue caméra RealSense D435 ───────────────────────────
-        public const float HFovRad = 69f * MathF.PI / 180f;
-        public const float VFovRad = 42f * MathF.PI / 180f;
+//        /// <summary>
+//        /// Ajoute un point Alt+Click.
+//        /// Stocke la position pixel (pour affichage) ET la position 3D (pour calcul).
+//        /// Retourne true si le plan est calculé (3 points atteints).
+//        /// </summary>
+//        public bool AddManualPoint(int px, int py,
+//                                    ushort[] depth, int imgW, int imgH,
+//                                    CameraIntrinsics intr, float depthUnits)
+//        {
+//            // 4e clic → reset
+//            if (_manualPts3D.Count >= 3)
+//            {
+//                _manualPts3D.Clear();
+//                _manualPts2D.Clear();
+//                IsReady = false;
+//            }
 
-        // ── État ──────────────────────────────────────────────────────────
+//            // Profondeur au pixel cliqué (médiane 3x3)
+//            float depthM = MedianDepth3x3(depth, imgW, imgH, px, py, depthUnits);
+//            if (depthM <= 0.05f || depthM > 5f) return false;
 
-        public bool IsReady { get; private set; } = false;
+//            // Stocke le pixel pour l'affichage
+//            _manualPts2D.Add(new PointF(px, py));
 
-        // Plan : normale (A,B,C) + D  tel que A*x + B*y + C*z = D
-        public float PlaneA { get; private set; }
-        public float PlaneB { get; private set; }
-        public float PlaneC { get; private set; }
-        public float PlaneD { get; private set; }
+//            // Déprojection 3D
+//            if (!intr.DeprojectPixel(px, py, depthM, out float X, out float Y, out float Z))
+//            {
+//                // Fallback si intrinsèques invalides
+//                float fx = imgW * 0.920f, fy = imgH * 1.165f;
+//                float cx2 = imgW / 2f, cy2 = imgH / 2f;
+//                X = (px - cx2) / fx * depthM;
+//                Y = (py - cy2) / fy * depthM;
+//                Z = depthM;
+//            }
 
-        private long _lastUpdateTicks = 0;
-        private readonly Random _rng = new Random(42);
+//            _manualPts3D.Add((X, Y, Z));
 
-        // ── API principale ────────────────────────────────────────────────
+//            if (_manualPts3D.Count == 3)
+//            {
+//                if (ComputePlaneFrom3Points(_manualPts3D[0], _manualPts3D[1], _manualPts3D[2],
+//                        out float a, out float b, out float c, out float d))
+//                {
+//                    PlaneA = a; PlaneB = b; PlaneC = c; PlaneD = d;
+//                    IsReady = true;
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
 
-        public void TryUpdate(ushort[] depth, int imgW, int imgH, float depthUnits, long nowTicks)
-        {
-            if (UpdateIntervalMs > 0)
-            {
-                long interval = UpdateIntervalMs * TimeSpan.TicksPerMillisecond;
-                if (_lastUpdateTicks != 0 && (nowTicks - _lastUpdateTicks) < interval)
-                    return;
-            }
-            _lastUpdateTicks = nowTicks;
+//        public void ResetManual()
+//        {
+//            _manualPts3D.Clear();
+//            _manualPts2D.Clear();
+//            if (Mode == DetectionMode.Manual) IsReady = false;
+//        }
 
-            var pts = SamplePoints(depth, imgW, imgH, depthUnits);
-            if (pts.Count < MinInliers) return;
+//        // ── Solution B : RANSAC ───────────────────────────────────────────
 
-            if (FitPlaneRansac(pts, out float a, out float b, out float c, out float d))
-            {
-                PlaneA = a; PlaneB = b; PlaneC = c; PlaneD = d;
-                IsReady = true;
-            }
-        }
+//        public void TryUpdate(ushort[] depth, int imgW, int imgH,
+//                               CameraIntrinsics intr, float depthUnits, long nowTicks)
+//        {
+//            if (Mode != DetectionMode.Auto) return;
 
-        public void Reset()
-        {
-            IsReady = false;
-            _lastUpdateTicks = 0;
-        }
+//            if (UpdateIntervalMs > 0)
+//            {
+//                long interval = UpdateIntervalMs * TimeSpan.TicksPerMillisecond;
+//                if (_lastUpdateTicks != 0 && (nowTicks - _lastUpdateTicks) < interval) return;
+//            }
+//            _lastUpdateTicks = nowTicks;
 
-        /// <summary>
-        /// Pour un pixel image (imgX), retourne le Y image où se trouve
-        /// la surface de la table à cet X, en utilisant le plan 3D détecté.
-        ///
-        /// refDepthM = profondeur de référence à cet X (en mètres).
-        /// On utilise cette profondeur comme Z pour reconstruire le point 3D sur le plan.
-        /// </summary>
-        public bool TryGetSurfaceY(int imgX, int imgW, int imgH,
-                                    float refDepthM, out float surfaceY)
-        {
-            surfaceY = 0f;
-            if (!IsReady || refDepthM <= 0.05f) return false;
+//            var pts = SamplePoints(depth, imgW, imgH, intr, depthUnits);
+//            if (pts.Count < MinInliers) return;
 
-            // Angle horizontal du pixel imgX
-            float angleH = ((imgX / (float)imgW) - 0.5f) * HFovRad;
-            float Z = refDepthM;
-            float X3d = Z * MathF.Tan(angleH);
+//            if (FitPlaneRansac(pts, out float a, out float b, out float c, out float d))
+//            {
+//                PlaneA = a; PlaneB = b; PlaneC = c; PlaneD = d;
+//                IsReady = true;
+//            }
+//        }
 
-            // Y 3D sur le plan : A*X + B*Y + C*Z = D → Y = (D - A*X - C*Z) / B
-            if (MathF.Abs(PlaneB) < 1e-6f) return false;
-            float Y3d = (PlaneD - PlaneA * X3d - PlaneC * Z) / PlaneB;
+//        // Surcharge sans intrinsèques (approximation FOV)
+//        public void TryUpdate(ushort[] depth, int imgW, int imgH,
+//                               float depthUnits, long nowTicks)
+//        {
+//            var fallback = new CameraIntrinsics
+//            {
+//                Width = imgW,
+//                Height = imgH,
+//                Fx = imgW * 0.920f,
+//                Fy = imgH * 1.165f,
+//                Cx = imgW / 2f,
+//                Cy = imgH / 2f,
+//            };
+//            TryUpdate(depth, imgW, imgH, fallback, depthUnits, nowTicks);
+//        }
 
-            // Reprojection Y3d → pixel Y image
-            float angleV = MathF.Atan2(Y3d, Z);
-            surfaceY = (angleV / VFovRad + 0.5f) * imgH;
+//        public void Reset()
+//        {
+//            IsReady = false;
+//            _lastUpdateTicks = 0;
+//            _manualPts3D.Clear();
+//            _manualPts2D.Clear();
+//        }
 
-            if (surfaceY < 0 || surfaceY >= imgH) return false;
-            return true;
-        }
+//        // ── Intersection rayon-plan ───────────────────────────────────────
 
-        /// <summary>
-        /// Retourne le Y image de la surface en échantillonnant la profondeur
-        /// directement depuis le buffer depth au pixel (imgX, scanY).
-        /// Plus précis que TryGetSurfaceY car utilise la vraie profondeur à cet X.
-        /// </summary>
-        public bool TryGetSurfaceYFromDepth(int imgX, int imgW, int imgH,
-                                             ushort[] depth, float depthUnits,
-                                             out float surfaceY)
-        {
-            surfaceY = 0f;
-            if (!IsReady) return false;
+//        public bool DeprojectPixelToPlane(float px, float py, CameraIntrinsics intr,
+//                                           out float X3d, out float Y3d, out float Z3d)
+//        {
+//            X3d = Y3d = Z3d = 0f;
+//            if (!IsReady) return false;
 
-            // Cherche une profondeur valide autour de imgX dans la zone basse
-            int scanY = (int)(imgH * 0.75f);
-            float bestDepth = 0f;
+//            float fx = intr.IsValid ? intr.Fx : 1f;
+//            float fy = intr.IsValid ? intr.Fy : 1f;
+//            float cx = intr.IsValid ? intr.Cx : px;
+//            float cy = intr.IsValid ? intr.Cy : py;
 
-            for (int dy = -20; dy <= 20; dy += 4)
-            {
-                int py = scanY + dy;
-                if (py < 0 || py >= imgH) continue;
-                ushort raw = depth[py * imgW + imgX];
-                if (raw == 0) continue;
-                float dm = raw * depthUnits;
-                if (dm > 0.1f && dm < 4f) { bestDepth = dm; break; }
-            }
+//            float dx = (px - cx) / fx;
+//            float dy = (py - cy) / fy;
 
-            if (bestDepth <= 0f) return false;
-            return TryGetSurfaceY(imgX, imgW, imgH, bestDepth, out surfaceY);
-        }
+//            float denom = PlaneA * dx + PlaneB * dy + PlaneC;
+//            if (MathF.Abs(denom) < 1e-6f) return false;
 
-        // ── Helpers internes ──────────────────────────────────────────────
+//            float t = PlaneD / denom;
+//            if (t <= 0.05f || t > 10f) return false;
 
-        private List<(float x, float y, float z)> SamplePoints(
-            ushort[] depth, int imgW, int imgH, float depthUnits)
-        {
-            var pts = new List<(float, float, float)>(512);
+//            Z3d = t; X3d = t * dx; Y3d = t * dy;
+//            return true;
+//        }
 
-            int yStart = (int)(imgH * (1f - ScanBottomFraction + ScanTopSkipFraction));
-            int yEnd = imgH - 4;
+//        public static bool ProjectToPixel(float X3d, float Y3d, float Z3d,
+//                                           CameraIntrinsics intr,
+//                                           out float px, out float py)
+//        {
+//            return intr.ProjectPoint(X3d, Y3d, Z3d, out px, out py);
+//        }
 
-            for (int py = yStart; py < yEnd; py += SampleStep)
-            {
-                for (int px = SampleStep; px < imgW - SampleStep; px += SampleStep)
-                {
-                    ushort raw = depth[py * imgW + px];
-                    if (raw == 0) continue;
+//        // ── Helpers ───────────────────────────────────────────────────────
 
-                    float Z = raw * depthUnits;
-                    if (Z < 0.15f || Z > 3.5f) continue;
+//        private static bool ComputePlaneFrom3Points(
+//            (float x, float y, float z) p0,
+//            (float x, float y, float z) p1,
+//            (float x, float y, float z) p2,
+//            out float a, out float b, out float c, out float d)
+//        {
+//            a = b = c = d = 0f;
+//            float ux = p1.x - p0.x, uy = p1.y - p0.y, uz = p1.z - p0.z;
+//            float vx = p2.x - p0.x, vy = p2.y - p0.y, vz = p2.z - p0.z;
+//            float nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+//            float len = MathF.Sqrt(nx * nx + ny * ny + nz * nz);
+//            if (len < 1e-6f) return false;
+//            a = nx / len; b = ny / len; c = nz / len;
+//            d = a * p0.x + b * p0.y + c * p0.z;
+//            if (b < 0) { a = -a; b = -b; c = -c; d = -d; }
+//            return true;
+//        }
 
-                    float angleH = ((px / (float)imgW) - 0.5f) * HFovRad;
-                    float angleV = ((py / (float)imgH) - 0.5f) * VFovRad;
+//        private static float MedianDepth3x3(ushort[] depth, int imgW, int imgH,
+//                                              int cx, int cy, float depthUnits)
+//        {
+//            var vals = new List<float>(9);
+//            for (int dy = -1; dy <= 1; dy++)
+//                for (int dx = -1; dx <= 1; dx++)
+//                {
+//                    int x = cx + dx, y = cy + dy;
+//                    if (x < 0 || x >= imgW || y < 0 || y >= imgH) continue;
+//                    ushort raw = depth[y * imgW + x];
+//                    if (raw == 0) continue;
+//                    vals.Add(raw * depthUnits);
+//                }
+//            if (vals.Count == 0) return 0f;
+//            vals.Sort();
+//            return vals[vals.Count / 2];
+//        }
 
-                    float X = Z * MathF.Tan(angleH);
-                    float Y = Z * MathF.Tan(angleV);
+//        private List<(float x, float y, float z)> SamplePoints(
+//            ushort[] depth, int imgW, int imgH,
+//            CameraIntrinsics intr, float depthUnits)
+//        {
+//            var pts = new List<(float, float, float)>(512);
+//            int yStart = (int)(imgH * (1f - ScanBottomFraction + ScanTopSkipFraction));
+//            int yEnd = imgH - 2;
 
-                    pts.Add((X, Y, Z));
-                }
-            }
+//            for (int py = yStart; py < yEnd; py += SampleStep)
+//                for (int px = SampleStep; px < imgW - SampleStep; px += SampleStep)
+//                {
+//                    ushort raw = depth[py * imgW + px];
+//                    if (raw == 0) continue;
+//                    float Z = raw * depthUnits;
+//                    if (Z < 0.15f || Z > 3.5f) continue;
 
-            return pts;
-        }
+//                    float X, Y;
+//                    if (intr.IsValid)
+//                    {
+//                        X = (px - intr.Cx) / intr.Fx * Z;
+//                        Y = (py - intr.Cy) / intr.Fy * Z;
+//                    }
+//                    else
+//                    {
+//                        X = (px - imgW / 2f) / (imgW * 0.920f) * Z;
+//                        Y = (py - imgH / 2f) / (imgH * 1.165f) * Z;
+//                    }
+//                    pts.Add((X, Y, Z));
+//                }
+//            return pts;
+//        }
 
-        private bool FitPlaneRansac(
-            List<(float x, float y, float z)> pts,
-            out float bestA, out float bestB, out float bestC, out float bestD)
-        {
-            bestA = 0; bestB = 1; bestC = 0; bestD = 0;
-            int bestCount = 0;
-            int n = pts.Count;
-            if (n < 3) return false;
+//        private bool FitPlaneRansac(
+//            List<(float x, float y, float z)> pts,
+//            out float bestA, out float bestB, out float bestC, out float bestD)
+//        {
+//            bestA = 0; bestB = 1; bestC = 0; bestD = 0;
+//            int bestCount = 0, n = pts.Count;
+//            if (n < 3) return false;
 
-            for (int iter = 0; iter < RansacIterations; iter++)
-            {
-                int i0 = _rng.Next(n), i1 = _rng.Next(n), i2 = _rng.Next(n);
-                if (i0 == i1 || i1 == i2 || i0 == i2) continue;
+//            for (int iter = 0; iter < RansacIterations; iter++)
+//            {
+//                int i0 = _rng.Next(n), i1 = _rng.Next(n), i2 = _rng.Next(n);
+//                if (i0 == i1 || i1 == i2 || i0 == i2) continue;
 
-                var (x0, y0, z0) = pts[i0];
-                var (x1, y1, z1) = pts[i1];
-                var (x2, y2, z2) = pts[i2];
+//                if (!ComputePlaneFrom3Points(pts[i0], pts[i1], pts[i2],
+//                        out float nx, out float ny, out float nz, out float d)) continue;
 
-                float ux = x1 - x0, uy = y1 - y0, uz = z1 - z0;
-                float vx = x2 - x0, vy = y2 - y0, vz = z2 - z0;
+//                // Rejette les plans verticaux
+//                if (MathF.Abs(ny) < MinHorizontalness) continue;
 
-                float nx = uy * vz - uz * vy;
-                float ny = uz * vx - ux * vz;
-                float nz = ux * vy - uy * vx;
+//                int count = 0;
+//                foreach (var p in pts)
+//                    if (MathF.Abs(nx * p.x + ny * p.y + nz * p.z - d) < RansacInlierM) count++;
 
-                float len = MathF.Sqrt(nx * nx + ny * ny + nz * nz);
-                if (len < 1e-6f) continue;
-                nx /= len; ny /= len; nz /= len;
+//                if (count > bestCount)
+//                { bestCount = count; bestA = nx; bestB = ny; bestC = nz; bestD = d; }
+//            }
 
-                float d = nx * x0 + ny * y0 + nz * z0;
+//            if (bestCount < MinInliers) return false;
+//            RefitOnInliers(pts, ref bestA, ref bestB, ref bestC, ref bestD);
+//            if (bestB < 0) { bestA = -bestA; bestB = -bestB; bestC = -bestC; bestD = -bestD; }
+//            return true;
+//        }
 
-                int count = 0;
-                foreach (var (px, py, pz) in pts)
-                    if (MathF.Abs(nx * px + ny * py + nz * pz - d) < RansacInlierM) count++;
+//        private void RefitOnInliers(List<(float x, float y, float z)> pts,
+//                                     ref float a, ref float b, ref float c, ref float d)
+//        {
+//            var inliers = new List<(float x, float y, float z)>();
+//            foreach (var p in pts)
+//                if (MathF.Abs(a * p.x + b * p.y + c * p.z - d) < RansacInlierM * 2f) inliers.Add(p);
+//            if (inliers.Count < 4) return;
 
-                if (count > bestCount)
-                {
-                    bestCount = count;
-                    bestA = nx; bestB = ny; bestC = nz; bestD = d;
-                }
-            }
+//            float mx = 0, my = 0, mz = 0;
+//            foreach (var p in inliers) { mx += p.x; my += p.y; mz += p.z; }
+//            mx /= inliers.Count; my /= inliers.Count; mz /= inliers.Count;
 
-            if (bestCount < MinInliers) return false;
-            RefitOnInliers(pts, ref bestA, ref bestB, ref bestC, ref bestD);
-            return true;
-        }
-
-        private void RefitOnInliers(
-            List<(float x, float y, float z)> pts,
-            ref float a, ref float b, ref float c, ref float d)
-        {
-            var inliers = new List<(float x, float y, float z)>();
-            foreach (var (px, py, pz) in pts)
-                if (MathF.Abs(a * px + b * py + c * pz - d) < RansacInlierM)
-                    inliers.Add((px, py, pz));
-
-            if (inliers.Count < 4) return;
-
-            float mx = 0, my = 0, mz = 0;
-            foreach (var (px, py, pz) in inliers) { mx += px; my += py; mz += pz; }
-            mx /= inliers.Count; my /= inliers.Count; mz /= inliers.Count;
-
-            double sxx = 0, sxy = 0, sxz = 0, syy = 0, syz = 0, szz = 0;
-            foreach (var (px, py, pz) in inliers)
-            {
-                double dx = px - mx, dy = py - my, dz = pz - mz;
-                sxx += dx * dx; sxy += dx * dy; sxz += dx * dz;
-                syy += dy * dy; syz += dy * dz; szz += dz * dz;
-            }
-
-            double na = a, nb = b, nc = c;
-            for (int k = 0; k < 3; k++)
-            {
-                double ra = sxx * na + sxy * nb + sxz * nc;
-                double rb = sxy * na + syy * nb + syz * nc;
-                double rc = sxz * na + syz * nb + szz * nc;
-                double rlen = Math.Sqrt(ra * ra + rb * rb + rc * rc);
-                if (rlen < 1e-10) break;
-                na = ra / rlen; nb = rb / rlen; nc = rc / rlen;
-            }
-
-            float flen = MathF.Sqrt((float)(na * na + nb * nb + nc * nc));
-            if (flen < 1e-6f) return;
-
-            a = (float)(na / flen); b = (float)(nb / flen); c = (float)(nc / flen);
-            d = a * mx + b * my + c * mz;
-
-            if (b > 0) { a = -a; b = -b; c = -c; d = -d; }
-        }
-    }
-}
+//            double sxx = 0, sxy = 0, sxz = 0, syy = 0, syz = 0, szz = 0;
+//            foreach (var p in inliers)
+//            {
+//                double dx = p.x - mx, dy = p.y - my, dz = p.z - mz;
+//                sxx += dx * dx; sxy += dx * dy; sxz += dx * dz; syy += dy * dy; syz += dy * dz; szz += dz * dz;
+//            }
+//            double na = a, nb = b, nc = c;
+//            for (int k = 0; k < 5; k++)
+//            {
+//                double ra = sxx * na + sxy * nb + sxz * nc;
+//                double rb = sxy * na + syy * nb + syz * nc;
+//                double rc = sxz * na + syz * nb + szz * nc;
+//                double rlen = Math.Sqrt(ra * ra + rb * rb + rc * rc);
+//                if (rlen < 1e-10) break;
+//                na = ra / rlen; nb = rb / rlen; nc = rc / rlen;
+//            }
+//            float flen = MathF.Sqrt((float)(na * na + nb * nb + nc * nc));
+//            if (flen < 1e-6f) return;
+//            a = (float)(na / flen); b = (float)(nb / flen); c = (float)(nc / flen);
+//            d = a * mx + b * my + c * mz;
+//        }
+//    }
+//}

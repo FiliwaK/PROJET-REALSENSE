@@ -12,7 +12,6 @@ namespace DEMOREALSENSE
     public partial class CameraView : Form
     {
         private readonly RealSenseCameraService _camera = new RealSenseCameraService();
-
         private readonly TemplateTracker _tracker = new TemplateTracker();
         private readonly TemplateTracker _autoTracker = new TemplateTracker();
 
@@ -29,16 +28,12 @@ namespace DEMOREALSENSE
         private readonly AutoTemplateFollower _autoFollower;
 
         private readonly TrajectoryTracker _traj = new TrajectoryTracker();
-
-        // MinDeltaPx = 10 : filtre les faux rebonds sur mouvements brusques
-        // CooldownMs = 500 : 500ms minimum entre deux rebonds
         private readonly ImpactDetector _impact = new ImpactDetector
         {
             HalfWindow = 3,
             MinDeltaPx = 10f,
             CooldownMs = 500
         };
-
         private readonly GroundEstimator _ground = new GroundEstimator
         {
             NearGroundPx = 35f,
@@ -53,7 +48,6 @@ namespace DEMOREALSENSE
         private HudPresenter? _hud;
         private CameraPipeline? _pipeline;
 
-        // ── Stratégies de détection ───────────────────────────────────────
         private IDetectionStrategy? _currentStrategy;
         private AlgoDetectionStrategy? _algoStrategy;
         private YoloDetectionStrategy? _yoloStrategy;
@@ -66,8 +60,7 @@ namespace DEMOREALSENSE
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models", fileName),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models", Path.GetFileName(fileName)),
             };
-            foreach (var p in candidates)
-                if (File.Exists(p)) return p;
+            foreach (var p in candidates) if (File.Exists(p)) return p;
             return candidates[0];
         }
 
@@ -82,8 +75,7 @@ namespace DEMOREALSENSE
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dirName),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Models", dirName),
             };
-            foreach (var p in candidates)
-                if (Directory.Exists(p)) return p;
+            foreach (var p in candidates) if (Directory.Exists(p)) return p;
             return "";
         }
 
@@ -95,7 +87,8 @@ namespace DEMOREALSENSE
                          "RealSense_Captures");
 
         private const string HelpText =
-            "Click=Tracker | Ctrl+Click=Ligne | Shift+Click=Calibrer balle | A=Auto | R=Reset | F=Flip IN/OUT";
+            "Click=Tracker | Ctrl+Click=Ligne | Shift+Click=Calibrer balle | " +
+            "A=Auto | R=Reset ligne | F=Flip IN/OUT | M=Mode IA/Algo";
 
         private bool _ballSelected = false;
 
@@ -115,7 +108,6 @@ namespace DEMOREALSENSE
 
             cameraPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             cameraPictureBox.BackColor = Color.Black;
-
             Directory.CreateDirectory(_snapDir);
 
             _input = new InputController(cameraPictureBox, _snapshots);
@@ -126,27 +118,17 @@ namespace DEMOREALSENSE
             _currentStrategy = _algoStrategy;
 
             _pipeline = new CameraPipeline(
-                _camera,
-                _tracker,
-                _lineDetector, _lineLock,
-                _autoTracker, _autoFollower,
-                _traj,
-                _impact,
-                _ground,
-                _inOutLatch)
+                _camera, _tracker, _lineDetector, _lineLock,
+                _autoTracker, _autoFollower, _traj, _impact, _ground, _inOutLatch)
             {
-                // Largeur réelle de ta ligne de ruban.
-                // Ajuste si ta ligne est plus large/étroite.
                 LineRealWidthMeters = 0.025f,
-                LineWidthPx = 6f,   // fallback si profondeur indisponible
+                LineWidthPx = 6f,
                 OutHoldMs = 5000
             };
 
             cameraPictureBox.MouseClick += CameraPictureBox_MouseClick;
-
             button1.Text = "📷 Photo";
             button1.Click += button1_Click;
-
             KeyPreview = true;
             KeyDown += CameraView_KeyDown;
 
@@ -156,11 +138,7 @@ namespace DEMOREALSENSE
 
         protected override void OnShown(EventArgs e) { base.OnShown(e); Start(); }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            Stop();
-            base.OnFormClosing(e);
-        }
+        protected override void OnFormClosing(FormClosingEventArgs e) { Stop(); base.OnFormClosing(e); }
 
         private void Start()
         {
@@ -168,20 +146,16 @@ namespace DEMOREALSENSE
             {
                 Stop();
                 _ballSelected = false;
-
                 distanceLabel.ForeColor = Color.Black;
                 distanceLabel.Text = HelpText;
                 button2.Text = "⚙️ Algo";
-
                 _camera.Start(640, 480, 30);
-
                 _cts = new CancellationTokenSource();
                 _task = Task.Run(() => Loop(_cts.Token), _cts.Token);
             }
             catch (Exception ex)
             {
-                SafeUI(() =>
-                {
+                SafeUI(() => {
                     distanceLabel.ForeColor = Color.OrangeRed;
                     distanceLabel.Text = "Start error: " + ex.Message;
                 });
@@ -194,22 +168,13 @@ namespace DEMOREALSENSE
             {
                 _cts?.Cancel();
                 try { _task?.Wait(500); } catch { }
-
-                _task = null;
-                _cts?.Dispose();
-                _cts = null;
-
-                _tracker.Stop();
-                _autoTracker.Stop();
-                _camera.Stop();
-                _snapshots.Clear();
-
-                SafeUI(() =>
-                {
+                _task = null; _cts?.Dispose(); _cts = null;
+                _tracker.Stop(); _autoTracker.Stop();
+                _camera.Stop(); _snapshots.Clear();
+                SafeUI(() => {
                     var old = cameraPictureBox.Image;
                     cameraPictureBox.Image = null;
                     old?.Dispose();
-
                     distanceLabel.ForeColor = Color.Black;
                     distanceLabel.Text = "Arrêté.";
                 });
@@ -250,30 +215,17 @@ namespace DEMOREALSENSE
                     if (!r.ManualTrackingOk)
                         _hud?.ShowTempMessage(r.NowTicks, "Objet perdu (reclique).", Color.OrangeRed);
 
-                    // showDistance = true dès que la balle est visible ou mode IA actif
-                    bool showInfo = _ballSelected
-                        || r.LiveSide != InOutSide.Unknown
-                        || r.RawDepth != 0
-                        || _detectionMode == DetectionMode.Yolo;
+                    bool showInfo = _ballSelected || r.LiveSide != InOutSide.Unknown
+                                 || r.RawDepth != 0 || _detectionMode == DetectionMode.Yolo;
 
                     _hud?.RenderHelpOrDistance(
-                        r.NowTicks,
-                        HelpText,
-                        showDistance: showInfo,
-                        rawDepth: r.RawDepth,
-                        depthUnits: r.DepthUnits,
-                        latch: r.Latch,
-                        varEngine: r.VarEngine,
-                        liveSide: r.LiveSide,
-                        verdictHeld: r.VerdictHeld,
-                        heldTicks: r.VerdictHeldTicks,
-                        outHoldMs: 5000);
+                        r.NowTicks, HelpText, showDistance: showInfo,
+                        rawDepth: r.RawDepth, depthUnits: r.DepthUnits,
+                        latch: r.Latch, varEngine: r.VarEngine,
+                        liveSide: r.LiveSide, verdictHeld: r.VerdictHeld,
+                        heldTicks: r.VerdictHeldTicks, outHoldMs: 5000);
 
-                    // ✅ Statut du plan de table dans le label de traitement
-                    string planeStatus = r.TablePlaneReady
-                        ? "🟢 Plan OK"
-                        : "🔴 Plan en cours...";
-                    _hud?.UpdateFrameTime(r.FrameMs, planeStatus);
+                    _hud?.UpdateFrameTime(r.FrameMs);
                 });
             }
         }
@@ -281,10 +233,8 @@ namespace DEMOREALSENSE
         private void CameraPictureBox_MouseClick(object? sender, MouseEventArgs e)
         {
             if (_input == null) return;
-
             if ((ModifierKeys & Keys.Shift) == Keys.Shift) { CalibrateBallColorFromClick(e.Location); return; }
             if ((ModifierKeys & Keys.Control) == Keys.Control) { AddLinePointFromClick(e.Location); return; }
-
             StartTrackingFromClick(e.Location);
         }
 
@@ -296,19 +246,16 @@ namespace DEMOREALSENSE
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Image pas prête.", Color.Black);
                 return;
             }
-
             if (!_camera.TryGetAlignedFrames(500, out var rgb, out _))
             {
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Frame non dispo.", Color.Black);
                 return;
             }
-
             if (!_tracker.TryStart(rgb, _camera.ColorW, _camera.ColorH, x, y))
             {
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Impossible de créer template.", Color.Black);
                 return;
             }
-
             _ballSelected = true;
             _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Balle sélectionnée ✅", Color.Black, 900);
         }
@@ -321,18 +268,15 @@ namespace DEMOREALSENSE
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Image pas prête.", Color.Black);
                 return;
             }
-
             using var img = _snapshots.TryClone();
             if (img == null)
             {
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Image pas prête pour calibration.", Color.Black);
                 return;
             }
-
             Color c = img.GetPixel(x, y);
             _ballDetector.CalibrateFromRgb(c.R, c.G, c.B);
             _pipeline?.ResetAllStates();
-
             BallDetector.RgbToHsv(c.R, c.G, c.B, out float hue, out _, out _);
             _hud?.ShowTempMessage(DateTime.UtcNow.Ticks,
                 $"Calibration HSV: H={hue:0}° R{c.R} G{c.G} B{c.B}", Color.Black);
@@ -346,22 +290,18 @@ namespace DEMOREALSENSE
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Image pas prête.", Color.Black);
                 return;
             }
-
-            bool hasLineNow;
-            int count;
+            bool hasLineNow; int count;
             lock (_lineLock)
             {
                 _lineDetector.AddClick(new PointF(x, y));
                 hasLineNow = _lineDetector.HasLine;
                 count = _lineDetector.Samples.Count;
             }
-
             _hud?.ShowTempMessage(DateTime.UtcNow.Ticks,
                 hasLineNow
                     ? "✅ Ligne détectée (Ctrl+Click ajouter / R reset)"
                     : $"Mode ligne: {count}/{_lineDetector.MinPointsToFit} points",
                 Color.Black);
-
             _pipeline?.ResetLineRelatedStates();
         }
 
@@ -374,7 +314,6 @@ namespace DEMOREALSENSE
                     _pipeline?.ResetLineRelatedStates();
                     _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Ligne reset ✅", Color.Black);
                     break;
-
                 case Keys.A:
                     if (_pipeline != null)
                     {
@@ -384,7 +323,6 @@ namespace DEMOREALSENSE
                             "AUTO: " + (_pipeline.AutoEnabled ? "ON" : "OFF"), Color.Black);
                     }
                     break;
-
                 case Keys.F:
                     if (_pipeline != null)
                     {
@@ -394,7 +332,6 @@ namespace DEMOREALSENSE
                             "Flip IN/OUT: " + (_pipeline.FlipInOutSide ? "ON" : "OFF"), Color.Black);
                     }
                     break;
-
                 case Keys.M:
                     SwitchDetectionMode();
                     break;
@@ -411,11 +348,8 @@ namespace DEMOREALSENSE
                     _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, "Pas d'image à enregistrer.", Color.Black);
                     return;
                 }
-
                 string fileName = $"rs_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
-                string fullPath = Path.Combine(_snapDir, fileName);
-
-                snap.Save(fullPath, ImageFormat.Png);
+                snap.Save(Path.Combine(_snapDir, fileName), ImageFormat.Png);
                 _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, $"Photo: {fileName}", Color.Black);
             }
             catch (Exception ex)
@@ -450,18 +384,14 @@ namespace DEMOREALSENSE
                         return;
                     }
                 }
-
-                _detectionMode = DetectionMode.Yolo;
-                _currentStrategy = _yoloStrategy;
+                _detectionMode = DetectionMode.Yolo; _currentStrategy = _yoloStrategy;
             }
             else
             {
-                _detectionMode = DetectionMode.Algo;
-                _currentStrategy = null;
+                _detectionMode = DetectionMode.Algo; _currentStrategy = null;
             }
 
-            _tracker.Stop();
-            _autoTracker.Stop();
+            _tracker.Stop(); _autoTracker.Stop();
             _pipeline?.SetDetectionStrategy(_currentStrategy);
             _pipeline?.ResetAllStates();
             lock (_lineLock) _lineDetector.Clear();
@@ -469,8 +399,8 @@ namespace DEMOREALSENSE
 
             bool isYolo = _detectionMode == DetectionMode.Yolo;
             button2.Text = isYolo ? "🤖 IA" : "⚙️ Algo";
-            string msg = isYolo ? "Mode IA YOLO — ligne auto" : "Mode Algo — Ctrl+Click pour ligne";
-            _hud?.ShowTempMessage(DateTime.UtcNow.Ticks, msg,
+            _hud?.ShowTempMessage(DateTime.UtcNow.Ticks,
+                isYolo ? "Mode IA YOLO — ligne auto" : "Mode Algo — Ctrl+Click pour ligne",
                 isYolo ? Color.Magenta : Color.LimeGreen, 2500);
         }
 
